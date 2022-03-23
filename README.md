@@ -1,9 +1,11 @@
 
 # **Employee Leave Management App**
 
+---
 
 ### Table of Contents 🕮
 
+---
 - [About](#About)
 - [Technologies](#Technologies)
 - [Setup](#Setup)
@@ -12,6 +14,7 @@
 
 ### About 🏖️
 
+---
 Project presents an application for managing employee leave.
 Main assumptions of the project:
 - menu on console
@@ -24,6 +27,7 @@ Main assumptions of the project:
 
 ### Technologies 💻
 
+---
 Project is created with:
 - Java version 17
 - Maven
@@ -33,14 +37,17 @@ Project is created with:
 
 ### Setup ⚙️
 
+---
 To run this project clone GitHub repository _ehj1-uNasDziala_ and run it in IDE of your choice.
 
 ### Status 👁️
 
+---
 Application development in progress. 
 Planned completion of the first stage on April 11, 2022.
 
 ### Authors 🧑🧑👱‍♀️🧑 
 
+---
 _uNasDziała_ team
 
