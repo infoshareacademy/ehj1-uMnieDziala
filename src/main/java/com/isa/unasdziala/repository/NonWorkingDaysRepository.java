@@ -12,13 +12,11 @@ public class NonWorkingDaysRepository {
     private final List<Day> nonWorkingDays = importNonWorkingDays();
     private static Long counter = 0L;
 
-    public Day add(Day dayToSave) {
-        Day day = new Day(dayToSave.getDate(), dayToSave.getName(), dayToSave.getDescription());
+    public Day add(Day day) {
         day.setId(counter);
-        dayToSave.setId(counter);
         counter += 1;
         nonWorkingDays.add(day);
-        return dayToSave;
+        return day;
     }
 
     public Optional<Day> findById(Long id) {
