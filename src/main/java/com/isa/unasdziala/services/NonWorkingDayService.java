@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public class NonWorkingDayService {
 
-    private final NonWorkingDaysRepository nonWorkingDaysRepository = new NonWorkingDaysRepository();
+    private final NonWorkingDaysRepository nonWorkingDaysRepository;
+
+    public NonWorkingDayService(NonWorkingDaysRepository nonWorkingDaysRepository) {
+        this.nonWorkingDaysRepository = nonWorkingDaysRepository;
+    }
 
     public Day add(Day day) {
         nonWorkingDaysRepository.add(day);

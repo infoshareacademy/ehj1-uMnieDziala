@@ -2,8 +2,6 @@ package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.domain.Day;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 class NonWorkingDaysRepositoryTest {
 
     private final NonWorkingDaysRepository sut = new NonWorkingDaysRepository();
@@ -72,6 +69,39 @@ class NonWorkingDaysRepositoryTest {
         Optional<Day> day = sut.findById(-1L);
         // then
         assertThat(day).isInstanceOf(Optional.class);
+    }
+
+    @Test
+    void shouldFindByDateAlwaysReturnListWithDays() {
+        // given
+
+        // when
+        List<Day> result = sut.findDaysByLocalDate(LocalDate.now());
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result).isInstanceOf(List.class);
+    }
+
+    @Test
+    void shouldFindByDateReturnDaysWithGivenDate() {
+        // given
+        LocalDate date = LocalDate.parse("1900-01-01");
+        Day testDay1 = new Day(date, "Test Day 1 Name", "Test Day 1 Desc");
+        Day testDay2 = new Day(date, "Test Day 2 Name", "Test Day 2 Desc");
+        Day testDay3 = new Day(LocalDate.parse("1900-01-03"), "Test Day 3 Name", "Test Day 3 Desc");
+        Day testDay4 = new Day(date, "Test Day 4 Name", "Test Day 4 Desc");
+
+        Day expectedTestDay1 = sut.add(testDay1);
+        Day expectedTestDay2 = sut.add(testDay2);
+        Day notExceptedTestDay3 = sut.add(testDay3);
+        Day expectedTestDay4 = sut.add(testDay4);
+
+        List<Day> expected = List.of(expectedTestDay1, expectedTestDay2, expectedTestDay4);
+        // when
+        List<Day> result = sut.findDaysByLocalDate(date);
+        // then
+        assertThat(result).containsAll(expected);
+        assertThat(result).doesNotContain(notExceptedTestDay3);
     }
 
     @Test
