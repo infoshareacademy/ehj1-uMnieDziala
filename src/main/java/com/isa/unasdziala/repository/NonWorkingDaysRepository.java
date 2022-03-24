@@ -3,45 +3,56 @@ package com.isa.unasdziala.repository;
 import com.isa.unasdziala.domain.Day;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class NonWorkingDaysRepository {
     private final List<Day> nonWorkingDays = importNonWorkingDays();
+    private static Long counter = 0L;
 
-    public Day add(Day day) {
+    public Day add(Day dayToSave) {
+        Day day = new Day(dayToSave.getDate(), dayToSave.getName(), dayToSave.getDescription());
+        day.setId(counter);
+        dayToSave.setId(counter);
+        counter += 1;
         nonWorkingDays.add(day);
-        return day;
+        return dayToSave;
     }
 
-    public Optional<Day> findNonWorkingDayByLocalDate(LocalDate date) {
-        return nonWorkingDays.stream().filter(day -> day.getDate().equals(date)).findFirst();
+    public Optional<Day> findById(Long id) {
+        return nonWorkingDays.stream().filter(day -> day.getId().equals(id)).findFirst();
+    }
+
+    public List<Day> findDaysByLocalDate(LocalDate date) {
+        return nonWorkingDays.stream().filter(day -> day.getDate().equals(date)).collect(Collectors.toList());
     }
 
     public List<Day> findAll() {
         return List.copyOf(nonWorkingDays);
     }
 
-    public Optional<Day> deleteByDate(LocalDate date) {
-        Optional<Day> day = findNonWorkingDayByLocalDate(date);
+    public Optional<Day> deleteById(Long id) {
+        Optional<Day> day = findById(id);
         day.ifPresent(nonWorkingDays::remove);
         return day;
     }
 
-    public Optional<Day> updateByDate(LocalDate date, Day newDay) {
-        Optional<Day> day = findNonWorkingDayByLocalDate(date);
-        if (day.isPresent()) {
-            Day dayEntity = day.get();
-            dayEntity.setDate(newDay.getDate());
-            dayEntity.setName(newDay.getName());
-            dayEntity.setDescription(newDay.getDescription());
+    public Optional<Day> updateById(Long id, Day newDay) {
+        Optional<Day> optionalDay = findById(id);
+        if (optionalDay.isPresent()) {
+            Day day = optionalDay.get();
+            day.setDate(newDay.getDate());
+            day.setName(newDay.getName());
+            day.setDescription(newDay.getDescription());
         }
-        return day;
+        return optionalDay;
     }
 
 
     private List<Day> importNonWorkingDays() {
-        throw new RuntimeException("No Implemented");
+        return new ArrayList<>();
     }
 
 }

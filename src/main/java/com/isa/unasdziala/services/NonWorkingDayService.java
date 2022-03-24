@@ -20,18 +20,17 @@ public class NonWorkingDayService {
         return nonWorkingDaysRepository.findAll();
     }
 
-    public Day findByDate(LocalDate date) {
-        Optional<Day> nonWorkingDay = nonWorkingDaysRepository.findNonWorkingDayByLocalDate(date);
-        return nonWorkingDay.orElseThrow(() -> new IllegalArgumentException("Wrong date"));
+    public List<Day> findDaysByDate(LocalDate date) {
+        return nonWorkingDaysRepository.findDaysByLocalDate(date);
     }
 
-    public Day deleteByDate(LocalDate date) {
-        Optional<Day> deletedDay = nonWorkingDaysRepository.deleteByDate(date);
+    public Day deleteById(Long id) {
+        Optional<Day> deletedDay = nonWorkingDaysRepository.deleteById(id);
         return deletedDay.orElseThrow(() -> new IllegalArgumentException("Wrong date"));
     }
 
-    public Day updateByDate(LocalDate date, Day newDay) {
-        Optional<Day> updatedDay = nonWorkingDaysRepository.updateByDate(date, newDay);
+    public Day updateById(Long id, Day newDay) {
+        Optional<Day> updatedDay = nonWorkingDaysRepository.updateById(id, newDay);
         return updatedDay.orElseThrow(() -> new IllegalArgumentException("Wrong date"));
     }
 
