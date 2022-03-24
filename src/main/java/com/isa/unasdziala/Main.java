@@ -1,7 +1,5 @@
 package com.isa.unasdziala;
 
-import com.isa.unasdziala.repository.NonWorkingDaysRepository;
-import com.isa.unasdziala.services.NonWorkingDayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
