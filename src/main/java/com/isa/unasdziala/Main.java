@@ -14,6 +14,5 @@ public static final Logger logger = LoggerFactory.getLogger(Main.class);
     public static void main(String[] args) {
         System.out.println("Run...");
         logger.info("\ntest loggera");
-        new NonWorkingDayService(new NonWorkingDaysRepository());
     }
 }
