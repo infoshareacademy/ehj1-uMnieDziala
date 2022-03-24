@@ -28,16 +28,16 @@ public class NonWorkingDayService {
         return nonWorkingDaysRepository.findDaysByLocalDate(date);
     }
 
-    public Day findById(Long id) {
+    public Day findById(Long id) throws IllegalArgumentException {
         return nonWorkingDaysRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Wrong ID"));
     }
 
-    public Day deleteById(Long id) {
+    public Day deleteById(Long id) throws IllegalArgumentException {
         Optional<Day> deletedDay = nonWorkingDaysRepository.deleteById(id);
         return deletedDay.orElseThrow(() -> new IllegalArgumentException("Wrong ID"));
     }
 
-    public Day updateById(Long id, Day newDay) {
+    public Day updateById(Long id, Day newDay) throws IllegalArgumentException {
         Optional<Day> updatedDay = nonWorkingDaysRepository.updateById(id, newDay);
         return updatedDay.orElseThrow(() -> new IllegalArgumentException("Wrong ID"));
     }
