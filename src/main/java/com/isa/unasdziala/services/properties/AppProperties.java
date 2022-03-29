@@ -12,26 +12,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-@Getter
 public class AppProperties {
     private final static Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
     private final static Path PROPERTIES_FILE_PATH = Paths.get("src", "main", "resources", "not_working_days.properties");
-    private  static Properties properties;
+    private static Properties properties;
 
     public AppProperties() {
-        this.properties = readFile(PROPERTIES_FILE_PATH);
+        properties = readFile(PROPERTIES_FILE_PATH);
     }
 
 
-    public static String getCountryName(){
+    public String getCountryName() {
         String property = properties.getProperty("country");
-        if (property != null){;
+        if (property != null) {
         } else {
             LOGGER.info("Properties COUNTRY is empty");
-        } return property;
+        }
+        return property;
     }
 
-    private static Properties readFile(Path fileName) {
+    private Properties readFile(Path fileName) {
         Properties appProperties = new Properties();
         try {
             appProperties.load(new StringReader(Files.readString(fileName)));
