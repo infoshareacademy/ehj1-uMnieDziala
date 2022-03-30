@@ -13,14 +13,14 @@ import java.util.List;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
-public class Employees {
+public class EmployeesRepository {
     private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
     private static final char CSV_SEPARATOR = ';';
-    private static final Logger logger = LoggerFactory.getLogger(Employees.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmployeesRepository.class);
 
     private List<Employee> employees;
 
-    public Employees() {
+    public EmployeesRepository() {
         logger.debug("Creating employee repository");
         this.employees = importEmployees();
     }

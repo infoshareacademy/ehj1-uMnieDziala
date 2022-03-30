@@ -10,9 +10,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-class EmployeesTest {
+class EmployeesRepositoryTest {
 
-    private Employees sut;
+    private EmployeesRepository sut;
     @Test
     void shouldContainsOnlyTestEmployeesFromFile() {
         // given
@@ -22,6 +22,7 @@ class EmployeesTest {
         // then
         assertThat(refferenceEmployees).containsExactlyElementsOf(result);
     }
+
 
     private List<Employee> getRefferenceEmployees() {
 
