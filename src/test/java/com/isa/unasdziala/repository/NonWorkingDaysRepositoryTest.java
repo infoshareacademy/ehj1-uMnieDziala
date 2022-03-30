@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,7 +49,7 @@ class NonWorkingDaysRepositoryTest {
         // given
         Day testDay = getTestDay();
         Day addedTestDay = sut.add(testDay);
-        Long id = addedTestDay.getId();
+        UUID id = addedTestDay.getId();
 
         // when
         Optional<Day> resultOptional = sut.findById(id);
@@ -66,7 +67,7 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldFindByIdAlwaysReturnOptional() {
         // when
-        Optional<Day> day = sut.findById(-1L);
+        Optional<Day> day = sut.findById(UUID.randomUUID());
         // then
         assertThat(day).isInstanceOf(Optional.class);
     }
@@ -107,7 +108,7 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldBeOptionalEmptyWhenDayWithGivenIdIsNotInRepository() {
         // given
-        long notExistingId = -1L;
+        UUID notExistingId = UUID.fromString("11111111-1111-1111-1111-111111111111");
         // when
         Optional<Day> result = sut.findById(notExistingId);
         // then
@@ -119,7 +120,7 @@ class NonWorkingDaysRepositoryTest {
         // given
         Day testDay = getTestDay();
         Day addedTestDay = sut.add(testDay);
-        Long id = addedTestDay.getId();
+        UUID id = addedTestDay.getId();
 
         LocalDate newDate = LocalDate.now().plusMonths(1);
         String newName = "newTestName";
@@ -140,7 +141,7 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldBeOptionalEmptyWhenTryDeleteNonExistingDay() {
         // given
-        Long id = -1L;
+        UUID id = UUID.randomUUID();
         // when
         Optional<Day> result = sut.deleteById(id);
         // then
@@ -153,7 +154,7 @@ class NonWorkingDaysRepositoryTest {
         // given
         Day testDay = getTestDay();
         Day addedTestDay = sut.add(testDay);
-        Long id = addedTestDay.getId();
+        UUID id = addedTestDay.getId();
         // when
         Optional<Day> optionalResult = sut.deleteById(id);
         @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -167,7 +168,7 @@ class NonWorkingDaysRepositoryTest {
         // given
         Day testDay = getTestDay();
         Day addedTestDay = sut.add(testDay);
-        Long id = addedTestDay.getId();
+        UUID id = addedTestDay.getId();
         // when
         sut.deleteById(id);
         Optional<Day> result = sut.findById(id);

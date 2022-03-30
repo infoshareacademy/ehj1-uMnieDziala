@@ -6,20 +6,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class NonWorkingDaysRepository {
     private final List<Day> nonWorkingDays = importNonWorkingDays();
-    private static Long counter = 0L;
 
     public Day add(Day day) {
-        day.setId(counter);
-        counter += 1;
+        day.setId(UUID.randomUUID());
         nonWorkingDays.add(day);
         return day;
     }
 
-    public Optional<Day> findById(Long id) {
+    public Optional<Day> findById(UUID id) {
         return nonWorkingDays.stream().filter(day -> day.getId().equals(id)).findFirst();
     }
 
@@ -31,13 +30,13 @@ public class NonWorkingDaysRepository {
         return List.copyOf(nonWorkingDays);
     }
 
-    public Optional<Day> deleteById(Long id) {
+    public Optional<Day> deleteById(UUID id) {
         Optional<Day> day = findById(id);
         day.ifPresent(nonWorkingDays::remove);
         return day;
     }
 
-    public Optional<Day> updateById(Long id, Day newDay) {
+    public Optional<Day> updateById(UUID id, Day newDay) {
         Optional<Day> optionalDay = findById(id);
         if (optionalDay.isPresent()) {
             Day day = optionalDay.get();
