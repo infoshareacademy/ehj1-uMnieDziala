@@ -1,0 +1,12 @@
+version: '2'
+services:
+  db:
+    image: mysql
+    container_name: holidays-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+    volumes:
+      - ./fixtures:/fixtures
+      - ./mysql:/var/lib/mysql
