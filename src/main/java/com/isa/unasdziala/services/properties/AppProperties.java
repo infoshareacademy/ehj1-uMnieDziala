@@ -16,7 +16,7 @@ import java.util.Properties;
 public class AppProperties {
     private final static Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
     ClassLoader classLoader = getClass().getClassLoader();
-    private final String PROPERTIES_FILE_NAME = "not_working_days.properties";
+    private final String PROPERTIES_FILE_NAME = "app.properties";
     private final File PROPERTIES_FILE = new File(classLoader.getResource(PROPERTIES_FILE_NAME).getFile());
     private Properties properties;
 
@@ -29,7 +29,16 @@ public class AppProperties {
         String property = properties.getProperty("country");
         if (property != null) {
         } else {
-            LOGGER.info("Properties COUNTRY is empty");
+            LOGGER.error("Properties 'country' is empty");
+        }
+        return property;
+    }
+
+    public String getNumberOfHolidaysDays() {
+        String property = properties.getProperty("holidays_days");
+        if (property != null) {
+        } else {
+            LOGGER.error("Properties 'holidays_days' is empty");
         }
         return property;
     }
