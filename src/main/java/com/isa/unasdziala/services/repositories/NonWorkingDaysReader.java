@@ -32,19 +32,21 @@ public class NonWorkingDaysReader {
 
     private void setNonWorkingDays() {
         try {
+            LOGGER.info("Start read file: {}" , NON_WORKING_DAYS_FILE_NAME);
             FileReader fileReader = new FileReader(NON_WORKING_DAYS_FILE);
-
+            LOGGER.info("Start load non working days from file");
             List<Day> result = objectMapper
                     .readerFor(new TypeReference<List<Day>>() {})
                     .readValue(fileReader);
             nonWorkingDays.addAll(result);
+            LOGGER.info("Have been loaded: {} day/s", result.size());
 
-        } catch (StreamReadException ex) {
-            ex.printStackTrace();
-        } catch (DatabindException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (StreamReadException e) {
+            LOGGER.error("Error while loading non working days", e);
+        } catch (DatabindException e) {
+            LOGGER.error("Error while loading non working days", e);
+        } catch (IOException e) {
+            LOGGER.error("Error while loading non working days", e);
         }
     }
 }

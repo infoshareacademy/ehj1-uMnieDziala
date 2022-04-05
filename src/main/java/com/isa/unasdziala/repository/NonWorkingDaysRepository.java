@@ -4,6 +4,8 @@ import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.services.properties.AppProperties;
 import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.stream.Collectors;
 
 @Getter
 public class NonWorkingDaysRepository {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
     private final List<Day> nonWorkingDays = importNonWorkingDays();
 
     public Day add(Day day) {
@@ -52,10 +56,14 @@ public class NonWorkingDaysRepository {
 
 
     private List<Day> importNonWorkingDays() {
+        LOGGER.info("Start import non working days to repository");
         NonWorkingDaysReader nonWorkingDaysReader = new NonWorkingDaysReader();
         String countryName = new AppProperties().getCountryName();
-        return nonWorkingDaysReader.getNonWorkingDays().stream()
+        LOGGER.info("Filtr non working days country by: {}", countryName);
+        List<Day> nonWorkingDaysRepository = nonWorkingDaysReader.getNonWorkingDays().stream()
                 .filter(day -> day.getCountry().equals(countryName))
                 .collect(Collectors.toList());
+        LOGGER.info("Have been imported {} day/s to country: {}",nonWorkingDaysRepository.size(), countryName);
+        return nonWorkingDaysRepository;
     }
 }
