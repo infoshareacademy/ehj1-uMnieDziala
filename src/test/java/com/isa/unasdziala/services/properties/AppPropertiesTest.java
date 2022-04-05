@@ -2,8 +2,6 @@ package com.isa.unasdziala.services.properties;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Properties;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class AppPropertiesTest {
@@ -17,18 +15,19 @@ class AppPropertiesTest {
         // when
         sut = new AppProperties();
         // then
-        assertThat(sut).isNotNull();
+        assertThat(sut.getProperties()).isNotNull();
     }
 
     @Test
-    void shouldGetCountryName() {
+    void shouldGetCountryNameFromProperties() {
         // given
         sut = new AppProperties();
-        // whe
+        String expectedCountry = "pl";
+        // when
         String result = sut.getCountryName();
         // then
         assertThat(result).isNotNull();
-        assertThat(result).isEqualTo("pl");
+        assertThat(result).isEqualTo(expectedCountry);
     }
 }
 

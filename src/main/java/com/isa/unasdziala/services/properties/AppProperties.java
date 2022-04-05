@@ -4,21 +4,24 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 
+@Getter
 public class AppProperties {
     private final static Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
-    private final static Path PROPERTIES_FILE_PATH = Paths.get("src", "main", "resources", "not_working_days.properties");
-    private static Properties properties;
+    ClassLoader classLoader = getClass().getClassLoader();
+    private final String PROPERTIES_FILE_NAME = "not_working_days.properties";
+    private final File PROPERTIES_FILE = new File(classLoader.getResource(PROPERTIES_FILE_NAME).getFile());
+    private Properties properties;
 
     public AppProperties() {
-        properties = readFile(PROPERTIES_FILE_PATH);
+        properties = readFile(PROPERTIES_FILE.toPath());
     }
 
 

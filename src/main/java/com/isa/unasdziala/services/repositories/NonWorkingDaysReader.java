@@ -1,18 +1,18 @@
 package com.isa.unasdziala.services.repositories;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isa.unasdziala.domain.Day;
-import com.isa.unasdziala.services.properties.AppProperties;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,23 +20,31 @@ public class NonWorkingDaysReader {
     public static final String HOLIDAYS_FILE_NAME = "holidays.json";
 
     private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysReader.class);
-    private List<Day> nonWorkingDays;
-    private final Path usersPath = Paths.get(NonWorkingDaysReader.class.getClassLoader().getResource(HOLIDAYS_FILE_NAME).getPath());
-    private final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer("yyyy-MM-dd"))
-            .create();
+    private List<Day> nonWorkingDays = new ArrayList<Day>();
+    ClassLoader classLoader = getClass().getClassLoader();
+    private final String NON_WORKING_DAYS_FILE_NAME = "holidays.json";
+    private final File NON_WORKING_DAYS_FILE = new File(classLoader.getResource(NON_WORKING_DAYS_FILE_NAME).getFile());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public NonWorkingDaysReader() {
-        getNonWorkingDays();
+        setNonWorkingDays();
     }
 
-    private void getNonWorkingDays(){
+    private void setNonWorkingDays() {
         try {
-            FileReader fileReader = new FileReader(usersPath.toString());
-            nonWorkingDays = gson.fromJson(fileReader, List.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            FileReader fileReader = new FileReader(NON_WORKING_DAYS_FILE);
+
+            List<Day> result = objectMapper
+                    .readerFor(new TypeReference<List<Day>>() {})
+                    .readValue(fileReader);
+            nonWorkingDays.addAll(result);
+
+        } catch (StreamReadException ex) {
+            ex.printStackTrace();
+        } catch (DatabindException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }
