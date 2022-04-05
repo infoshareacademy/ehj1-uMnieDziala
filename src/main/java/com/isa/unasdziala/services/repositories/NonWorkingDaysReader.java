@@ -42,11 +42,11 @@ public class NonWorkingDaysReader {
             LOGGER.info("Have been loaded: {} day/s", result.size());
 
         } catch (StreamReadException e) {
-            LOGGER.error("Error while loading non working days", e);
+            LOGGER.error("Error while reading non working days file, " + e.getMessage());
         } catch (DatabindException e) {
-            LOGGER.error("Error while loading non working days", e);
+            LOGGER.error("Error while mapping non working days, " + e.getMessage());
         } catch (IOException e) {
-            LOGGER.error("Error while loading non working days", e);
+            LOGGER.error("File read error, " + e.getMessage());
         }
     }
 }
