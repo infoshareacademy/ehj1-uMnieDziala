@@ -47,7 +47,6 @@ public class NonWorkingDaysRepository {
         return optionalDay;
     }
 
-
     private List<Day> importNonWorkingDays() {
         return new ArrayList<>();
     }
