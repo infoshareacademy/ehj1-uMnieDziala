@@ -1,6 +1,7 @@
 package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.domain.Day;
+import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,7 +13,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class NonWorkingDaysRepositoryTest {
 
-    private final NonWorkingDaysRepository sut = new NonWorkingDaysRepository();
+    private NonWorkingDaysRepository sut = new NonWorkingDaysRepository();
+
+    @Test
+    void shouldLoadNonWorkingDaysRepository() {
+        // when
+        sut = new NonWorkingDaysRepository();
+        // then
+        assertThat(sut.getNonWorkingDays()).isNotNull();
+    }
+
+    @Test
+    void shouldDayCountryNameBeLikePl() {
+        // given
+        List<Day> dayList = sut.findAll();
+        Day day = dayList.get(1);
+        // when
+        String result = day.getCountry();
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo("pl");
+    }
 
     @Test
     void shouldFindAllAlwaysReturnList() {
@@ -180,27 +201,7 @@ class NonWorkingDaysRepositoryTest {
         return new Day(LocalDate.now(), "TestName", "TestDesc");
     }
 }
-import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-class NonWorkingDaysRepositoryTest {
-
-    private NonWorkingDaysRepository sut;
-
-    @Test
-    void shouldLoadNonWorkingDaysRepository() {
-        // given
-
-        // when
-        sut = new NonWorkingDaysRepository();
-        // then
-        assertThat(sut.getNonWorkingDays()).isNotNull();
-        System.out.println(sut.getNonWorkingDays().size());
-        sut.getNonWorkingDays().stream().forEach(day -> System.out.println(day.toString()));
-
-    }
-}
 
 
 
