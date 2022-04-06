@@ -27,7 +27,7 @@ public class Employee {
     private Department department;
     @CsvBindByPosition(position = 11)
     private float holidays;
-    private Set<Day> events;
+    private Set<Day> events=new HashSet<>();
 
 
     public Employee(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
