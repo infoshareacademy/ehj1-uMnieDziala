@@ -23,6 +23,4 @@ public class Address {
     String houseNumber;
     @CsvBindByPosition(position = 9)
     String  flatNumber;
-    @OneToOne(mappedBy = "address")
-    Employee employee;
     }

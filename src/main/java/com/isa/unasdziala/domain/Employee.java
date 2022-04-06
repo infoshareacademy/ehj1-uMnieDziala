@@ -7,18 +7,9 @@ import com.opencsv.bean.CsvRecurse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-
-@Entity
-@Table(name = "employees")
 
 public class Employee {
 
@@ -27,13 +18,9 @@ public class Employee {
     @CsvBindByPosition(position = 1)
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contact_id")
     @CsvRecurse
     private Contact contact;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "home_address_id")
     @CsvRecurse
     private Address address;
 
