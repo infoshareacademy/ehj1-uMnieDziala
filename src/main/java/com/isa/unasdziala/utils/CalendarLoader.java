@@ -1,7 +1,7 @@
 package com.isa.unasdziala.utils;
 
+import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Employee;
-import com.isa.unasdziala.domain.Event;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -22,8 +22,8 @@ public class CalendarLoader {
 
     public static final DateTimeFormatter ICAL_DATA_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public Set<Event> loadEmployeeEventCalendar(Employee employee) {
-        Set<Event> eventDays = new HashSet<>();
+    public Set<Day> loadEmployeeEventCalendar(Employee employee) {
+        Set<Day> eventDays = new HashSet<>();
 
         String fileName = employee.getFirstName() + "_" + employee.getLastName() + ".ics";
         URL employeeCalendarURL = Employee.class.getClassLoader().getResource(fileName);
@@ -39,7 +39,7 @@ public class CalendarLoader {
             System.out.println(calendar);
 
             for (CalendarComponent event : calendar.getComponents(Component.VEVENT)) {
-                Event newEvent = convertIcalEventToDomainEvent(event);
+                Day newEvent = convertIcalEventToDomainEvent(event);
                 eventDays.add(newEvent);
             }
         } catch (IOException e) {
@@ -50,11 +50,11 @@ public class CalendarLoader {
         return eventDays;
     }
 
-    private Event convertIcalEventToDomainEvent(CalendarComponent event) {
-        Event newEvent = new Event();
+    private Day convertIcalEventToDomainEvent(CalendarComponent event) {
+        Day newEvent = new Day();
         String eventDateString = event.getProperty(Property.DTSTART).getValue().substring(0, 8);
         LocalDate eventDate = LocalDate.parse(eventDateString, ICAL_DATA_FORMATTER);
-        newEvent.setEventDate(eventDate);
+        newEvent.setDate(eventDate);
         newEvent.setId(UUID.randomUUID());
         return newEvent;
     }

@@ -18,7 +18,7 @@ class EmployeesRepositoryTest {
     @Test
     void shouldContainsOnlyTestEmployeesFromFile() {
         // given
-        List<Employee> referenceEmployees = getRefferenceEmployees();
+        List<Employee> referenceEmployees = getReferenceEmployees();
         // when
         List<Employee> result = sut.importEmployees();
         // then
@@ -26,7 +26,7 @@ class EmployeesRepositoryTest {
     }
 
 
-    private List<Employee> getRefferenceEmployees() {
+    private List<Employee> getReferenceEmployees() {
 
         Address address1 = new Address("Bylowo-Leśnictwo", "80-002", "Kartuzy", "", "5", "");
         Address address2 = new Address("Gdynia", "80-001", "Gdynia", "Starowiejska", "5", "33");
