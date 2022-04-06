@@ -19,7 +19,7 @@ import java.util.List;
 public class NonWorkingDaysReader {
     public static final String HOLIDAYS_FILE_NAME = "holidays.json";
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysReader.class);
+    private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysReader.class);
     private List<Day> nonWorkingDays = new ArrayList<Day>();
     ClassLoader classLoader = getClass().getClassLoader();
     private final String NON_WORKING_DAYS_FILE_NAME = "holidays.json";
@@ -32,21 +32,21 @@ public class NonWorkingDaysReader {
 
     private void setNonWorkingDays() {
         try {
-            LOGGER.info("Start read file: {}" , NON_WORKING_DAYS_FILE_NAME);
+            log.info("Start read file: {}", NON_WORKING_DAYS_FILE_NAME);
             FileReader fileReader = new FileReader(NON_WORKING_DAYS_FILE);
-            LOGGER.info("Start load non working days from file");
+            log.info("Start load non working days from file");
             List<Day> result = objectMapper
                     .readerFor(new TypeReference<List<Day>>() {})
                     .readValue(fileReader);
             nonWorkingDays.addAll(result);
-            LOGGER.info("Have been loaded: {} day/s", result.size());
+            log.info("Have been loaded: {} day/s", result.size());
 
         } catch (StreamReadException e) {
-            LOGGER.error("Error while reading non working days file, " + e.getMessage());
+            log.error("Error while reading non working days file, " + e.getMessage());
         } catch (DatabindException e) {
-            LOGGER.error("Error while mapping non working days, " + e.getMessage());
+            log.error("Error while mapping non working days, " + e.getMessage());
         } catch (IOException e) {
-            LOGGER.error("File read error, " + e.getMessage());
+            log.error("File read error, " + e.getMessage());
         }
     }
 }

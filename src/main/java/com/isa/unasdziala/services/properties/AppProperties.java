@@ -34,15 +34,6 @@ public class AppProperties {
         return property;
     }
 
-    public String getNumberOfHolidaysDays() {
-        String property = properties.getProperty("holidays_days");
-        if (property != null) {
-        } else {
-            LOGGER.error("Properties 'holidays_days' is empty");
-        }
-        return property;
-    }
-
     private Properties readFile(Path fileName) {
         Properties appProperties = new Properties();
         try {

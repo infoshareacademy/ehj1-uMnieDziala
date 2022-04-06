@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Getter
 public class NonWorkingDaysRepository {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
+    private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
     private final List<Day> nonWorkingDays = importNonWorkingDays();
 
     public Day add(Day day) {
@@ -55,14 +55,14 @@ public class NonWorkingDaysRepository {
     }
 
     private List<Day> importNonWorkingDays() {
-        LOGGER.info("Start import non working days to repository");
+        log.info("Start import non working days to repository");
         NonWorkingDaysReader nonWorkingDaysReader = new NonWorkingDaysReader();
         String countryName = new AppProperties().getCountryName();
-        LOGGER.info("Filtr non working days country by: {}", countryName);
+        log.info("Filtr non working days country by: {}", countryName);
         List<Day> nonWorkingDaysRepository = nonWorkingDaysReader.getNonWorkingDays().stream()
                 .filter(day -> day.getCountry().equals(countryName))
                 .collect(Collectors.toList());
-        LOGGER.info("Have been imported {} day/s to country: {}",nonWorkingDaysRepository.size(), countryName);
+        log.info("Have been imported {} day/s to country: {}", nonWorkingDaysRepository.size(), countryName);
         return nonWorkingDaysRepository;
     }
 }

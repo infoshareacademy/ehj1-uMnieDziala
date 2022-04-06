@@ -3,6 +3,7 @@ package com.isa.unasdziala.domain;
 import com.isa.unasdziala.domain.converter.DepartmentConverter;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByPosition;
+import com.opencsv.bean.CsvIgnore;
 import com.opencsv.bean.CsvRecurse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +28,10 @@ public class Employee {
     private Department department;
     @CsvBindByPosition(position = 11)
     private float holidays;
+    @CsvIgnore
     private Set<Day> events;
+    @CsvIgnore
+    private Set<Holiday> holidayDays;
 
 
     public Employee(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
