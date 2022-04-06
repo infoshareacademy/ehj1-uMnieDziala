@@ -1,8 +1,12 @@
 package com.isa.unasdziala;
 
+import com.isa.unasdziala.dao.EmployeeDao;
 import com.isa.unasdziala.repository.EmployeesRepository;
+import com.isa.unasdziala.services.EmployeeServiceBase;
+import com.isa.unasdziala.utils.HibernateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.persistence.EntityManager;
 
 public class Main {
 public static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -11,5 +15,14 @@ public static final Logger logger = LoggerFactory.getLogger(Main.class);
         System.out.println("Run...");
         logger.info("\ntest loggera");
         System.out.println(EmployeesRepository.importEmployees());
+        new Main().run();
+
+
     }
+
+    private void run() {
+        EntityManager em = HibernateUtil.getEntityManager();
+        EmployeeServiceBase service = new EmployeeServiceBase(new EmployeeDao());
+    }
+
 }
