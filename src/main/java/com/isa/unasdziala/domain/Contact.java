@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Contact {
+
     @CsvBindByPosition(position = 2)
     String phoneNo;
     @CsvBindByPosition(position = 3)
     String emailAddress;
+
 }

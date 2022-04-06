@@ -29,7 +29,7 @@ public class Employee {
     @CsvBindByPosition(position = 11)
     private float holidays;
     @CsvIgnore
-    private Set<Day> events;
+    private Set<Day> events=new HashSet<>();
     @CsvIgnore
     private Set<Holiday> holidayDays;
 
