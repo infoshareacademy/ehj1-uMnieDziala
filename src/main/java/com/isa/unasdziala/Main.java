@@ -1,5 +1,6 @@
 package com.isa.unasdziala;
 
+import com.isa.unasdziala.cli.MainCli;
 import com.isa.unasdziala.repository.EmployeesRepository;
 import com.isa.unasdziala.repository.NonWorkingDaysRepository;
 import com.isa.unasdziala.services.NonWorkingDayService;
@@ -10,10 +11,6 @@ public class Main {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        System.out.println("Run...");
-        logger.info("\ntest loggera");
-        EmployeesRepository employeesRepository = new EmployeesRepository();
-        NonWorkingDayService nonWorkingDayService = new NonWorkingDayService(new NonWorkingDaysRepository());
-        System.out.println();
+        new MainCli().run();
     }
 }

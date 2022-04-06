@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,7 +18,11 @@ import java.util.stream.Collectors;
 public class NonWorkingDaysRepository {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
-    private final List<Day> nonWorkingDays = importNonWorkingDays();
+    private final List<Day> nonWorkingDays = new ArrayList<>();
+
+    public NonWorkingDaysRepository() {
+        importNonWorkingDays();
+    }
 
     public Day add(Day day) {
         day.setId(UUID.randomUUID());
@@ -54,15 +59,15 @@ public class NonWorkingDaysRepository {
         return optionalDay;
     }
 
-    private List<Day> importNonWorkingDays() {
+    private void importNonWorkingDays() {
         LOGGER.info("Start import non working days to repository");
         NonWorkingDaysReader nonWorkingDaysReader = new NonWorkingDaysReader();
         String countryName = new AppProperties().getCountryName();
         LOGGER.info("Filtr non working days country by: {}", countryName);
-        List<Day> nonWorkingDaysRepository = nonWorkingDaysReader.getNonWorkingDays().stream()
+        nonWorkingDaysReader.getNonWorkingDays().stream()
                 .filter(day -> day.getCountry().equals(countryName))
-                .collect(Collectors.toList());
-        LOGGER.info("Have been imported {} day/s to country: {}",nonWorkingDaysRepository.size(), countryName);
-        return nonWorkingDaysRepository;
+                .forEach(this::add);
+        LOGGER.info("Have been imported {} day/s to country: {}", nonWorkingDays.size(), countryName);
+
     }
 }
