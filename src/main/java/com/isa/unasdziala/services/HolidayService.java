@@ -16,7 +16,7 @@ public class HolidayService {
     }
 
     public void addDay(Holiday holiday) {
-        log.info("Add new holiday day {} to repository", holiday.toString());
-
+        log.info("Add new holiday day {} to repository", holiday.getDate().toString());
+        holidayRepository.save(holiday);
     }
 }
