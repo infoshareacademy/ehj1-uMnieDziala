@@ -22,20 +22,20 @@ public class EmployeesRepository {
     private final File CSV_FILE = new File(classLoader.getResource(CSV_FILE_NAME).getFile());
     private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
     private static final char CSV_SEPARATOR = ';';
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeesRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(EmployeesRepository.class);
     private final CalendarLoader calendarLoader = new CalendarLoader();
 
     private List<Employee> employees;
 
     public EmployeesRepository() {
-        LOGGER.info("Creating employee repository");
+        log.info("Creating employee repository");
         if (this.employees == null) {
             this.employees = importEmployees();
         }
     }
 
     List<Employee> importEmployees() {
-        LOGGER.info("Start read file: {}", CSV_FILE_NAME);
+        log.info("Start read file: {}", CSV_FILE_NAME);
         List<Employee> employees = new ArrayList<>();
         try (FileReader fileReader = new FileReader(CSV_FILE)) {
             employees = new CsvToBeanBuilder<Employee>(fileReader)
@@ -45,15 +45,15 @@ public class EmployeesRepository {
                     .build()
                     .parse();
 
-            LOGGER.info("Have been loaded: {} employees", employees.size());
+            log.info("Have been loaded: {} employees", employees.size());
             for (Employee e : employees) {
                 e.setEvents(calendarLoader.loadEmployeeEventCalendar(e));
             }
 
         } catch (StreamReadException e) {
-            LOGGER.error("Error while reading non working days file, " + e.getMessage());
+            log.error("Error while reading non working days file, " + e.getMessage());
         } catch (IOException e) {
-            LOGGER.error("File read error, " + e.getMessage());
+            log.error("File read error, " + e.getMessage());
         }
         return employees;
     }
