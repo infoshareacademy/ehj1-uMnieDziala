@@ -56,7 +56,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>
         </dependency>
-
         <dependency>
             <groupId>org.bedework.ical4j</groupId>
             <artifactId>ical4j</artifactId>
@@ -98,7 +97,6 @@
             <version>8.0.28</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
