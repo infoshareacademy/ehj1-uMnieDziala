@@ -2,6 +2,7 @@ package com.isa.unasdziala.domain.entities;
 
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
+import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Department;
 import com.isa.unasdziala.domain.converter.DepartmentConverter;
 import com.opencsv.bean.CsvBindByPosition;
@@ -12,17 +13,16 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
-@AllArgsConstructor
-@Data
+@Builder
 @Entity
 @Table(name = "employees")
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
-public class Employee {
+public class Employee { // rozdzielić
 
     @Id
     @GeneratedValue(generator = "uuid-generator")
@@ -40,10 +40,12 @@ public class Employee {
     private String lastName;
 
     @CsvRecurse
+    @Embedded
     @Column(nullable = false)
     private Contact contact;
 
     @CsvRecurse
+    @Embedded
     @Column(nullable = false)
     private Address address;
 
@@ -55,4 +57,5 @@ public class Employee {
     @CsvBindByPosition(position = 11)
     @Column(nullable = false)
     private float holidays;
+//    private Set<Day> events;  // LocalDate
 }

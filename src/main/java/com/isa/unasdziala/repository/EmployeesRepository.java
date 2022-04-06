@@ -1,6 +1,7 @@
 package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.domain.entities.Employee;
+import com.isa.unasdziala.utils.CalendarLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +20,9 @@ public class EmployeesRepository {
     private static final char CSV_SEPARATOR = ';';
     private static final Logger logger = LoggerFactory.getLogger(EmployeesRepository.class);
     private static final String EMPLOYEES_CSV_FILE_NAME = "employees_repository.csv";
+    private static final CalendarLoader calendarLoader = new CalendarLoader();
 
-    private static List<Employee> employees;
+    private List<Employee> employees;
 
     public EmployeesRepository() {
         logger.debug("Creating employee repository");
@@ -54,10 +56,13 @@ public class EmployeesRepository {
         return employee;
     }
 
-    public static Optional<Employee> findEmployeeByLastName(String lastName) {
+    public Optional<Employee> findEmployeeByLastName(String lastName) {  // List
+        if (lastName == null) {
+            return Optional.empty();
+        }
         return employees
                 .stream()
-                .filter(employee -> employee.getLastName().equals(lastName))
+                .filter(employee -> lastName.equals(employee.getLastName()))
                 .findFirst();
     }
 
@@ -65,8 +70,8 @@ public class EmployeesRepository {
         return List.copyOf(employees);
     }
 
-    public Optional<Employee> updateEmployeeByLastName(String lastName, Employee newEmployee) {
-        Optional<Employee> optionalEmployee = findEmployeeByLastName(lastName);
+    public Optional<Employee> updateEmployeeByLastName(Employee newEmployee) {  // po id
+        Optional<Employee> optionalEmployee = findEmployeeByLastName(newEmployee.getLastName());
         if (optionalEmployee.isPresent()) {
             Employee employee = optionalEmployee.get();
             employee.setFirstName(newEmployee.getFirstName());
@@ -83,6 +88,6 @@ public class EmployeesRepository {
     }
 
     String pathToEmployeesCSVFile() {
-        return EmployeesRepository.class.getClassLoader().getResource(String.valueOf(EMPLOYEES_CSV_FILE_NAME)).getPath();
+        return getClass().getClassLoader().getResource(String.valueOf(EMPLOYEES_CSV_FILE_NAME)).getPath();
     }
 }

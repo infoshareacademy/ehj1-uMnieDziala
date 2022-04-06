@@ -17,13 +17,13 @@ public record EmployeesService(EmployeesRepository employeeRepository) {
         return employeeRepository.findAllEmployees();
     }
 
-    public Employee findEmployeeByLastName(String lastName) throws IllegalArgumentException {
+    public Employee findEmployeeByLastName(String lastName) throws IllegalArgumentException { // List
         Optional<Employee> employee = employeeRepository.findEmployeeByLastName(lastName);
         return employee.orElseThrow(() -> new IllegalArgumentException("Wrong last name: " + lastName));
     }
 
-    public Employee updateEmployeeByLastName(String lastName, Employee newEmployee) throws IllegalArgumentException {
-        Optional<Employee> deletedEmployee = employeeRepository.updateEmployeeByLastName(lastName, newEmployee);
+    public Employee updateEmployeeByLastName(String lastName, Employee newEmployee) throws IllegalArgumentException {  //po id
+        Optional<Employee> deletedEmployee = employeeRepository.updateEmployeeByLastName(newEmployee);
         return deletedEmployee.orElseThrow(() -> new IllegalArgumentException("Wrong last name: " + lastName));
     }
 

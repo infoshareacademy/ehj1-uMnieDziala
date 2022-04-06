@@ -3,18 +3,20 @@ package com.isa.unasdziala.dto;
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Department;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.UUID;
 
-public record EmployeeDto(UUID id, String firstName, String lastName, Contact contact, Address address,
-                          Department department, float holidays) {
+@Getter
+@Builder
+public class EmployeeDto {
 
-    public EmployeeDto(UUID id, String firstName, String lastName, Contact contact, Address address,
-                       Department department, float holidays){
-        this(id, firstName, lastName, contact, address, department, holidays);
-    }
-
+    private UUID id;
+    private String firstName;
+    private String lastName;
+    private Contact contact;
+    private Address address;
+    private Department department;
+    private float holidays;
 }

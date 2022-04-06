@@ -8,7 +8,7 @@ public class EmployeeAdapter {
         if (entityEmployee == null) {
             return null;
         }
-        return new EmployeeDto(entityEmployee.getId(),
+        return EmployeeDto.builder().id(employee.id(),
                 entityEmployee.getFirstName(),
                 entityEmployee.getLastName(),
                 entityEmployee.getContact(),
@@ -22,14 +22,13 @@ public class EmployeeAdapter {
         if (employeeDto == null) {
             return null;
         }
-        Employee employee = new Employee(employeeDto.id(),
-                employeeDto.firstName(),
-                employeeDto.lastName(),
-                employeeDto.contact(),
-                employeeDto.address(),
-                employeeDto.department(),
-                employeeDto.holidays());
-        return employee;
-
-    }
+        Employee employee = Employee.builder().id(employeeDto.getId())
+                .firstName(employeeDto.getFirstName())
+                .lastName(employeeDto.getLastName())
+                .contact(employeeDto.getContact())
+                .address(employeeDto.getAddress())
+                .department(employeeDto.getDepartment())
+                .holidays(employeeDto.getHolidays()) {
+            return employee;
+        }
 }

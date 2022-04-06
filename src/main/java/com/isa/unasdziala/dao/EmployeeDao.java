@@ -49,7 +49,7 @@ public class EmployeeDao {
     }
 
     public List<EmployeeDto> findAll() {
-        return em.createNamedQuery("EntityEmployee.findAll", Employee.class)
+        return em.createNamedQuery("Employee.findAll", Employee.class)
                 .getResultStream()
                 .map(adapter::convertToEmployeeDto)
                 .toList();
