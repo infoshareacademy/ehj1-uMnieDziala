@@ -12,7 +12,7 @@ import java.util.List;
 
 class EmployeesRepositoryTest {
 
-    private EmployeesRepository sut;
+    private EmployeesImporter sut;
     @Test
     void shouldContainsOnlyTestEmployeesFromFile() {
         // given
@@ -34,7 +34,7 @@ class EmployeesRepositoryTest {
 
         testEmployees.add(new Employee("Adam","Superclass",    new Contact("111222333","adam@company.com"),    address1, Department.DEPARTAMENT_FINANSOW ,22.5f));
         testEmployees.add(new Employee("Jan","Maven",           new Contact ("222333444","jan@company.com"),   address2, Department.DEPARTAMENT_AKTUARIALNY,44f));
-        testEmployees.add(new Employee("Monika","Git" ,      new Contact ("444555666","monika@company.com"),   address3, Department.DEPARTAMENT_SPRZEDAZY,0f));
+        testEmployees.add(new Employee( "Monika","Git" ,      new Contact ("444555666","monika@company.com"),   address3, Department.DEPARTAMENT_SPRZEDAZY,0f));
         testEmployees.add(new Employee("Karolina","Pullrequest",new Contact("999888777","karolina@company.com"),address4, Department.DEPARTAMENT_AKTUARIALNY,0.5f));
 
         return testEmployees;

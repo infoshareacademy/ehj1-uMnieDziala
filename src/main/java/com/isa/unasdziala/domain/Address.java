@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.OneToOne;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +23,6 @@ public class Address {
     String houseNumber;
     @CsvBindByPosition(position = 9)
     String  flatNumber;
+    @OneToOne(mappedBy = "address")
+    Employee employee;
     }
