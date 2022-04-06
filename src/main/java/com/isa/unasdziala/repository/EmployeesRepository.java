@@ -1,6 +1,6 @@
 package com.isa.unasdziala.repository;
 
-import com.isa.unasdziala.domain.Employee;
+import com.isa.unasdziala.domain.entities.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -17,8 +18,9 @@ public class EmployeesRepository {
     private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
     private static final char CSV_SEPARATOR = ';';
     private static final Logger logger = LoggerFactory.getLogger(EmployeesRepository.class);
+    private static final String EMPLOYEES_CSV_FILE_NAME = "employees_repository.csv";
 
-    private List<Employee> employees;
+    private static List<Employee> employees;
 
     public EmployeesRepository() {
         logger.debug("Creating employee repository");

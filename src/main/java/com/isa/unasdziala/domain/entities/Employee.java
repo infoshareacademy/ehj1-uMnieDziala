@@ -1,9 +1,9 @@
 package com.isa.unasdziala.domain.entities;
 
-import com.isa.unasdziala.converter.DepartmentConverter;
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Department;
+import com.isa.unasdziala.domain.converter.DepartmentConverter;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvCustomBindByPosition;
 import com.opencsv.bean.CsvRecurse;

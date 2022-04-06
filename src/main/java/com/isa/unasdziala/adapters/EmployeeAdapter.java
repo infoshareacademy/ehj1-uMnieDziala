@@ -29,6 +29,7 @@ public class EmployeeAdapter {
                 employeeDto.address(),
                 employeeDto.department(),
                 employeeDto.holidays());
+        return employee;
 
     }
 }

@@ -3,12 +3,12 @@ package com.isa.unasdziala.repository;
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Department;
-import com.isa.unasdziala.domain.Employee;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class EmployeesRepositoryTest {
 
