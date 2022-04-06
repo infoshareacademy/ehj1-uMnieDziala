@@ -54,7 +54,6 @@ public class NonWorkingDaysRepository {
         return optionalDay;
     }
 
-
     private List<Day> importNonWorkingDays() {
         LOGGER.info("Start import non working days to repository");
         NonWorkingDaysReader nonWorkingDaysReader = new NonWorkingDaysReader();
