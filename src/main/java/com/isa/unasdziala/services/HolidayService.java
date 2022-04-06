@@ -6,6 +6,8 @@ import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class HolidayService {
 
     private final HolidayRepository holidayRepository;
@@ -18,5 +20,9 @@ public class HolidayService {
     public void addDay(Holiday holiday) {
         log.info("Add new holiday day {} to repository", holiday.getDate().toString());
         holidayRepository.save(holiday);
+    }
+
+    public List<Holiday> findAll() {
+        return holidayRepository.findAll();
     }
 }

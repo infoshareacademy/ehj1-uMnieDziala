@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 public class HolidayRepository {
 
@@ -17,5 +18,11 @@ public class HolidayRepository {
         log.info("Add new holiday day to repository");
         em.persist(holidayDay);
         return holidayDay;
+    }
+
+    public List<Holiday> findAll() {
+        return em.createQuery("from Holiday", Holiday.class)
+                .getResultStream()
+                .toList();
     }
 }
