@@ -17,12 +17,12 @@ import java.util.List;
 
 @Getter
 public class NonWorkingDaysReader {
-    public static final String HOLIDAYS_FILE_NAME = "holidays.json";
+    public static final String HOLIDAYS_FILE_NAME = "non_working_days.json";
 
     private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysReader.class);
     private List<Day> nonWorkingDays = new ArrayList<Day>();
     ClassLoader classLoader = getClass().getClassLoader();
-    private final String NON_WORKING_DAYS_FILE_NAME = "holidays.json";
+    private final String NON_WORKING_DAYS_FILE_NAME = "non_working_days.json";
     private final File NON_WORKING_DAYS_FILE = new File(classLoader.getResource(NON_WORKING_DAYS_FILE_NAME).getFile());
     private final ObjectMapper objectMapper = new ObjectMapper();
 

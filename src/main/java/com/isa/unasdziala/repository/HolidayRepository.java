@@ -21,7 +21,7 @@ public class HolidayRepository {
     }
 
     public List<Holiday> findAll() {
-        return em.createQuery("from Holiday", Holiday.class)
+        return em.createQuery("from Holiday ", Holiday.class)
                 .getResultStream()
                 .toList();
     }

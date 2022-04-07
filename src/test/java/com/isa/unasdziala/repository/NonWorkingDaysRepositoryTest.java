@@ -1,7 +1,6 @@
 package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.domain.Day;
-import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -18,16 +17,17 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldLoadNonWorkingDaysRepository() {
         // when
-        sut = new NonWorkingDaysRepository();
+        sut.initialize();
         // then
-        assertThat(sut.getNonWorkingDays()).isNotNull();
+        assertThat(sut.findAll()).isNotEmpty();
     }
 
     @Test
     void shouldDayCountryNameBeLikePl() {
         // given
+        sut.initialize();
         List<Day> dayList = sut.findAll();
-        Day day = dayList.get(1);
+        Day day = dayList.get(0);
         // when
         String result = day.getCountry();
         // then

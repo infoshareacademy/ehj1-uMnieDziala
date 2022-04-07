@@ -2,6 +2,8 @@ package com.isa.unasdziala.services.properties;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Locale;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class AppPropertiesTest {
@@ -22,12 +24,12 @@ class AppPropertiesTest {
     void shouldGetCountryNameFromProperties() {
         // given
         sut = new AppProperties();
-        String expectedCountry = "pl";
+        String expectedCountry = "PL";
         // when
-        String result = sut.getCountryName();
+        Locale result = sut.getCountryName();
         // then
         assertThat(result).isNotNull();
-        assertThat(result).isEqualTo(expectedCountry);
+        assertThat(result.getCountry()).isEqualTo(expectedCountry);
     }
 }
 
