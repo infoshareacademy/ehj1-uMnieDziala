@@ -15,9 +15,12 @@ public class NonWorkingDayService {
         this.nonWorkingDaysRepository = nonWorkingDaysRepository;
     }
 
-    public Day add(Day day) {
-        nonWorkingDaysRepository.add(day);
-        return day;
+    public Day add(Day day) throws IllegalArgumentException {
+        return nonWorkingDaysRepository.add(day)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "NonWorkingDay with this date already exists. Update it instead of creating new one."
+                        ));
     }
 
     public List<Day> findAll() {
@@ -25,17 +28,20 @@ public class NonWorkingDayService {
     }
 
     public Day findDayByDate(LocalDate date) throws IllegalArgumentException {
-        return nonWorkingDaysRepository.findDayByLocalDate(date).orElseThrow(() -> new IllegalArgumentException("Wrong date"));
+        return nonWorkingDaysRepository.findDayByLocalDate(date).orElseThrow(
+                () -> new IllegalArgumentException("Non working day with this date does not exists: " + date));
     }
 
     public Day deleteByDate(LocalDate date) throws IllegalArgumentException {
         Optional<Day> deletedDay = nonWorkingDaysRepository.deleteByDate(date);
-        return deletedDay.orElseThrow(() -> new IllegalArgumentException("Wrong date " + date));
+        return deletedDay.orElseThrow(
+                () -> new IllegalArgumentException("Non working day with this date does not exists: " + date));
     }
 
     public Day updateByDate(Day newDay) throws IllegalArgumentException {
         Optional<Day> updatedDay = nonWorkingDaysRepository.updateByDate(newDay);
-        return updatedDay.orElseThrow(() -> new IllegalArgumentException("Wrong date " + newDay.getDate()));
+        return updatedDay.orElseThrow(
+                () -> new IllegalArgumentException("Non working day with this date does not exists: " + newDay.getDate()));
     }
 
 

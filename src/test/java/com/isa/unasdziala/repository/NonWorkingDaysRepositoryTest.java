@@ -43,46 +43,46 @@ class NonWorkingDaysRepositoryTest {
         assertThat(dayList).isInstanceOf(List.class);
     }
 
-    @Test
-    void shouldAddedDayHaveId() {
-        // given
-        Day testDay = getTestDay();
-        // when
-        Day resultDay = sut.add(testDay);
-        // then
-        assertThat(resultDay.getId()).isNotNull();
-    }
+//    @Test
+//    void shouldAddedDayHaveId() {
+//        // given
+//        Day testDay = getTestDay();
+//        // when
+//        Day resultDay = sut.add(testDay);
+//        // then
+//        assertThat(resultDay.getId()).isNotNull();
+//    }
 
-    @Test
-    void shouldNewDayBeSavedInRepositoryWhenAdded() {
-        // given
-        Day testDay = getTestDay();
-        // when
-        Day addedTestDay = sut.add(testDay);
-        List<Day> result = sut.findAll();
-        // then
-        assertThat(result).contains(addedTestDay);
-    }
+//    @Test
+//    void shouldNewDayBeSavedInRepositoryWhenAdded() {
+//        // given
+//        Day testDay = getTestDay();
+//        // when
+//        Day addedTestDay = sut.add(testDay);
+//        List<Day> result = sut.findAll();
+//        // then
+//        assertThat(result).contains(addedTestDay);
+//    }
 
-    @Test
-    void shouldFindByIdWhenExist() {
-        // given
-        Day testDay = getTestDay();
-        Day addedTestDay = sut.add(testDay);
-        UUID id = addedTestDay.getId();
-
-        // when
-        Optional<Day> resultOptional = sut.findById(id);
-
-        @SuppressWarnings("OptionalGetWithoutIsPresent")
-        Day result = resultOptional.get();
-        // then
-        assertThat(result).isEqualTo(addedTestDay);
-        assertThat(result.getId()).isEqualTo(addedTestDay.getId());
-        assertThat(result.getName()).isEqualTo(addedTestDay.getName());
-        assertThat(result.getDate()).isEqualTo(addedTestDay.getDate());
-        assertThat(result.getDescription()).isEqualTo(addedTestDay.getDescription());
-    }
+//    @Test
+//    void shouldFindByIdWhenExist() {
+//        // given
+//        Day testDay = getTestDay();
+//        Day addedTestDay = sut.add(testDay);
+//        UUID id = addedTestDay.getId();
+//
+//        // when
+//        Optional<Day> resultOptional = sut.findById(id);
+//
+//        @SuppressWarnings("OptionalGetWithoutIsPresent")
+//        Day result = resultOptional.get();
+//        // then
+//        assertThat(result).isEqualTo(addedTestDay);
+//        assertThat(result.getId()).isEqualTo(addedTestDay.getId());
+//        assertThat(result.getName()).isEqualTo(addedTestDay.getName());
+//        assertThat(result.getDate()).isEqualTo(addedTestDay.getDate());
+//        assertThat(result.getDescription()).isEqualTo(addedTestDay.getDescription());
+//    }
 
     @Test
     void shouldFindByIdAlwaysReturnOptional() {

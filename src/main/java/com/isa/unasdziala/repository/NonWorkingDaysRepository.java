@@ -23,10 +23,14 @@ public class NonWorkingDaysRepository {
         importNonWorkingDays();
     }
 
-    public Day add(Day day) {
-        day.setId(UUID.randomUUID());
-        nonWorkingDays.add(day);
-        return day;
+    public Optional<Day> add(Day day) {
+        Optional<Day> optionalDay = findDayByLocalDate(day.getDate());
+        if (optionalDay.isEmpty()) {
+            day.setId(UUID.randomUUID());
+            nonWorkingDays.add(day);
+            return Optional.of(day);
+        }
+        return Optional.empty();
     }
 
     public Optional<Day> findById(UUID id) {
