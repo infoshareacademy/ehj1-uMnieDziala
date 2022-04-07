@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,8 +17,12 @@ import java.util.stream.Collectors;
 @Getter
 public class NonWorkingDaysRepository {
 
-    private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
-    private final List<Day> nonWorkingDays = importNonWorkingDays();
+    private final static Logger Log = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
+    private final List<Day> nonWorkingDays = new ArrayList<>();
+
+    public NonWorkingDaysRepository() {
+        importNonWorkingDays();
+    }
 
     public Day add(Day day) {
         day.setId(UUID.randomUUID());
