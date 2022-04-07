@@ -1,34 +1,37 @@
 package com.isa.unasdziala.adapters;
+
 import com.isa.unasdziala.domain.entities.Employee;
 import com.isa.unasdziala.dto.EmployeeDto;
 
 public class EmployeeAdapter {
 
-    public EmployeeDto convertToEmployeeDto(Employee entityEmployee) {
-        if (entityEmployee == null) {
+    public EmployeeDto convertToEmployeeDto(Employee employee) {
+        if (employee == null) {
             return null;
         }
-        return EmployeeDto.builder().id(employee.id(),
-                entityEmployee.getFirstName(),
-                entityEmployee.getLastName(),
-                entityEmployee.getContact(),
-                entityEmployee.getAddress(),
-                entityEmployee.getDepartment(),
-                entityEmployee.getHolidays()
-        );
+        EmployeeDto.EmployeeDtoBuilder employeeDto = EmployeeDto.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .contact(employee.getContact())
+                .address(employee.getAddress())
+                .department(employee.getDepartment())
+                .holidays(employee.getHolidays());
+        return EmployeeDto.builder().build();
     }
 
     public Employee convertToEmployee(EmployeeDto employeeDto) {
         if (employeeDto == null) {
             return null;
         }
-        Employee employee = Employee.builder().id(employeeDto.getId())
+        Employee.EmployeeBuilder employee = Employee.builder()
+                .id(employeeDto.getId())
                 .firstName(employeeDto.getFirstName())
                 .lastName(employeeDto.getLastName())
                 .contact(employeeDto.getContact())
                 .address(employeeDto.getAddress())
                 .department(employeeDto.getDepartment())
-                .holidays(employeeDto.getHolidays()) {
-            return employee;
-        }
+                .holidays(employeeDto.getHolidays());
+        return employee.build();
+    }
 }

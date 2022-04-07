@@ -1,6 +1,6 @@
 package com.isa.unasdziala.services;
 
-import com.isa.unasdziala.domain.entities.Employee;
+import com.isa.unasdziala.domain.Employee;
 import com.isa.unasdziala.repository.EmployeesRepository;
 
 import java.util.List;

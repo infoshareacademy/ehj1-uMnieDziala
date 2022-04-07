@@ -29,10 +29,10 @@ public class EmployeeDao {
     }
 
     public EmployeeDto findById(UUID id) {
-       return adapter.convertToEmployeeDto(em.find(Employee.class, id));
+        return adapter.convertToEmployeeDto(em.find(Employee.class, id));
     }
 
-    private Employee findEmployeeById(UUID id){
+    private Employee findEmployeeById(UUID id) {
         return em.find(Employee.class, id);
     }
 
