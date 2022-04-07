@@ -2,6 +2,7 @@ package com.isa.unasdziala.utils;
 
 import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Employee;
+import lombok.extern.slf4j.Slf4j;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -18,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Slf4j
 public class CalendarLoader {
 
     public static final DateTimeFormatter ICAL_DATA_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -36,16 +38,14 @@ public class CalendarLoader {
         try (FileInputStream fileInputStream = new FileInputStream(employeeCalendarFilePath)) {
             CalendarBuilder builder = new CalendarBuilder();
             Calendar calendar = builder.build(fileInputStream);
-            System.out.println(calendar);
-
             for (CalendarComponent event : calendar.getComponents(Component.VEVENT)) {
                 Day newEvent = convertIcalEventToDomainEvent(event);
                 eventDays.add(newEvent);
             }
         } catch (IOException e) {
-            System.out.println("Info - no calendar for employee");
+            log.info("Cannot load file for employer - " + employeeCalendarFilePath);
         } catch (ParserException e) {
-            System.out.println("Wrong data type");
+            log.info("Calendar builder parse error ", e);
         }
         return eventDays;
     }

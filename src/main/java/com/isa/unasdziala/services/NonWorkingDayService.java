@@ -28,7 +28,7 @@ public class NonWorkingDayService {
     }
 
     public Day findDayByDate(LocalDate date) throws IllegalArgumentException {
-        return nonWorkingDaysRepository.findDayByLocalDate(date).orElseThrow(
+        return nonWorkingDaysRepository.findByDate(date).orElseThrow(
                 () -> new IllegalArgumentException("Non working day with this date does not exists: " + date));
     }
 
