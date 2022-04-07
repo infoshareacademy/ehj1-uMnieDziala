@@ -30,6 +30,7 @@ public class Employee {
     private float holidays;
     private Set<Day> events = new HashSet<>();
 
+
     public Employee(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
         this.firstName = firstName;
         this.lastName = lastName;

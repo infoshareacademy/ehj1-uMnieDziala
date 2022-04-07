@@ -1,6 +1,9 @@
 package com.isa.unasdziala.utils;
 
 import com.isa.unasdziala.domain.Day;
+
+import com.isa.unasdziala.domain.Employee;
+import com.isa.unasdziala.domain.EmployeeBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -14,7 +17,7 @@ class CalendarLoaderTest {
    @Test
    void shouldReturnEmptyListWhenFileDoesNotExists() {
       // given
-      Employee testEmployee = new Employee("Not", "Existing", null, null, null, 0);
+      Employee testEmployee = new EmployeeBuilder().setFirstName("Not").setLastName("Existing").setContact(null).setAddress(null).setDepartment(null).setHolidays(0).createEmployee();
       // when
       Set<Day> result = sut.loadEmployeeEventCalendar(testEmployee);
       // then
@@ -25,7 +28,7 @@ class CalendarLoaderTest {
    @Test
    void shouldReturnListWith3ElementsWhenLoadedTestFile() {
       // given
-      Employee testEmployee = new Employee("TestName", "TestLastName", null, null, null, 0);
+      Employee testEmployee = new EmployeeBuilder().setFirstName("TestName").setLastName("TestLastName").setContact(null).setAddress(null).setDepartment(null).setHolidays(0).createEmployee();
       // when
       Set<Day> result = sut.loadEmployeeEventCalendar(testEmployee);
       // then
