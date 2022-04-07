@@ -22,7 +22,9 @@ public class NonWorkingDaysRepository {
 
     public void initialize() {
         log.info("Initialize non working days repository");
-        this.nonWorkingDays = importNonWorkingDays();
+        if (this.nonWorkingDays.isEmpty()) {
+            this.nonWorkingDays = importNonWorkingDays();
+        }
     }
 
     public Day add(Day day) {

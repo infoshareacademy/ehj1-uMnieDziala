@@ -14,14 +14,15 @@ public class HolidayRepository {
     private final EntityManager em = HibernateUtil.getEntityManager();
     Logger log = LoggerFactory.getLogger(NonWorkingDaysReader.class);
 
-    public Holiday save(Holiday holidayDay) {
+    public Holiday saveHoliday(Holiday holiday) {
         log.info("Add new holiday day to repository");
-        em.persist(holidayDay);
-        return holidayDay;
+        em.persist(holiday);
+        return holiday;
     }
 
     public List<Holiday> findAll() {
-        return em.createQuery("from Holiday ", Holiday.class)
+        log.info("Get all holiday day/s from repository");
+        return em.createQuery("from Holiday", Holiday.class)
                 .getResultStream()
                 .toList();
     }

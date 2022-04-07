@@ -16,9 +16,9 @@ public class HolidayService {
         this.holidayRepository = holidayRepository;
     }
 
-    public void addDay(Holiday holiday) {
+    public void addHoliday(Holiday holiday) {
         log.info("Add new holiday day {} to repository", holiday.getDate().toString());
-        holidayRepository.save(holiday);
+        holidayRepository.saveHoliday(holiday);
     }
 
     public List<Holiday> findAll() {

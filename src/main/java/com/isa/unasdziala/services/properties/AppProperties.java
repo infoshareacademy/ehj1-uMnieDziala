@@ -30,9 +30,18 @@ public class AppProperties {
         Locale locale = new Locale(properties.getProperty("non_working_day_country"), properties.getProperty("non_working_day_country"));
         if (locale != null) {
         } else {
-            log.error("Properties 'country' is empty");
+            log.error("Properties 'non_working_day_country' is empty");
         }
         return locale;
+    }
+
+    public Integer getMaxAbsence() {
+        Integer maxAbsence = Integer.parseInt(properties.getProperty("max_absence"));
+        if (maxAbsence != null) {
+        } else {
+            log.error("Properties 'max_absence' is empty");
+        }
+        return maxAbsence;
     }
 
     private Properties readFile(Path fileName) {
@@ -40,15 +49,15 @@ public class AppProperties {
         try {
             appProperties.load(new StringReader(Files.readString(fileName)));
         } catch (InvalidPathException e) {
-            log.error("Path not found, " + e.getMessage());
+            log.error("Path not found, " + e.getMessage(), e);
         } catch (IOException e) {
-            log.error("File read error, " + e.getMessage());
+            log.error("File read error, " + e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            log.error("File error, " + e.getMessage());
+            log.error("File error, " + e.getMessage(), e);
         } catch (NullPointerException e) {
-            log.error("File not found, " + e.getMessage());
+            log.error("File not found, " + e.getMessage(), e);
         } catch (Exception e) {
-            log.error("Reading properties Error " + e.getMessage());
+            log.error("Reading properties Error " + e.getMessage(), e);
         }
         return appProperties;
     }
