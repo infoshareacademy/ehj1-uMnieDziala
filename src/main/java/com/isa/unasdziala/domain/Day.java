@@ -55,6 +55,6 @@ public class Day {
 
     @Override
     public String toString() {
-        return "NonWorkingDay:" + date.toString() + "\n\tname: " + name + "\n\tdescription: " + description + "\n\tID: " + id;
+        return "NonWorkingDay:" + date.toString() + "\n\tname: " + name + "\n\tdescription: " + description;
     }
 }
