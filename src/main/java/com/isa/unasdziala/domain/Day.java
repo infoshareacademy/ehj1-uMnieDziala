@@ -22,6 +22,7 @@ public class Day {
     private UUID id;
     private LocalDate date;
 
+
     @JsonProperty("date")
     private void unpackDateFromNestedObject(Map<String, Object> date) throws ParseException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -44,14 +45,16 @@ public class Day {
         this.name = name;
         this.description = description;
     }
+
+    public Day(LocalDate date, String name, String desc, String country) {
+        this.date = date;
+        this.name = name;
+        this.description = desc;
+        this.country = country;
+    }
+
     @Override
     public String toString() {
-        return "Day{" +
-                "id=" + id +
-                ", date=" + date.toString() +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", country='" + country + '\'' +
-                '}';
+        return "NonWorkingDay:" + date.toString() + "\n\tname: " + name + "\n\tdescription: " + description;
     }
 }
