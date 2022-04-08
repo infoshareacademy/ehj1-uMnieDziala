@@ -1,25 +1,22 @@
 package com.isa.unasdziala.repository;
-
 import com.isa.unasdziala.domain.*;
 import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class EmployeesRepositoryTest {
-
     private EmployeesRepository sut = new EmployeesRepository();
 
     @Test
     void shouldContainsOnlyTestEmployeesFromFile() {
-        // given
-        List<Employee> referenceEmployees = getReferenceEmployees();
-        // when
+
+        List<Employee> refferenceEmployees = getRefferenceEmployees();
+
         List<Employee> result = sut.importEmployees();
-        // then
-        assertThat(referenceEmployees).containsExactlyElementsOf(result);
+
+        assertThat(refferenceEmployees).containsExactlyElementsOf(result);
     }
 
     private List<Employee> getReferenceEmployees() {
@@ -37,4 +34,67 @@ class EmployeesRepositoryTest {
 
         return testEmployees;
     }
+
+    @Test
+    void shouldFindEmployeeByLastNameReturnOptional() {
+
+        Optional<Employee> result = sut.findEmployeeByLastName("testName");
+
+        assertThat(result).isNotNull();
+        assertThat(result).isInstanceOf(Optional.class);
+    }
+
+    @Test
+    void shouldFindAllEmployeesReturnList() {
+
+        List<Employee> result = sut.findAllEmployees();
+
+        assertThat(result).isInstanceOf(List.class);
+
+    }
+
+    @Test
+    void shouldNotFindByNonExistingLastName() {
+
+        Optional<Employee> result = sut.findEmployeeByLastName("TestLastName");
+
+        assertThat(result).isEmpty();
+    }
+
+
+    @Test
+    void shouldAddedEmployeeNotBeNull() {
+
+        Employee testEmployee = getTestEmployee();
+
+        Employee result = sut.addEmployee(testEmployee);
+
+        assertThat(result).isNotNull();
+    }
+
+    private Employee getTestEmployee() {
+        return new Employee();
+    }
+
+    @Test
+    void shouldFindByLastNameAlwaysReturnOptional() {
+
+        Optional<Employee> employee = sut.findEmployeeByLastName("Maven");
+
+        assertThat(employee).isInstanceOf(Optional.class);
+    }
+
+    @Test
+    void shouldDeleteEmployeeWithGivenLastName() {
+
+        Employee testEmployee = getTestEmployee();
+        Employee addedTestEmployee = sut.addEmployee(testEmployee);
+        String lastName = addedTestEmployee.getLastName();
+
+        sut.deleteEmployeeByLastName(lastName);
+        Optional<Employee> result = sut.findEmployeeByLastName(lastName);
+
+        assertThat(result).isEmpty();
+    }
+
 }

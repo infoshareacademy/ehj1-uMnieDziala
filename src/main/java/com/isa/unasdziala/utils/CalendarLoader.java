@@ -1,7 +1,7 @@
 package com.isa.unasdziala.utils;
 
 import com.isa.unasdziala.domain.Day;
-import com.isa.unasdziala.domain.Employee;
+import com.isa.unasdziala.domain.entities.Employee;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;

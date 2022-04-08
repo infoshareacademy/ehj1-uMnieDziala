@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -56,5 +57,46 @@ public class EmployeesRepository {
             log.error("File read error, " + e.getMessage());
         }
         return employees;
+    }
+
+    public Employee addEmployee(Employee employee) {
+        employee.setLastName(employee.getLastName());
+        employees.add(employee);
+        return employee;
+    }
+
+    public Optional<Employee> findEmployeeByLastName(String lastName) {
+        if (lastName == null) {
+            return Optional.empty();
+        }
+        return employees
+                .stream()
+                .filter(employee -> lastName.equals(employee.getLastName()))
+                .findFirst();
+    }
+
+    public List<Employee> findAllEmployees() {
+        return List.copyOf(employees);
+    }
+
+    public Optional<Employee> updateEmployeeByLastName(Employee newEmployee) {
+        Optional<Employee> optionalEmployee = findEmployeeByLastName(newEmployee.getLastName());
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+            employee.setFirstName(newEmployee.getFirstName());
+            employee.setLastName(newEmployee.getLastName());
+            employee.setAddress(newEmployee.getAddress());
+        }
+        return optionalEmployee;
+    }
+
+    public Optional<Employee> deleteEmployeeByLastName(String lastName) {
+        Optional<Employee> employee = findEmployeeByLastName(lastName);
+        employee.ifPresent(employees::remove);
+        return employee;
+    }
+
+    String pathToEmployeesCSVFile() {
+        return getClass().getClassLoader().getResource(String.valueOf(CSV_FILE_NAME)).getPath();
     }
 }

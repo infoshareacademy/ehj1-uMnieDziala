@@ -27,32 +27,32 @@ public class NonWorkingDaysRepository {
         }
     }
 
-    public Day add(Day day) {
-        day.setId(UUID.randomUUID());
-        nonWorkingDays.add(day);
-        return day;
+    public Optional<Day> add(Day day) {
+        Optional<Day> optionalDay = findByDate(day.getDate());
+        if (optionalDay.isEmpty()) {
+            day.setId(UUID.randomUUID());
+            nonWorkingDays.add(day);
+            return Optional.of(day);
+        }
+        return Optional.empty();
     }
 
-    public Optional<Day> findById(UUID id) {
-        return nonWorkingDays.stream().filter(day -> day.getId().equals(id)).findFirst();
-    }
-
-    public List<Day> findDaysByLocalDate(LocalDate date) {
-        return nonWorkingDays.stream().filter(day -> day.getDate().equals(date)).collect(Collectors.toList());
+    public Optional<Day> findByDate(LocalDate date) {
+        return nonWorkingDays.stream().filter(day -> day.getDate().equals(date)).findFirst();
     }
 
     public List<Day> findAll() {
         return List.copyOf(nonWorkingDays);
     }
 
-    public Optional<Day> deleteById(UUID id) {
-        Optional<Day> day = findById(id);
+    public Optional<Day> deleteByDate(LocalDate date) {
+        Optional<Day> day = findByDate(date);
         day.ifPresent(nonWorkingDays::remove);
         return day;
     }
 
-    public Optional<Day> updateById(UUID id, Day newDay) {
-        Optional<Day> optionalDay = findById(id);
+    public Optional<Day> updateByDate(Day newDay) {
+        Optional<Day> optionalDay = findByDate(newDay.getDate());
         if (optionalDay.isPresent()) {
             Day day = optionalDay.get();
             day.setDate(newDay.getDate());

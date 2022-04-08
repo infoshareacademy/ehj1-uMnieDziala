@@ -6,7 +6,6 @@ import com.isa.unasdziala.repository.NonWorkingDaysRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class NonWorkingDayService {
 
@@ -16,32 +15,33 @@ public class NonWorkingDayService {
         this.nonWorkingDaysRepository = nonWorkingDaysRepository;
     }
 
-    public Day add(Day day) {
-        nonWorkingDaysRepository.add(day);
-        return day;
+    public Day add(Day day) throws IllegalArgumentException {
+        return nonWorkingDaysRepository.add(day)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "NonWorkingDay with this date already exists. Update it instead of creating new one."
+                        ));
     }
 
     public List<Day> findAll() {
         return nonWorkingDaysRepository.findAll();
     }
 
-    public List<Day> findDaysByDate(LocalDate date) {
-        return nonWorkingDaysRepository.findDaysByLocalDate(date);
+    public Day findDayByDate(LocalDate date) throws IllegalArgumentException {
+        return nonWorkingDaysRepository.findByDate(date).orElseThrow(
+                () -> new IllegalArgumentException("Non working day with this date does not exists: " + date));
     }
 
-    public Day findById(UUID id) throws IllegalArgumentException {
-        Optional<Day> day = nonWorkingDaysRepository.findById(id);
-        return day.orElseThrow(() -> new IllegalArgumentException("Wrong ID"));
+    public Day deleteByDate(LocalDate date) throws IllegalArgumentException {
+        Optional<Day> deletedDay = nonWorkingDaysRepository.deleteByDate(date);
+        return deletedDay.orElseThrow(
+                () -> new IllegalArgumentException("Non working day with this date does not exists: " + date));
     }
 
-    public Day deleteById(UUID id) throws IllegalArgumentException {
-        Optional<Day> deletedDay = nonWorkingDaysRepository.deleteById(id);
-        return deletedDay.orElseThrow(() -> new IllegalArgumentException("Wrong ID: " + id));
-    }
-
-    public Day updateById(UUID id, Day newDay) throws IllegalArgumentException {
-        Optional<Day> updatedDay = nonWorkingDaysRepository.updateById(id, newDay);
-        return updatedDay.orElseThrow(() -> new IllegalArgumentException("Wrong ID " + id));
+    public Day updateByDate(Day newDay) throws IllegalArgumentException {
+        Optional<Day> updatedDay = nonWorkingDaysRepository.updateByDate(newDay);
+        return updatedDay.orElseThrow(
+                () -> new IllegalArgumentException("Non working day with this date does not exists: " + newDay.getDate()));
     }
 
 

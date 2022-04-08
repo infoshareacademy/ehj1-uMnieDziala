@@ -1,24 +1,37 @@
 package com.isa.unasdziala.services;
 
 import com.isa.unasdziala.domain.Employee;
-import com.isa.unasdziala.domain.Holiday;
+import com.isa.unasdziala.repository.EmployeesRepository;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-public class EmployeesService {
+public record EmployeesService(EmployeesRepository employeeRepository) {
 
-    public List<LocalDate> getAllBusyDayForEmployee(Employee employee) {
-        List<LocalDate> busyDays = new ArrayList<>();
+    public Employee addEmployee(Employee employee) {
+        employeeRepository.addEmployee(employee);
+        return employee;
+    }
 
+    public List<Employee> findAllEmployees() {
+        return employeeRepository.findAllEmployees();
+    }
 
-        busyDays.addAll(employee.getHolidayDays().stream()
-                .map(Holiday::getDate)
-                .collect(Collectors.toList()));
+    public Employee findEmployeeByLastName(String lastName) throws IllegalArgumentException { // List
+        Optional<Employee> employee = employeeRepository.findEmployeeByLastName(lastName);
+        return employee.orElseThrow(() -> new IllegalArgumentException("Wrong last name: " + lastName));
+    }
 
-        return busyDays;
+    public Employee updateEmployeeByLastName(String lastName, Employee newEmployee) throws IllegalArgumentException {  //po id
+        Optional<Employee> deletedEmployee = employeeRepository.updateEmployeeByLastName(newEmployee);
+        return deletedEmployee.orElseThrow(() -> new IllegalArgumentException("Wrong last name: " + lastName));
+    }
+
+    public Employee deleteEmployeeByLastName(String lastName) throws IllegalArgumentException {
+        Optional<Employee> deletedEmployee = employeeRepository.deleteEmployeeByLastName(lastName);
+        return deletedEmployee.orElseThrow(() -> new IllegalArgumentException("Wrong last name: " + lastName));
     }
 
 }
+
+
