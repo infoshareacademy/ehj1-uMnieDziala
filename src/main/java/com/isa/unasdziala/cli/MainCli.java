@@ -16,6 +16,7 @@ public class MainCli {
             printMenu();
             int userOption = getUserOption();
             switch (userOption) {
+                case 2 -> EmployeeCli.run();
                 case 2 -> nonWorkingDaysCli.run();
                 case 0 -> System.exit(-1);
             }
