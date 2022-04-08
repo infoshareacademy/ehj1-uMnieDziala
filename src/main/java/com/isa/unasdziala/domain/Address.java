@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embeddable;
+import javax.persistence.OneToOne;
+
+@Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
