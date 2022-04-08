@@ -9,6 +9,7 @@ public class MainCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
     private final EmployeeCli employeeCli = new EmployeeCli();
     private final NonWorkingDaysCli nonWorkingDaysCli = new NonWorkingDaysCli();
+    private final HolidayCli holidayCli = new HolidayCli();
     private Scanner scanner = new Scanner(System.in);
 
     public void run() {
@@ -20,6 +21,7 @@ public class MainCli {
                 case 1 -> employeeCli.printAllEmployees();
                 case 4 -> nonWorkingDaysCli.printAllDays();
                 case 5 -> nonWorkingDaysCli.addNewDay();
+                case 6 -> holidayCli.run();
 
                 case 0 -> System.exit(-1);
             }
@@ -49,6 +51,7 @@ public class MainCli {
         logSTD.info("1. Show all Employees");
         logSTD.info("4. Show all Non-Working Days");
         logSTD.info("5. Add new Non-working Day");
+        logSTD.info("6. Holiday management");
         logSTD.info("0. Exit");
     }
 }
