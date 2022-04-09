@@ -10,7 +10,7 @@ public class EmployeeAdapter {
         if (employee == null) {
             return null;
         }
-        EmployeeDto.EmployeeDtoBuilder employeeDto = EmployeeDto.builder()
+        EmployeeDto employeeDto = EmployeeDto.builder()
                 .id(employee.getId())
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
@@ -18,38 +18,40 @@ public class EmployeeAdapter {
                 .address(employee.getAddress())
                 .department(employee.getDepartment())
                 .holidays(employee.getHolidays())
-                .events(employee.getEvents());
-        return EmployeeDto.builder().build();
+                .events(employee.getEvents())
+                .build();
+        return employeeDto;
     }
 
     public Employee convertToEmployee(EmployeeDto employeeDto) {
         if (employeeDto == null) {
             return null;
         }
-        Employee.EmployeeBuilder employee = Employee.builder()
-                .id(employeeDto.getId())
-                .firstName(employeeDto.getFirstName())
-                .lastName(employeeDto.getLastName())
-                .contact(employeeDto.getContact())
-                .address(employeeDto.getAddress())
-                .department(employeeDto.getDepartment())
-                .holidays(employeeDto.getHolidays())
-                .events(employeeDto.getEvents());
-        return employee.build();
+        Employee employee = new Employee();
+        employee.setId(employeeDto.getId());
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setContact(employeeDto.getContact());
+        employee.setAddress(employeeDto.getAddress());
+        employee.setDepartment(employeeDto.getDepartment());
+        employee.setHolidays(employeeDto.getHolidays());
+        employee.setEvents(employeeDto.getEvents());
+        return employee;
     }
 
     public EmployeeDto convertEmployeeCSVToEmployeeDto(EmployeeCSV employeeCSV) {
         if (employeeCSV == null) {
             return null;
         }
-        EmployeeDto.EmployeeDtoBuilder employeeDto = EmployeeDto.builder()
+        EmployeeDto employeeDto = EmployeeDto.builder()
                 .firstName(employeeCSV.getFirstName())
                 .lastName(employeeCSV.getLastName())
                 .contact(employeeCSV.getContact())
                 .address(employeeCSV.getAddress())
                 .department(employeeCSV.getDepartment())
                 .holidays(employeeCSV.getHolidays())
-                .events(employeeCSV.getEvents());
-        return EmployeeDto.builder().build();
+                .events(employeeCSV.getEvents())
+                .build();
+        return employeeDto;
     }
 }
