@@ -1,21 +1,26 @@
 package com.isa.unasdziala.cli;
 
 import com.isa.unasdziala.domain.*;
-import com.isa.unasdziala.services.EmployeeService;
+//import com.isa.unasdziala.services.EmployeeService;
 import com.isa.unasdziala.services.NonWorkingDayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.Key;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.isa.unasdziala.domain.Department.*;
+
+import static com.isa.unasdziala.domain.Department.*;
+
 public class EmployeeCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
-
+    Department departmentInput;
     private final Scanner scanner = new Scanner(System.in);
-    private final EmpleyeeService service = new EmpleyeeService(new EmpleyeeService());
+    //private final EmpleyeeService service = new EmpleyeeService(new EmpleyeeService());
 
     public void run() {
         boolean again = true;
@@ -26,8 +31,7 @@ public class EmployeeCli {
             switch (userOption) {
                 case 1 -> findAllEmployees();
                 case 2 -> findEmployeeByLastName();
-                //TO DO
-                //case 3 -> service.addEmployee();
+                case 3 -> addNewEmployee();
                 //case 4 -> service.updateEmployeeByLastName();
                 case 5 -> deleteEmployeeByLastName();
                 case 0 -> again = false;
@@ -103,21 +107,38 @@ public class EmployeeCli {
         logSTD.info("Enter employee flat number:");
         String flatnumber = scanner.nextLine();
         logSTD.info("Enter employee department:");
-        String department = scanner.nextLine();
+        getDepartmentInput();
         logSTD.info("Enter employee holidays:");
         Float holidays = Float.valueOf(scanner.nextLine());
 
+        Address address = new Address(city, code, postCity, street, houseNumber, flatnumber);
+        Contact contact = new Contact(phone, email);
 
-        Address address= new Address(city, code, postCity, street, houseNumber,flatnumber);
-        Contact contact= new Contact(phone, email);
+        Employee employee = new Employee(name, lastname, contact, address,departmentInput, holidays);
+        System.out.println(employee);
 
-        testEmployees.add(new Employee(name, lastname, contact, address, Department.DEPARTAMENT_FINANSOW, 22.5f));
-
-
-            return input;
-        }
+        //service.addEmployee(employee);
     }
 
+    public void getDepartmentInput() {
+        int i = 0;
+        for (Department department : VALUES) {
+            i++;
+            logSTD.info(i + ". " + department.fromDepartment(department));
+        }
+            int userOption = getUserOption();
+            switch (userOption) {
+
+                case 1 -> departmentInput = ACTUARIAL_DEPARTMENT;
+                case 2 -> departmentInput = SALES_DEPARTAMENT;
+                case 3 -> departmentInput = FINANCIAL_DEPARTMENT;
+            }
+        }
 
 }
+
+
+
+
+
 

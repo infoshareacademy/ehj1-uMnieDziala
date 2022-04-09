@@ -34,10 +34,10 @@ class EmployeesRepositoryTest {
         Address address4 = new Address("Kościerzyna", "80-004", "Kościerzyna", "Nowa", "5A", "");
         List<Employee> testEmployees = new ArrayList<>();
 
-        testEmployees.add(new Employee("Adam", "Superclass", new Contact("111222333", "adam@company.com"), address1, Department.DEPARTAMENT_FINANSOW, 22.5f));
-        testEmployees.add(new Employee("Jan", "Maven", new Contact("222333444", "jan@company.com"), address2, Department.DEPARTAMENT_AKTUARIALNY, 44f));
-        testEmployees.add(new Employee("Monika", "Git", new Contact("444555666", "monika@company.com"), address3, Department.DEPARTAMENT_SPRZEDAZY, 0f));
-        testEmployees.add(new Employee("Karolina", "Pullrequest", new Contact("999888777", "karolina@company.com"), address4, Department.DEPARTAMENT_AKTUARIALNY, 0.5f));
+        testEmployees.add(new Employee("Adam", "Superclass", new Contact("111222333", "adam@company.com"), address1, Department.FINANCIAL_DEPARTMENT, 22.5f));
+        testEmployees.add(new Employee("Jan", "Maven", new Contact("222333444", "jan@company.com"), address2, Department.ACTUARIAL_DEPARTMENT, 44f));
+        testEmployees.add(new Employee("Monika", "Git", new Contact("444555666", "monika@company.com"), address3, Department.SALES_DEPARTAMENT, 0f));
+        testEmployees.add(new Employee("Karolina", "Pullrequest", new Contact("999888777", "karolina@company.com"), address4, Department.ACTUARIAL_DEPARTMENT, 0.5f));
 
         return testEmployees;
     }
