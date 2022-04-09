@@ -4,6 +4,7 @@ import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Department;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @NamedQueries({
-        @NamedQuery(name = "Employee.findAll", query = "from Employee"),
+        @NamedQuery(name="Employee.findAll", query = "from Employee"),
         @NamedQuery(name = "Employee.findByFirstNameAndLastName", query = "from Employee e where e.firstName = :firstName and e.lastName = :lastName"),
 })
 public class Employee {
