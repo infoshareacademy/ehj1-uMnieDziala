@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.OneToOne;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Address {
     @CsvBindByPosition(position = 4)
     String city;

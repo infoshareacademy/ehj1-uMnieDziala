@@ -5,13 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Contact {
 
     @CsvBindByPosition(position = 2)
