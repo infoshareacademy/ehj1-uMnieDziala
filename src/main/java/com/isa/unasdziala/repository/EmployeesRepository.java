@@ -65,6 +65,13 @@ public class EmployeesRepository {
     }
 
     public Optional<EmployeeDto> update(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
+        // Check if employee with new Name and new Lastname already exists.
+        Optional<EmployeeDto> checkExistingNewEmployee = findByFirstNameAndLastName(newEmployeeDto.getFirstName(), newEmployeeDto.getLastName());
+        if(checkExistingNewEmployee.isPresent()) {
+            return Optional.empty();
+        }
+
+
         Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(oldFirstName, oldLastName);
         if (employeeDtoOptional.isPresent()) {
             EmployeeDto employeeDto = employeeDtoOptional.get();
@@ -75,8 +82,10 @@ public class EmployeesRepository {
             employee.setAddress(newEmployeeDto.getAddress());
             employee.setContact(newEmployeeDto.getContact());
             employee.setDepartment(newEmployeeDto.getDepartment());
+            employee.setHolidays(newEmployeeDto.getHolidays());
+
             em.getTransaction().begin();
-            em.merge(employee);
+            em.merge(em.contains(employee) ? employee : em.merge(employee));
             em.getTransaction().commit();
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }
