@@ -4,7 +4,6 @@ import com.isa.unasdziala.adapters.EmployeeAdapter;
 import com.isa.unasdziala.domain.EmployeeCSV;
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.domain.entity.Employee;
-import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.utils.CalendarLoader;
 import com.isa.unasdziala.utils.HibernateUtil;
 import org.slf4j.Logger;
@@ -14,10 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -31,7 +28,7 @@ public class EmployeesRepository {
     private final CalendarLoader calendarLoader = new CalendarLoader();
     private final EntityManager em = HibernateUtil.getEntityManager();
 
-    private EmployeeAdapter adapter = new EmployeeAdapter();
+    private final EmployeeAdapter adapter = new EmployeeAdapter();
 
     public EmployeesRepository() {
         logger.debug("Creating employee repository");
@@ -55,7 +52,7 @@ public class EmployeesRepository {
 
     public Optional<EmployeeDto> add(EmployeeDto employeeDto) {
         Optional<EmployeeDto> existingEmployee = findByFirstNameAndLastName(employeeDto.getFirstName(), employeeDto.getLastName());
-        if(existingEmployee.isPresent()) {
+        if (existingEmployee.isPresent()) {
             return Optional.empty();
         }
         Employee employee = adapter.convertToEmployee(employeeDto);
@@ -63,8 +60,8 @@ public class EmployeesRepository {
         return Optional.of(adapter.convertToEmployeeDto(employee));
     }
 
-    public Optional<EmployeeDto> update(EmployeeDto newEmployeeDto) {
-        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(newEmployeeDto.getFirstName(), newEmployeeDto.getLastName());
+    public Optional<EmployeeDto> update(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
+        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(oldFirstName, oldLastName);
         if (employeeDtoOptional.isPresent()) {
             EmployeeDto employeeDto = employeeDtoOptional.get();
             Employee employee = adapter.convertToEmployee(employeeDto);
@@ -83,7 +80,7 @@ public class EmployeesRepository {
 
     public Optional<EmployeeDto> delete(String firstName, String lastName) {
         Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(firstName, lastName);
-        if(employeeDtoOptional.isPresent()) {
+        if (employeeDtoOptional.isPresent()) {
             Employee employee = adapter.convertToEmployee(employeeDtoOptional.get());
             em.remove(employee);
             return Optional.of(adapter.convertToEmployeeDto(employee));
