@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class MainCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
     private final NonWorkingDaysCli nonWorkingDaysCli = new NonWorkingDaysCli();
+    private final EmployeeCli employeeCli = new EmployeeCli();
+
     private final EmployeeService service = new EmployeeService(new EmployeesRepository());
     private final Scanner scanner = new Scanner(System.in);
 
@@ -19,8 +21,8 @@ public class MainCli {
             printMenu();
             int userOption = getUserOption();
             switch (userOption) {
+                case 1 -> employeeCli.run();
                 case 2 -> nonWorkingDaysCli.run();
-                case 6 -> service.importFile();
                 case 0 -> System.exit(-1);
             }
         }

@@ -57,7 +57,10 @@ public class EmployeesRepository {
         }
         Employee employee = adapter.convertToEmployee(employeeDto);
         System.out.println("Dodaje " + employee.getFirstName());
+        em.getTransaction().begin();
         em.persist(employee);
+        em.getTransaction().commit();
+        System.out.println(employee);
         return Optional.of(adapter.convertToEmployeeDto(employee));
     }
 
@@ -72,8 +75,9 @@ public class EmployeesRepository {
             employee.setAddress(newEmployeeDto.getAddress());
             employee.setContact(newEmployeeDto.getContact());
             employee.setDepartment(newEmployeeDto.getDepartment());
-
+            em.getTransaction().begin();
             em.merge(employee);
+            em.getTransaction().commit();
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }
         return Optional.empty();
@@ -83,7 +87,9 @@ public class EmployeesRepository {
         Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(firstName, lastName);
         if (employeeDtoOptional.isPresent()) {
             Employee employee = adapter.convertToEmployee(employeeDtoOptional.get());
+            em.getTransaction().begin();
             em.remove(employee);
+            em.getTransaction().commit();
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }
         return Optional.empty();
