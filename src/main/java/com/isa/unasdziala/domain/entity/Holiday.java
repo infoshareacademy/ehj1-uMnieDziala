@@ -9,6 +9,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,6 +19,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @ToString
+@NamedQueries({
+        @NamedQuery(name = "Holiday.findByDate", query = "from Holiday h where h.date =:date"),
+})
 public class Holiday {
     @Id
     @GeneratedValue(generator = "uuid-generator")
@@ -29,8 +33,8 @@ public class Holiday {
     @Column
     private LocalDate date;
 
-    @ManyToMany(mappedBy = "holidays", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Employee> employees;
+    @ManyToMany(mappedBy = "holidays", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Employee> employees = new HashSet<>();
 
     public Holiday(LocalDate date) {
         this.date = date;

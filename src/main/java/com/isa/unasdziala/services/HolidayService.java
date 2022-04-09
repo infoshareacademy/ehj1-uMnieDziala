@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
+
 public class HolidayService {
 
     private final HolidayRepository holidayRepository;
@@ -18,5 +20,9 @@ public class HolidayService {
 
     public List<Holiday> findAll() {
         return holidayRepository.findAll();
+    }
+
+    public Optional<Holiday> addHoliday(Holiday holiday) {
+        return holidayRepository.add(holiday);
     }
 }

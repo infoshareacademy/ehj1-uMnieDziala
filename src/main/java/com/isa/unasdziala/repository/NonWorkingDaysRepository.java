@@ -18,9 +18,10 @@ public class NonWorkingDaysRepository {
     private List<Day> nonWorkingDays = new ArrayList<>();
 
     public NonWorkingDaysRepository() {
+        initialize();
     }
 
-    public void initialize() {
+    private void initialize() {
         log.info("Initialize non working days repository");
         if (this.nonWorkingDays.isEmpty()) {
             this.nonWorkingDays = importNonWorkingDays();

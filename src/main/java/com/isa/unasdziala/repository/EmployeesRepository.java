@@ -2,23 +2,21 @@ package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.adapters.EmployeeAdapter;
 import com.isa.unasdziala.domain.EmployeeCSV;
-import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.domain.entity.Employee;
+import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.utils.CalendarLoader;
 import com.isa.unasdziala.utils.HibernateUtil;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-
-import com.opencsv.bean.CsvToBeanBuilder;
-
-import javax.persistence.EntityManager;
 
 public class EmployeesRepository {
     private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
@@ -81,6 +79,13 @@ public class EmployeesRepository {
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }
         return Optional.empty();
+    }
+
+    public Optional<Employee> updateHolidays(Employee employee) {
+        em.getTransaction().begin();
+        em.merge(employee);
+        em.getTransaction().commit();
+        return Optional.of(employee);
     }
 
     public Optional<EmployeeDto> delete(String firstName, String lastName) {

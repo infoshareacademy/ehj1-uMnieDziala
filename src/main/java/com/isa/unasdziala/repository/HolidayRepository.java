@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class HolidayRepository {
 
@@ -20,4 +22,28 @@ public class HolidayRepository {
                 .getResultStream()
                 .toList();
     }
+
+    public Optional<Holiday> findByDate(LocalDate date) {
+        return em.createNamedQuery("Holiday.findByDate", Holiday.class)
+                .setParameter("date", date)
+                .getResultStream()
+                .findFirst();
+    }
+
+    public Optional<Holiday> add(Holiday holiday) {
+        Optional<Holiday> existingHoliday = findByDate(holiday.getDate());
+//        if (existingHoliday.isPresent()) {
+//            System.out.println("The given date already exists in the database");
+//            em.getTransaction().begin();
+//            em.merge(holiday);
+//            em.getTransaction().commit();
+//            return Optional.empty();
+//        } else {
+        System.out.println("Adding date " + holiday.getDate().toString());
+        em.getTransaction().begin();
+        em.persist(holiday);
+        em.getTransaction().commit();
+        return Optional.of(holiday);
+    }
 }
+

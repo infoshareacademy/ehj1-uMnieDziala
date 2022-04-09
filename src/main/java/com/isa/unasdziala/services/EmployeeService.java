@@ -4,7 +4,6 @@ import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.repository.EmployeesRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public class EmployeeService {
     private final EmployeesRepository employeesRepository;
@@ -49,6 +48,15 @@ public class EmployeeService {
                         )
                 );
     }
+
+//    public Employee updateHolidays(Employee employe){
+//        return employeesRepository.updateHolidays(employe)
+//                .orElseThrow(
+//                        () -> new IllegalArgumentException(
+//                                "Employee with first name and last name does not exist: " + employe.getFirstName() + " " + employe.getLastName()
+//                        )
+//                );
+//    }
 
     public void importFile() {
         employeesRepository.importEmployees();

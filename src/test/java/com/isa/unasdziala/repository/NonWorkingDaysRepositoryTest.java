@@ -23,7 +23,7 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldLoadNonWorkingDaysRepository() {
         // when
-        sut.initialize();
+
         // then
         assertThat(sut.findAll()).isNotEmpty();
     }
@@ -31,7 +31,7 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldDayCountryNameBeLikePl() {
         // given
-        sut.initialize();
+
         List<Day> dayList = sut.findAll();
         Day day = dayList.get(0);
         // when
