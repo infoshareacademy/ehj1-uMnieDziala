@@ -53,10 +53,14 @@ public class EmployeesRepository {
                 .findFirst();
     }
 
-    public EmployeeDto add(EmployeeDto employeeDto) {
+    public Optional<EmployeeDto> add(EmployeeDto employeeDto) {
+        Optional<EmployeeDto> existingEmployee = findByFirstNameAndLastName(employeeDto.getFirstName(), employeeDto.getLastName());
+        if(existingEmployee.isPresent()) {
+            return Optional.empty();
+        }
         Employee employee = adapter.convertToEmployee(employeeDto);
         em.persist(employee);
-        return adapter.convertToEmployeeDto(employee);
+        return Optional.of(adapter.convertToEmployeeDto(employee));
     }
 
     public Optional<EmployeeDto> update(EmployeeDto newEmployeeDto) {

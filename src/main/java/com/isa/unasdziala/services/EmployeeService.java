@@ -22,5 +22,16 @@ public class EmployeeService {
         );
     }
 
+    public EmployeeDto addEmployee(EmployeeDto employeeDto) throws IllegalArgumentException {
+        return employeesRepository.add(employeeDto)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Employee with this first name and last name already exists: " + employeeDto.getFirstName() + " " + employeeDto.getLastName()
+                        )
+                );
+    }
+
+
+
 
 }
