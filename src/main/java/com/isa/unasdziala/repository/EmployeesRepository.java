@@ -88,7 +88,7 @@ public class EmployeesRepository {
         if (employeeDtoOptional.isPresent()) {
             Employee employee = adapter.convertToEmployee(employeeDtoOptional.get());
             em.getTransaction().begin();
-            em.remove(employee);
+            em.remove(em.contains(employee) ? employee : em.merge(employee));
             em.getTransaction().commit();
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }

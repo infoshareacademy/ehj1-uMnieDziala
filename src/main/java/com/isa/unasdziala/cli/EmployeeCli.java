@@ -27,9 +27,30 @@ public class EmployeeCli {
             switch (userOption) {
                 case 1 -> showAllEmployees();
                 case 2 -> showEmployeeDetailsByFirstAndLastName();
+                case 4 -> deleteEmployee();
                 case 5 -> importFromFile();
                 case 0 -> again = false;
             }
+        }
+    }
+
+    private void deleteEmployee() {
+        logSTD.info("Delete");
+        logSTD.info("Enter first name");
+        String firstName = scanner.nextLine();
+
+        logSTD.info("Enter last name");
+        String lastName = scanner.nextLine();
+
+        employeeService.deleteEmployee(firstName, lastName);
+    }
+
+    private void showAllEmployees() {
+        List<EmployeeDto> allEmployees = employeeService.findAll();
+
+        logSTD.info("All employees: ");
+        for (EmployeeDto employee : allEmployees) {
+            logSTD.info("\t" + employee.getFirstName() + " " + employee.getLastName());
         }
     }
 
@@ -50,14 +71,6 @@ public class EmployeeCli {
         employeeService.importFile();
     }
 
-    private void showAllEmployees() {
-        List<EmployeeDto> allEmployees = employeeService.findAll();
-
-        logSTD.info("All employees: ");
-        for (EmployeeDto employee : allEmployees) {
-            logSTD.info("\t" + employee.getFirstName() + " " + employee.getLastName());
-        }
-    }
 
     private void printMenu() {
         logSTD.info("Options: ");
