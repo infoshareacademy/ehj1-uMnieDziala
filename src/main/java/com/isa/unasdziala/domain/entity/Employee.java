@@ -1,4 +1,4 @@
-package com.isa.unasdziala.domain.entities;
+package com.isa.unasdziala.domain.entity;
 
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
@@ -13,7 +13,6 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
-
 
 @Entity
 @Table(name = "employees")
@@ -57,14 +56,8 @@ public class Employee {
     @Transient
     private Set<Day> events;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employee_holiday",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "holiday_id")
-    )
-    private Set<Holiday> holidayDays;
 
     public Employee() {
+
     }
 }

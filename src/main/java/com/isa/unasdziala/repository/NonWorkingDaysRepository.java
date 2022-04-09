@@ -27,6 +27,7 @@ public class NonWorkingDaysRepository {
         }
     }
 
+
     public Optional<Day> add(Day day) {
         Optional<Day> optionalDay = findByDate(day.getDate());
         if (optionalDay.isEmpty()) {

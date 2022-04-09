@@ -1,6 +1,6 @@
 package com.isa.unasdziala.services;
 
-import com.isa.unasdziala.domain.entities.Holiday;
+import com.isa.unasdziala.domain.entity.Holiday;
 import com.isa.unasdziala.repository.HolidayRepository;
 import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import org.slf4j.Logger;

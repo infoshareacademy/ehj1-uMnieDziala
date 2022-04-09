@@ -1,7 +1,7 @@
 package com.isa.unasdziala.cli;
 
 import com.isa.unasdziala.domain.Day;
-import com.isa.unasdziala.domain.entities.Holiday;
+import com.isa.unasdziala.domain.entity.Holiday;
 import com.isa.unasdziala.repository.HolidayRepository;
 import com.isa.unasdziala.repository.NonWorkingDaysRepository;
 import com.isa.unasdziala.services.HolidayService;

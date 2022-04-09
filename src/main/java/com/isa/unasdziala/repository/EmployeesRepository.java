@@ -2,8 +2,7 @@ package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.adapters.EmployeeAdapter;
 import com.isa.unasdziala.domain.EmployeeCSV;
-import com.isa.unasdziala.domain.entities.Employee;
-import com.isa.unasdziala.domain.entities.Holiday;
+import com.isa.unasdziala.domain.entity.Employee;
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.utils.CalendarLoader;
 import com.isa.unasdziala.utils.HibernateUtil;
@@ -27,26 +26,18 @@ public class EmployeesRepository {
     private final CalendarLoader calendarLoader = new CalendarLoader();
     private final EntityManager em = HibernateUtil.getEntityManager();
 
-    private EmployeeAdapter adapter = new EmployeeAdapter();
+    private final EmployeeAdapter adapter = new EmployeeAdapter();
 
     public EmployeesRepository() {
         logger.debug("Creating employee repository");
     }
 
     public List<EmployeeDto> findAll() {
-        return em.createNamedQuery("Employee.findAll", Employee.class)
-                .getResultStream()
-                .map(adapter::convertToEmployeeDto)
-                .toList();
+        return em.createNamedQuery("Employee.findAll", Employee.class).getResultStream().map(adapter::convertToEmployeeDto).toList();
     }
 
     public Optional<EmployeeDto> findByFirstNameAndLastName(String firstName, String lastName) {
-        return em.createNamedQuery("Employee.findByFirstNameAndLastName", Employee.class)
-                .setParameter("firstName", firstName)
-                .setParameter("lastName", lastName)
-                .getResultStream()
-                .map(adapter::convertToEmployeeDto)
-                .findFirst();
+        return em.createNamedQuery("Employee.findByFirstNameAndLastName", Employee.class).setParameter("firstName", firstName).setParameter("lastName", lastName).getResultStream().map(adapter::convertToEmployeeDto).findFirst();
     }
 
     public Optional<EmployeeDto> add(EmployeeDto employeeDto) {
@@ -55,12 +46,13 @@ public class EmployeesRepository {
             return Optional.empty();
         }
         Employee employee = adapter.convertToEmployee(employeeDto);
+        System.out.println("Dodaje " + employee.getFirstName());
         em.persist(employee);
         return Optional.of(adapter.convertToEmployeeDto(employee));
     }
 
-    public Optional<EmployeeDto> update(EmployeeDto newEmployeeDto) {
-        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(newEmployeeDto.getFirstName(), newEmployeeDto.getLastName());
+    public Optional<EmployeeDto> update(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
+        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(oldFirstName, oldLastName);
         if (employeeDtoOptional.isPresent()) {
             EmployeeDto employeeDto = employeeDtoOptional.get();
             Employee employee = adapter.convertToEmployee(employeeDto);
@@ -91,12 +83,7 @@ public class EmployeesRepository {
     public void importEmployees() {
         logger.debug("Importing employees from file.");
         try (FileReader fileReader = new FileReader(PATH_TO_CSV.toString())) {
-            List<EmployeeCSV> employeesCSV = new CsvToBeanBuilder<EmployeeCSV>(fileReader)
-                    .withType(EmployeeCSV.class)
-                    .withSeparator(CSV_SEPARATOR)
-                    .withSkipLines(1)
-                    .build()
-                    .parse();
+            List<EmployeeCSV> employeesCSV = new CsvToBeanBuilder<EmployeeCSV>(fileReader).withType(EmployeeCSV.class).withSeparator(CSV_SEPARATOR).withSkipLines(1).build().parse();
             List<EmployeeDto> employeesDto = employeesCSV.stream().map(adapter::convertEmployeeCSVToEmployeeDto).toList();
             for (EmployeeDto employeeDto : employeesDto) {
                 employeeDto.setEvents(calendarLoader.loadEmployeeEventCalendar(employeeDto));
@@ -106,11 +93,5 @@ public class EmployeesRepository {
         } catch (IOException e) {
             logger.warn("Can't load csv file", e);
         }
-    }
-
-    public void addHoliday(EmployeeDto employee, Holiday holiday) {
-        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(employee.getFirstName(), employee.getLastName());
-        adapter.convertToEmployee(employeeDtoOptional.get()).getHolidayDays().add(holiday);
-        em.merge(adapter.convertToEmployee(employeeDtoOptional.get()));
     }
 }

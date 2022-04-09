@@ -1,4 +1,4 @@
-package com.isa.unasdziala.domain.entities;
+package com.isa.unasdziala.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

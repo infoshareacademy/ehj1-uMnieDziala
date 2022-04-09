@@ -4,10 +4,9 @@ import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.repository.EmployeesRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public class EmployeeService {
-    private EmployeesRepository employeesRepository;
+    private final EmployeesRepository employeesRepository;
 
     public EmployeeService(EmployeesRepository employeesRepository) {
         this.employeesRepository = employeesRepository;
@@ -17,7 +16,7 @@ public class EmployeeService {
         return employeesRepository.findAll();
     }
 
-    public EmployeeDto findByFirstNameAndLastName(String firstName, String lastName) {
+    public EmployeeDto findByFirstNameAndLastName(String firstName, String lastName) throws IllegalArgumentException {
         return employeesRepository.findByFirstNameAndLastName(firstName, lastName).orElseThrow(
                 () -> new IllegalArgumentException("Wrong first name " + firstName + " and last name " + lastName)
         );
@@ -27,7 +26,7 @@ public class EmployeeService {
         return employeesRepository.add(employeeDto)
                 .orElseThrow(
                         () -> new IllegalArgumentException(
-                                "Employee with this first name and last name already exists: " + employeeDto.getFirstName() + " " + employeeDto.getLastName()
+                                "Employee with first name and last name already exists: " + employeeDto.getFirstName() + " " + employeeDto.getLastName()
                         )
                 );
     }
@@ -36,19 +35,21 @@ public class EmployeeService {
         return employeesRepository.delete(firstName, lastName)
                 .orElseThrow(
                         () -> new IllegalArgumentException(
-                                "Employee with this first name and last name does not exist: " + firstName + " " + lastName
+                                "Employee with first name and last name does not exist: " + firstName + " " + lastName
                         )
                 );
     }
 
-    public EmployeeDto updateEmployee(EmployeeDto employeeDto) throws IllegalArgumentException {
-        Optional<EmployeeDto> updatedEmployeeDto = employeesRepository.update(employeeDto);
-        return updatedEmployeeDto.orElseThrow(
-                () -> new IllegalArgumentException(
-                        "Employee with this first name and last name does not exist: " + employeeDto.getFirstName() + " " + employeeDto.getLastName()
-                )
-        );
+    public EmployeeDto updateEmployee(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) throws IllegalArgumentException {
+        return employeesRepository.update(oldFirstName, oldLastName, newEmployeeDto)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Employee with first name and last name does not exist: " + oldFirstName + " " + oldLastName
+                        )
+                );
     }
 
-
+    public void importFile() {
+        employeesRepository.importEmployees();
+    }
 }

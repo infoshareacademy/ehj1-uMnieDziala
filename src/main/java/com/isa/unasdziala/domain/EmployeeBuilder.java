@@ -1,6 +1,6 @@
 package com.isa.unasdziala.domain;
 
-import com.isa.unasdziala.domain.entities.Holiday;
+import com.isa.unasdziala.domain.entity.Holiday;
 
 import java.util.HashSet;
 import java.util.Set;
