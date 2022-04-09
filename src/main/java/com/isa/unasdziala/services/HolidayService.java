@@ -1,6 +1,6 @@
 package com.isa.unasdziala.services;
 
-import com.isa.unasdziala.domain.Holiday;
+import com.isa.unasdziala.domain.entities.Holiday;
 import com.isa.unasdziala.repository.HolidayRepository;
 import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import org.slf4j.Logger;
@@ -14,11 +14,6 @@ public class HolidayService {
 
     public HolidayService(HolidayRepository holidayRepository) {
         this.holidayRepository = holidayRepository;
-    }
-
-    public void addHoliday(Holiday holiday) {
-        log.info("Add new holiday day {} to repository", holiday.getDate().toString());
-        holidayRepository.saveHoliday(holiday);
     }
 
     public List<Holiday> findAll() {

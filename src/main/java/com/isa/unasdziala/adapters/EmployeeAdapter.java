@@ -1,5 +1,6 @@
 package com.isa.unasdziala.adapters;
 
+import com.isa.unasdziala.domain.EmployeeCSV;
 import com.isa.unasdziala.domain.entities.Employee;
 import com.isa.unasdziala.dto.EmployeeDto;
 
@@ -16,7 +17,8 @@ public class EmployeeAdapter {
                 .contact(employee.getContact())
                 .address(employee.getAddress())
                 .department(employee.getDepartment())
-                .holidays(employee.getHolidays());
+                .holidays(employee.getHolidays())
+                .events(employee.getEvents());
         return EmployeeDto.builder().build();
     }
 
@@ -31,7 +33,22 @@ public class EmployeeAdapter {
                 .contact(employeeDto.getContact())
                 .address(employeeDto.getAddress())
                 .department(employeeDto.getDepartment())
-                .holidays(employeeDto.getHolidays());
-        return employee.build();
+                .holidays(employeeDto.getHolidays())
+                .events(employeeDto.getEvents());
+        return employee.builder().build();
+    }
+
+    public EmployeeDto convertEmployeeCSVToEmployeeDto(EmployeeCSV employeeCSV) {
+        if (employeeCSV == null) {
+            return null;
+        }
+        EmployeeDto.EmployeeDtoBuilder employeeDto = EmployeeDto.builder()
+                .firstName(employeeCSV.getFirstName())
+                .lastName(employeeCSV.getLastName())
+                .contact(employeeCSV.getContact())
+                .address(employeeCSV.getAddress())
+                .department(employeeCSV.getDepartment())
+                .holidays(employeeCSV.getHolidays());
+        return EmployeeDto.builder().build();
     }
 }

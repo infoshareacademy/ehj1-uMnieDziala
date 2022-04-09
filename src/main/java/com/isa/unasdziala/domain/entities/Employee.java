@@ -1,20 +1,29 @@
 package com.isa.unasdziala.domain.entities;
+
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
+import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Department;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
-@Builder
+
 @Entity
 @Table(name = "employees")
 @Getter
 @Setter
 @ToString
+@NamedQueries({
+        @NamedQuery(name = "Employee.findAll", query = "from Employee"),
+        @NamedQuery(name = "Employee.findByFirstNameAndLastName", query = "from Employee e where e.firstName = :firstName and e.lastName = :lastName"),
+})
 public class Employee {
 
     @Id
@@ -45,17 +54,17 @@ public class Employee {
     @Column(nullable = false)
     private float holidays;
 
-    public Employee(UUID id, String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.contact = contact;
-        this.address = address;
-        this.department = department;
-        this.holidays = holidays;
-    }
+    @Transient
+    private Set<Day> events;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "employee_holiday",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "holiday_id")
+    )
+    private Set<Holiday> holidayDays;
 
     public Employee() {
-
     }
 }

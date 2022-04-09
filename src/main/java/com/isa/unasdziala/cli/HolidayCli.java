@@ -1,7 +1,7 @@
 package com.isa.unasdziala.cli;
 
 import com.isa.unasdziala.domain.Day;
-import com.isa.unasdziala.domain.Holiday;
+import com.isa.unasdziala.domain.entities.Holiday;
 import com.isa.unasdziala.repository.HolidayRepository;
 import com.isa.unasdziala.repository.NonWorkingDaysRepository;
 import com.isa.unasdziala.services.HolidayService;
@@ -36,7 +36,7 @@ public class HolidayCli {
             printMenu();
             int userOption = getUserOption();
             switch (userOption) {
-                case 1 -> printAllFreeDays();
+                case 1 -> printAllRemainingFreeDaysToEndOfYear();
 //                case 2 -> service.addEmployee();
 //                case 3 -> service.updateEmployeeByLastName();
                 case 0 -> again = false;
@@ -47,7 +47,7 @@ public class HolidayCli {
 
     private void printMenu() {
         logSTD.info("Options: ");
-        logSTD.info("1. Show all free days");
+        logSTD.info("1. Show all remaining free days in this year");
         logSTD.info("2. Show recommended holiday days");
         logSTD.info("3. Add new holiday");
         logSTD.info("0. Back to previous menu");
@@ -64,7 +64,7 @@ public class HolidayCli {
         }
     }
 
-    private void printAllFreeDays() {
+    private void printAllRemainingFreeDaysToEndOfYear() {
         List<LocalDate> freeDays = new ArrayList<>();
         List<LocalDate> freeDaysFromCalendar = LocalDate.now().datesUntil(LocalDate.now().with(lastDayOfYear()))
                 .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY)
@@ -82,5 +82,6 @@ public class HolidayCli {
         freeDays.removeAll(busyDaysFromNonWorkingDaysRepo);
         freeDays.removeAll(busyDaysFromHolidayRepo);
         freeDays.removeAll(busyDaysFromHolidayRepo);
+
     }
 }

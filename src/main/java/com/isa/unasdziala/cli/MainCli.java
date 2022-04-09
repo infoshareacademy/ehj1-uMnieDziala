@@ -7,7 +7,9 @@ import java.util.Scanner;
 
 public class MainCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
+    private final EmployeeCli employeeCli = new EmployeeCli();
     private final NonWorkingDaysCli nonWorkingDaysCli = new NonWorkingDaysCli();
+    private final HolidayCli holidayCli = new HolidayCli();
     private final Scanner scanner = new Scanner(System.in);
 
     public void run() {
@@ -16,8 +18,9 @@ public class MainCli {
             printMenu();
             int userOption = getUserOption();
             switch (userOption) {
-                case 2 -> EmployeeCli.run();
+                case 1 -> employeeCli.run();
                 case 2 -> nonWorkingDaysCli.run();
+                case 3 -> holidayCli.run();
                 case 0 -> System.exit(-1);
             }
         }

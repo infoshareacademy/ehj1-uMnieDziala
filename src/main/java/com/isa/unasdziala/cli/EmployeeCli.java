@@ -1,7 +1,7 @@
 package com.isa.unasdziala.cli;
 
+import com.isa.unasdziala.repository.EmployeesRepository;
 import com.isa.unasdziala.services.EmployeeService;
-import com.isa.unasdziala.services.NonWorkingDayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ public class EmployeeCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
 
     private final Scanner scanner = new Scanner(System.in);
-    private final EmpleyeeService service = new EmpleyeeService(new EmpleyeeService());
+    private final EmployeeService service = new EmployeeService(new EmployeesRepository());
 
     public void run() {
         boolean again = true;
@@ -20,11 +20,11 @@ public class EmployeeCli {
             printMenu();
             int userOption = getUserOption();
             switch (userOption) {
-                case 1 -> service.findAllEmployees();
-                case 2 -> service.findEmployeeByLastName();
-                case 3 -> service.addEmployee();
-                case 4 -> service.updateEmployeeByLastName();
-                case 5 -> service.deleteEmployeeByLastName();
+                case 1 -> service.findAll();
+//                case 2 -> service.findEmployeeByLastName();
+//                case 3 -> service.addEmployee();
+//                case 4 -> service.updateEmployeeByLastName();
+//                case 5 -> service.deleteEmployeeByLastName();
                 case 0 -> again = false;
             }
         }

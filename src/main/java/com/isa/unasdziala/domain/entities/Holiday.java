@@ -1,4 +1,4 @@
-package com.isa.unasdziala.domain;
+package com.isa.unasdziala.domain.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public class Holiday {
     @GeneratedValue(generator = "uuid-generator")
     @GenericGenerator(name = "uuid-generator", strategy = "uuid2")
     @Type(type = "uuid-char")
-    @Column
+    @Column(length = 36, updatable = false, nullable = false)
     private UUID id;
 
     @Column
@@ -31,4 +31,8 @@ public class Holiday {
 
     @ManyToMany(mappedBy = "holidays", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Employee> employees;
+
+    public Holiday(LocalDate date) {
+        this.date = date;
+    }
 }
