@@ -1,102 +1,118 @@
 package com.isa.unasdziala.repository;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.isa.unasdziala.domain.Employee;
+import com.isa.unasdziala.adapters.EmployeeAdapter;
+import com.isa.unasdziala.domain.EmployeeCSV;
+import com.isa.unasdziala.dto.EmployeeDto;
+import com.isa.unasdziala.domain.entity.Employee;
 import com.isa.unasdziala.utils.CalendarLoader;
+import com.isa.unasdziala.utils.HibernateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
+import javax.persistence.EntityManager;
+
 public class EmployeesRepository {
-    ClassLoader classLoader = getClass().getClassLoader();
-    private final String CSV_FILE_NAME = "employees_repository.csv";
-    private final File CSV_FILE = new File(classLoader.getResource(CSV_FILE_NAME).getFile());
     private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
     private static final char CSV_SEPARATOR = ';';
-    private static final Logger log = LoggerFactory.getLogger(EmployeesRepository.class);
-    private final CalendarLoader calendarLoader = new CalendarLoader();
+    private static final Logger logger = LoggerFactory.getLogger(EmployeesRepository.class);
 
-    private List<Employee> employees;
+    private final CalendarLoader calendarLoader = new CalendarLoader();
+    private final EntityManager em = HibernateUtil.getEntityManager();
+
+    private final EmployeeAdapter adapter = new EmployeeAdapter();
 
     public EmployeesRepository() {
-        log.info("Creating employee repository");
-        if (this.employees == null) {
-            this.employees = importEmployees();
-        }
+        logger.debug("Creating employee repository");
     }
 
-    List<Employee> importEmployees() {
-        log.info("Start read file: {}", CSV_FILE_NAME);
-        List<Employee> employees = new ArrayList<>();
-        try (FileReader fileReader = new FileReader(CSV_FILE)) {
-            employees = new CsvToBeanBuilder<Employee>(fileReader)
-                    .withType(Employee.class)
+    public List<EmployeeDto> findAll() {
+        return em.createNamedQuery("Employee.findAll", Employee.class)
+                .getResultStream()
+                .map(adapter::convertToEmployeeDto)
+                .toList();
+    }
+
+    public Optional<EmployeeDto> findByFirstNameAndLastName(String firstName, String lastName) {
+        return em.createNamedQuery("Employee.findByFirstNameAndLastName", Employee.class)
+                .setParameter("firstName", firstName)
+                .setParameter("lastName", lastName)
+                .getResultStream()
+                .map(adapter::convertToEmployeeDto)
+                .findFirst();
+    }
+
+    public Optional<EmployeeDto> add(EmployeeDto employeeDto) {
+        Optional<EmployeeDto> existingEmployee = findByFirstNameAndLastName(employeeDto.getFirstName(), employeeDto.getLastName());
+        if (existingEmployee.isPresent()) {
+            return Optional.empty();
+        }
+        Employee employee = adapter.convertToEmployee(employeeDto);
+        System.out.println("Dodaje " + employee.getFirstName());
+        em.getTransaction().begin();
+        em.persist(employee);
+        em.getTransaction().commit();
+        System.out.println(employee);
+        return Optional.of(adapter.convertToEmployeeDto(employee));
+    }
+
+    public Optional<EmployeeDto> update(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
+        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(oldFirstName, oldLastName);
+        if (employeeDtoOptional.isPresent()) {
+            EmployeeDto employeeDto = employeeDtoOptional.get();
+            Employee employee = adapter.convertToEmployee(employeeDto);
+
+            employee.setFirstName(newEmployeeDto.getFirstName());
+            employee.setLastName(newEmployeeDto.getLastName());
+            employee.setAddress(newEmployeeDto.getAddress());
+            employee.setContact(newEmployeeDto.getContact());
+            employee.setDepartment(newEmployeeDto.getDepartment());
+            em.getTransaction().begin();
+            em.merge(employee);
+            em.getTransaction().commit();
+            return Optional.of(adapter.convertToEmployeeDto(employee));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<EmployeeDto> delete(String firstName, String lastName) {
+        Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(firstName, lastName);
+        if (employeeDtoOptional.isPresent()) {
+            Employee employee = adapter.convertToEmployee(employeeDtoOptional.get());
+            em.getTransaction().begin();
+            em.remove(employee);
+            em.getTransaction().commit();
+            return Optional.of(adapter.convertToEmployeeDto(employee));
+        }
+        return Optional.empty();
+    }
+
+
+    public void importEmployees() {
+        logger.debug("Importing employees from file.");
+        try (FileReader fileReader = new FileReader(PATH_TO_CSV.toString())) {
+            List<EmployeeCSV> employeesCSV = new CsvToBeanBuilder<EmployeeCSV>(fileReader)
+                    .withType(EmployeeCSV.class)
                     .withSeparator(CSV_SEPARATOR)
                     .withSkipLines(1)
                     .build()
                     .parse();
-
-            log.info("Have been loaded: {} employees", employees.size());
-            for (Employee e : employees) {
-                e.setEvents(calendarLoader.loadEmployeeEventCalendar(e));
+            List<EmployeeDto> employeesDto = employeesCSV.stream().map(adapter::convertEmployeeCSVToEmployeeDto).toList();
+            for (EmployeeDto employeeDto : employeesDto) {
+                employeeDto.setEvents(calendarLoader.loadEmployeeEventCalendar(employeeDto));
+                add(employeeDto);
             }
 
-        } catch (StreamReadException e) {
-            log.error("Error while reading non working days file, " + e.getMessage());
         } catch (IOException e) {
-            log.error("File read error, " + e.getMessage());
+            logger.warn("Can't load csv file", e);
         }
-        return employees;
-    }
-
-    public Employee addEmployee(Employee employee) {
-        employee.setLastName(employee.getLastName());
-        employees.add(employee);
-        return employee;
-    }
-
-    public Optional<Employee> findEmployeeByLastName(String lastName) {
-        if (lastName == null) {
-            return Optional.empty();
-        }
-        return employees
-                .stream()
-                .filter(employee -> lastName.equals(employee.getLastName()))
-                .findFirst();
-    }
-
-    public List<Employee> findAllEmployees() {
-        return List.copyOf(employees);
-    }
-
-    public Optional<Employee> updateEmployeeByLastName(Employee newEmployee) {
-        Optional<Employee> optionalEmployee = findEmployeeByLastName(newEmployee.getLastName());
-        if (optionalEmployee.isPresent()) {
-            Employee employee = optionalEmployee.get();
-            employee.setFirstName(newEmployee.getFirstName());
-            employee.setLastName(newEmployee.getLastName());
-            employee.setAddress(newEmployee.getAddress());
-        }
-        return optionalEmployee;
-    }
-
-    public Optional<Employee> deleteEmployeeByLastName(String lastName) {
-        Optional<Employee> employee = findEmployeeByLastName(lastName);
-        employee.ifPresent(employees::remove);
-        return employee;
-    }
-
-    String pathToEmployeesCSVFile() {
-        return getClass().getClassLoader().getResource(String.valueOf(CSV_FILE_NAME)).getPath();
     }
 }

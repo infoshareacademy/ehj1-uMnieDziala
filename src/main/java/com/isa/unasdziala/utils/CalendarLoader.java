@@ -1,7 +1,8 @@
 package com.isa.unasdziala.utils;
 
 import com.isa.unasdziala.domain.Day;
-import com.isa.unasdziala.domain.entities.Employee;
+import com.isa.unasdziala.domain.EmployeeCSV;
+import com.isa.unasdziala.dto.EmployeeDto;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
@@ -22,11 +23,11 @@ public class CalendarLoader {
 
     public static final DateTimeFormatter ICAL_DATA_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    public Set<Day> loadEmployeeEventCalendar(Employee employee) {
+    public Set<Day> loadEmployeeEventCalendar(EmployeeDto employee) {
         Set<Day> eventDays = new HashSet<>();
 
         String fileName = employee.getFirstName() + "_" + employee.getLastName() + ".ics";
-        URL employeeCalendarURL = Employee.class.getClassLoader().getResource(fileName);
+        URL employeeCalendarURL = EmployeeCSV.class.getClassLoader().getResource(fileName);
 
         if (employeeCalendarURL == null) {
             return eventDays;
