@@ -1,10 +1,12 @@
 package com.isa.unasdziala.cli;
 
+import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.services.EmployeeService;
 import com.isa.unasdziala.services.NonWorkingDayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class EmployeeCli {
@@ -20,11 +22,12 @@ public class EmployeeCli {
             printMenu();
             int userOption = getUserOption();
             switch (userOption) {
-                case 1 -> service.findAllEmployees();
-                case 2 -> service.findEmployeeByLastName();
-                case 3 -> service.addEmployee();
-                case 4 -> service.updateEmployeeByLastName();
-                case 5 -> service.deleteEmployeeByLastName();
+                case 1 -> findAllEmployees();
+                case 2 -> findEmployeeByLastName();
+                //TO DO
+                //case 3 -> service.addEmployee();
+                //case 4 -> service.updateEmployeeByLastName();
+                case 5 -> deleteEmployeeByLastName();
                 case 0 -> again = false;
             }
         }
@@ -51,4 +54,30 @@ public class EmployeeCli {
         }
     }
 
+    public String getInputEmployeeLastname() {
+
+        logSTD.info("Enter employee last name:");
+        String input = scanner.nextLine();
+        return input;
+    }
+
+    public void findAllEmployees() {
+        logSTD.info("List of employees:");
+        //service.findAllEmployees();
+    }
+
+    public void findEmployeeByLastName() {
+        String userInput = getInputEmployeeLastname();
+        logSTD.info("Search results for employee lastname: {} ", userInput);
+        //service.findEmployeeByLastName(getUserInput());
+    }
+
+    public void deleteEmployeeByLastName() {
+        String userInput = getInputEmployeeLastname();
+        logSTD.info("Deleting employee : {} ", userInput);
+        //service.deleteEmployeeByLastName(getUserInput());
+
+    }
+
 }
+
