@@ -15,7 +15,6 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
-@Builder
 @Entity
 @Table(name = "employees")
 @Getter

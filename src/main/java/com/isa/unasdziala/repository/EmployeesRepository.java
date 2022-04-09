@@ -56,6 +56,7 @@ public class EmployeesRepository {
             return Optional.empty();
         }
         Employee employee = adapter.convertToEmployee(employeeDto);
+        System.out.println("Dodaje " + employee.getFirstName());
         em.persist(employee);
         return Optional.of(adapter.convertToEmployeeDto(employee));
     }
