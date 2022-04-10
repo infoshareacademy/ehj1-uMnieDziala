@@ -25,6 +25,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
+
 public class HolidayCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
 
@@ -38,6 +40,7 @@ public class HolidayCli {
     private EmployeeDto employeeDto;
     private Employee employee;
     private Set<LocalDate> busyDays;
+    private Set<LocalDate> freeDaysFromCalendar;
     private String firstName;
     private String lastName;
 
@@ -54,6 +57,7 @@ public class HolidayCli {
         lastName = scanner.nextLine();
 
         this.busyDays = new HashSet<>();
+        this.freeDaysFromCalendar = new HashSet<>();
         employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
         employee = adapter.convertToEmployee(employeeDto);
 
@@ -120,7 +124,18 @@ public class HolidayCli {
     }
 
     private void showHint() {
-
+        logSTD.info("How many days show You ?");
+        int userOption = getUserOption();
+        freeDaysFromCalendar = LocalDate.now().datesUntil(LocalDate.now().with(lastDayOfYear()))
+                .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY)
+                .filter(date -> date.getDayOfWeek() != DayOfWeek.SUNDAY)
+                .collect(Collectors.toSet());
+        getAllBusyDays();
+        freeDaysFromCalendar.removeAll(busyDays);
+        freeDaysFromCalendar = freeDaysFromCalendar.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        freeDaysFromCalendar = freeDaysFromCalendar.stream().limit(userOption).collect(Collectors.toSet());
+        freeDaysFromCalendar = freeDaysFromCalendar.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        printFreeDays();
     }
 
     private void addNewHolidayToEmployee() {
@@ -171,6 +186,14 @@ public class HolidayCli {
         } catch (DateTimeParseException e) {
             logSTD.info("Wrong date format!");
             return getInputDate();
+        }
+    }
+
+    private void printFreeDays() {
+        getAllBusyDays();
+        logSTD.info("Next free days: ");
+        for (LocalDate date : freeDaysFromCalendar) {
+            logSTD.info("\t" + date.toString());
         }
     }
 }
