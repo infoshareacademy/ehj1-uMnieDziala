@@ -10,13 +10,14 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Properties;
 
 @Getter
 public class AppProperties {
-    private final static Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
+    private final static Logger log = LoggerFactory.getLogger(AppProperties.class);
     ClassLoader classLoader = getClass().getClassLoader();
-    private final String PROPERTIES_FILE_NAME = "not_working_days.properties";
+    private final String PROPERTIES_FILE_NAME = "app.properties";
     private final File PROPERTIES_FILE = new File(classLoader.getResource(PROPERTIES_FILE_NAME).getFile());
     private Properties properties;
 
@@ -25,13 +26,22 @@ public class AppProperties {
     }
 
 
-    public String getCountryName() {
-        String property = properties.getProperty("country");
-        if (property != null) {
+    public Locale getCountryName() {
+        Locale locale = new Locale(properties.getProperty("non_working_day_country"), properties.getProperty("non_working_day_country"));
+        if (locale != null) {
         } else {
-            LOGGER.info("Properties COUNTRY is empty");
+            log.error("Properties 'non_working_day_country' is empty");
         }
-        return property;
+        return locale;
+    }
+
+    public Integer getMaxAbsence() {
+        Integer maxAbsence = Integer.parseInt(properties.getProperty("max_absence"));
+        if (maxAbsence != null) {
+        } else {
+            log.error("Properties 'max_absence' is empty");
+        }
+        return maxAbsence;
     }
 
     private Properties readFile(Path fileName) {
@@ -39,15 +49,15 @@ public class AppProperties {
         try {
             appProperties.load(new StringReader(Files.readString(fileName)));
         } catch (InvalidPathException e) {
-            LOGGER.error("Path not found, " + e.getMessage());
+            log.error("Path not found, " + e.getMessage(), e);
         } catch (IOException e) {
-            LOGGER.error("File read error, " + e.getMessage());
+            log.error("File read error, " + e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            LOGGER.error("File error, " + e.getMessage());
+            log.error("File error, " + e.getMessage(), e);
         } catch (NullPointerException e) {
-            LOGGER.error("File not found, " + e.getMessage());
+            log.error("File not found, " + e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("Reading properties Error " + e.getMessage());
+            log.error("Reading properties Error " + e.getMessage(), e);
         }
         return appProperties;
     }

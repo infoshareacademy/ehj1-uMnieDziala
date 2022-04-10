@@ -4,6 +4,7 @@ import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Department;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 public class EmployeeDto {
 
     private UUID id;

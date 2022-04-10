@@ -28,14 +28,14 @@ public class EmployeeAdapter {
             return null;
         }
         Employee employee = new Employee();
-        employee.setId(employeeDto.getId());
-        employee.setFirstName(employeeDto.getFirstName());
-        employee.setLastName(employeeDto.getLastName());
-        employee.setContact(employeeDto.getContact());
-        employee.setAddress(employeeDto.getAddress());
-        employee.setDepartment(employeeDto.getDepartment());
-        employee.setHolidays(employeeDto.getHolidays());
-        employee.setEvents(employeeDto.getEvents());
+                employee.setId(employeeDto.getId());
+                employee.setFirstName(employeeDto.getFirstName());
+                employee.setLastName(employeeDto.getLastName());
+                employee.setContact(employeeDto.getContact());
+                employee.setAddress(employeeDto.getAddress());
+                employee.setDepartment(employeeDto.getDepartment());
+                employee.setHolidays(employeeDto.getHolidays());
+                employee.setEvents(employeeDto.getEvents());
         return employee;
     }
 

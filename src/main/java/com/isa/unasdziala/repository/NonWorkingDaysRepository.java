@@ -8,20 +8,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class NonWorkingDaysRepository {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
-    private final List<Day> nonWorkingDays = new ArrayList<>();
+    private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
+    private List<Day> nonWorkingDays = new ArrayList<>();
 
     public NonWorkingDaysRepository() {
-        importNonWorkingDays();
+        initialize();
     }
+
+    private void initialize() {
+        log.info("Initialize non working days repository");
+        if (this.nonWorkingDays.isEmpty()) {
+            this.nonWorkingDays = importNonWorkingDays();
+        }
+    }
+
 
     public Optional<Day> add(Day day) {
         Optional<Day> optionalDay = findByDate(day.getDate());
@@ -58,15 +64,15 @@ public class NonWorkingDaysRepository {
         return optionalDay;
     }
 
-    private void importNonWorkingDays() {
-        LOGGER.info("Start import non working days to repository");
+    private List<Day> importNonWorkingDays() {
+        log.info("Start import non working days to repository");
         NonWorkingDaysReader nonWorkingDaysReader = new NonWorkingDaysReader();
-        String countryName = new AppProperties().getCountryName();
-        LOGGER.info("Filtr non working days country by: {}", countryName);
-        nonWorkingDaysReader.getNonWorkingDays().stream()
-                .filter(day -> day.getCountry().equals(countryName))
-                .forEach(this::add);
-        LOGGER.info("Have been imported {} day/s to country: {}", nonWorkingDays.size(), countryName);
-
+        Locale countryName = new AppProperties().getCountryName();
+        log.info("Filtr non working days country by: {}", countryName.getCountry());
+        List<Day> nonWorkingDaysRepository = nonWorkingDaysReader.getNonWorkingDays().stream()
+                .filter(day -> day.getCountry().equals(countryName.getCountry().toLowerCase()))
+                .collect(Collectors.toList());
+        log.info("Have been imported {} day/s to country: {}", nonWorkingDaysRepository.size(), countryName.getCountry());
+        return nonWorkingDaysRepository;
     }
 }
