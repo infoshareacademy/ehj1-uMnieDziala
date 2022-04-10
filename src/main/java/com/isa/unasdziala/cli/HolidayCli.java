@@ -116,6 +116,7 @@ public class HolidayCli {
     private void checkDay() {
         logSTD.info("Please enter date to check");
         LocalDate dateToCheck = getInputDate();
+        getAllBusyDays();
         if (busyDays.contains(dateToCheck)) {
             logSTD.info("Date is busy. Choose another");
         } else if (dateToCheck.getDayOfWeek() == DayOfWeek.SATURDAY || dateToCheck.getDayOfWeek() == DayOfWeek.SUNDAY) {
