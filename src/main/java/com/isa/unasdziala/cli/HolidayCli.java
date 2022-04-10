@@ -96,7 +96,7 @@ public class HolidayCli {
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
         Set<LocalDate> busyDaysFromEmployeHolidaysDays = holidayService.findAll().stream()
-                .filter(h -> h.getEmployees().contains(employee))
+                .filter(holiday -> holiday.getEmployees().contains(employee))
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
 
