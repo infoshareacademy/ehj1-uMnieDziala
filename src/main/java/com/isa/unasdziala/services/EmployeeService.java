@@ -49,15 +49,6 @@ public class EmployeeService {
                 );
     }
 
-//    public Employee updateHolidays(Employee employe){
-//        return employeesRepository.updateHolidays(employe)
-//                .orElseThrow(
-//                        () -> new IllegalArgumentException(
-//                                "Employee with first name and last name does not exist: " + employe.getFirstName() + " " + employe.getLastName()
-//                        )
-//                );
-//    }
-
     public void importFile() {
         employeesRepository.importEmployees();
     }

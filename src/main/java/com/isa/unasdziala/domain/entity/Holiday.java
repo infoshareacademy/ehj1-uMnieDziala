@@ -33,7 +33,12 @@ public class Holiday {
     @Column
     private LocalDate date;
 
-    @ManyToMany(mappedBy = "holidays", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "holiday_employe",
+            joinColumns = @JoinColumn(name = "holiday_id"),
+            inverseJoinColumns = @JoinColumn(name = "employe_id")
+    )
     private Set<Employee> employees = new HashSet<>();
 
     public Holiday(LocalDate date) {

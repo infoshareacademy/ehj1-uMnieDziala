@@ -81,13 +81,6 @@ public class EmployeesRepository {
         return Optional.empty();
     }
 
-    public Optional<Employee> updateHolidays(Employee employee) {
-        em.getTransaction().begin();
-        em.merge(employee);
-        em.getTransaction().commit();
-        return Optional.of(employee);
-    }
-
     public Optional<EmployeeDto> delete(String firstName, String lastName) {
         Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(firstName, lastName);
         if (employeeDtoOptional.isPresent()) {
@@ -99,7 +92,6 @@ public class EmployeesRepository {
         }
         return Optional.empty();
     }
-
 
     public void importEmployees() {
         logger.debug("Importing employees from file.");

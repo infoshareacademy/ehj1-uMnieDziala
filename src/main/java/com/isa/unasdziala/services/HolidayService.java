@@ -1,13 +1,14 @@
 package com.isa.unasdziala.services;
 
+import com.isa.unasdziala.domain.entity.Employee;
 import com.isa.unasdziala.domain.entity.Holiday;
 import com.isa.unasdziala.repository.HolidayRepository;
 import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public class HolidayService {
 
@@ -22,7 +23,12 @@ public class HolidayService {
         return holidayRepository.findAll();
     }
 
-    public Optional<Holiday> addHoliday(Holiday holiday) {
-        return holidayRepository.add(holiday);
+    public Holiday addHoliday(LocalDate date, Employee employee) throws IllegalArgumentException {
+        return holidayRepository.add(date, employee)
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Holiday with date already exists: " + date.toString()
+                        )
+                );
     }
 }

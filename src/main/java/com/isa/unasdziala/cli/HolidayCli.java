@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,13 +33,13 @@ public class HolidayCli {
     private final HolidayService holidayService = new HolidayService(new HolidayRepository());
     private final NonWorkingDayService nonWorkingDayService = new NonWorkingDayService(new NonWorkingDaysRepository());
     private final EmployeeService employeeService = new EmployeeService(new EmployeesRepository());
-    private Integer maxAbsence = new AppProperties().getMaxAbsence();
+    private final Integer maxAbsence = new AppProperties().getMaxAbsence();
     private final EmployeeAdapter adapter = new EmployeeAdapter();
-    private final Set<LocalDate> busyDays = new HashSet<>();
+    private Set<LocalDate> busyDays = new HashSet<>();
 
 
     public void run() {
-        getAllBusyDays();
+        this.busyDays = new HashSet<>();
         boolean again = true;
 
         while (again) {
@@ -56,7 +57,7 @@ public class HolidayCli {
 
     private void printMenu() {
         logSTD.info("Options: ");
-        logSTD.info("1. Show all busy days");
+        logSTD.info("1. Show all busy days for employee");
         logSTD.info("2. Check if day to holiday is correct");
         logSTD.info("3. Give me a hint about holiday days");
         logSTD.info("4. Add new holiday");
@@ -75,6 +76,18 @@ public class HolidayCli {
     }
 
     private void getAllBusyDays() {
+        logSTD.info("Enter first name");
+        String firstName = scanner.nextLine();
+
+        logSTD.info("Enter last name");
+        String lastName = scanner.nextLine();
+
+        EmployeeDto employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
+        Employee employee = adapter.convertToEmployee(employeeDto);
+
+        Set<LocalDate> busyDayFromEvent = employee.getEvents().stream()
+                .map(e -> e.getDate())
+                .collect(Collectors.toSet());
         Set<LocalDate> busyDaysFromNonWorkingDaysRepo = nonWorkingDayService.findAll().stream()
                 .map(Day::getDate)
                 .collect(Collectors.toSet());
@@ -82,30 +95,25 @@ public class HolidayCli {
                 .filter(holiday -> holiday.getEmployees().stream().collect(Collectors.toList()).size() >= maxAbsence)
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
+        Set<LocalDate> busyDaysFromEmployeHolidaysDays = holidayService.findAll().stream()
+                .filter(h -> h.getEmployees().contains(employee))
+                .map(Holiday::getDate)
+                .collect(Collectors.toSet());
+
         busyDays.addAll(busyDaysFromNonWorkingDaysRepo);
         busyDays.addAll(busyDaysFromHolidayRepo);
+        busyDays.addAll(busyDayFromEvent);
+        busyDays.addAll(busyDaysFromEmployeHolidaysDays);
+        busyDays = busyDays.stream()
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
+        logSTD.info(busyDaysFromNonWorkingDaysRepo.toString());
+        logSTD.info(busyDaysFromHolidayRepo.toString());
+        logSTD.info(busyDaysFromEmployeHolidaysDays.toString());
+        logSTD.info(busyDayFromEvent.toString());
     }
-//    private void printAllRemainingFreeDaysToEndOfYear() {
-//        List<LocalDate> freeDays = new ArrayList<>();
-//        List<LocalDate> freeDaysFromCalendar = LocalDate.now().datesUntil(LocalDate.now().with(lastDayOfYear()))
-//                .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY)
-//                .filter(date -> date.getDayOfWeek() != DayOfWeek.SUNDAY)
-//                .collect(Collectors.toList());
-//        List<LocalDate> busyDaysFromNonWorkingDaysRepo = nonWorkingDayService.findAll().stream()
-//                .map(Day::getDate)
-//                .collect(Collectors.toList());
-//        List<LocalDate> busyDaysFromHolidayRepo = holidayService.findAll().stream()
-//                .filter(holiday -> holiday.getEmployees().stream().collect(Collectors.toList()).size() < maxAbsence)
-//                .map(Holiday::getDate)
-//                .collect(Collectors.toList());
-//
-//        freeDays.addAll(freeDaysFromCalendar);
-//        freeDays.removeAll(busyDaysFromNonWorkingDaysRepo);
-//        freeDays.removeAll(busyDaysFromHolidayRepo);
-//        freeDays.removeAll(busyDaysFromHolidayRepo);
-//        freeDays.forEach(day -> logSTD.info(day.toString()));
-//    }
+
 
     private void checkDay() {
         logSTD.info("Please enter date to check");
@@ -124,17 +132,15 @@ public class HolidayCli {
         logSTD.info("Enter last name");
         String lastName = scanner.nextLine();
 
-        Holiday holiday = new Holiday();
         int counter = 0;
         boolean isCorrect = false;
+        LocalDate inputDate;
         do {
-            LocalDate inputDate = getInputDate();
-            getAllBusyDays();
+            inputDate = getInputDate();
             if (busyDays.contains(inputDate) || inputDate.getDayOfWeek() == DayOfWeek.SATURDAY || inputDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
                 logSTD.info("Day is busy or weekend. Choose another");
                 counter++;
             } else {
-                holiday = new Holiday(inputDate);
                 isCorrect = true;
                 break;
             }
@@ -144,17 +150,11 @@ public class HolidayCli {
         if (isCorrect) {
             EmployeeDto employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
             Employee employee = adapter.convertToEmployee(employeeDto);
-            employee.getHolidayDays().stream().forEach(System.out::println);
-            if (employee.getHolidayDays().contains(holiday)) {
-                logSTD.info("This user already has holiday on that day");
-                return;
-            } else {
-                employee.addHoliday(holiday);
-                holidayService.addHoliday(holiday);
-                EmployeesRepository employeesRepository = new EmployeesRepository();
-                employeesRepository.updateHolidays(employee);
-            }
-        }
+            LocalDate finalInputDate = inputDate;
+
+            Holiday newHoliday = holidayService.addHoliday(inputDate, employee);
+            logSTD.info("Adding new holiday {} to employee {}", newHoliday.getDate().toString(), employeeDto.getFirstName() + " " + employeeDto.getLastName());
+        } else logSTD.info("Try adding new day");
     }
 
     private void printBusyDays() {

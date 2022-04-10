@@ -1,7 +1,5 @@
 package com.isa.unasdziala.domain;
 
-import com.isa.unasdziala.domain.entity.Holiday;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +11,6 @@ public class EmployeeBuilder {
     private Department department;
     private float holidays;
     private Set<Day> events = new HashSet<>();
-    private Set<Holiday> holidayDays = new HashSet<>();
     ;
 
     public EmployeeBuilder setFirstName(String firstName) {

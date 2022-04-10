@@ -1,5 +1,6 @@
 package com.isa.unasdziala.repository;
 
+import com.isa.unasdziala.domain.entity.Employee;
 import com.isa.unasdziala.domain.entity.Holiday;
 import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import com.isa.unasdziala.utils.HibernateUtil;
@@ -10,6 +11,8 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class HolidayRepository {
 
@@ -30,20 +33,41 @@ public class HolidayRepository {
                 .findFirst();
     }
 
-    public Optional<Holiday> add(Holiday holiday) {
-        Optional<Holiday> existingHoliday = findByDate(holiday.getDate());
-//        if (existingHoliday.isPresent()) {
-//            System.out.println("The given date already exists in the database");
-//            em.getTransaction().begin();
-//            em.merge(holiday);
-//            em.getTransaction().commit();
-//            return Optional.empty();
-//        } else {
-        System.out.println("Adding date " + holiday.getDate().toString());
-        em.getTransaction().begin();
-        em.persist(holiday);
-        em.getTransaction().commit();
-        return Optional.of(holiday);
+    public Optional<Holiday> add(LocalDate date, Employee employee) {
+        Optional<Holiday> existingHoliday = findByDate(date);
+        Set<Holiday> holidaysFromEmployee = employee.getHolidayDays();
+        System.out.println(holidaysFromEmployee);
+        if (holidaysFromEmployee.contains(date)) {
+            if (existingHoliday.isPresent()) {
+                System.out.println("Date exist " + existingHoliday.get().getDate().toString());
+                existingHoliday.get().getEmployees().add(employee);
+                holidaysFromEmployee.add(existingHoliday.get());
+                em.getTransaction().begin();
+                em.merge(existingHoliday.get());
+                em.getTransaction().commit();
+                return existingHoliday;
+            } else {
+                System.out.println("już jest");
+                return existingHoliday;
+            }
+        } else {
+            Holiday holiday = new Holiday(date);
+            holiday.getEmployees().add(employee);
+            holidaysFromEmployee.add(holiday);
+            System.out.println("Adding date " + date.toString());
+            em.getTransaction().begin();
+            em.merge(holiday);
+            em.getTransaction().commit();
+            return Optional.of(holiday);
+        }
     }
+
+    private List<LocalDate> getDatesOfHolidays(LocalDate date, Employee employee) {
+        return findByDate(date).stream()
+                .filter(h -> h.getEmployees().contains(employee))
+                .map(h -> h.getDate())
+                .collect(Collectors.toList());
+    }
+
 }
 

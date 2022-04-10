@@ -20,10 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@NamedQueries({
-        @NamedQuery(name = "Employee.findAll", query = "from Employee"),
-        @NamedQuery(name = "Employee.findByFirstNameAndLastName", query = "from Employee e where e.firstName = :firstName and e.lastName = :lastName"),
-})
+@NamedQueries({@NamedQuery(name = "Employee.findAll", query = "from Employee"), @NamedQuery(name = "Employee.findByFirstNameAndLastName", query = "from Employee e where e.firstName = :firstName and e.lastName = :lastName"),})
 public class Employee {
 
     @Id
@@ -57,19 +54,9 @@ public class Employee {
     @Transient
     private Set<Day> events;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employee_holiday",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "holiday_id")
-    )
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Holiday> holidayDays = new HashSet<>();
 
     public Employee() {
-
-    }
-
-    public void addHoliday(Holiday holiday) {
-        this.holidayDays.add(holiday);
     }
 }
