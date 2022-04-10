@@ -6,11 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 
+@Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
 public class Contact {
 
     @CsvBindByPosition(position = 2)

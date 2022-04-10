@@ -4,7 +4,6 @@ import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Day;
 import com.isa.unasdziala.domain.Department;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,10 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@NamedQueries({
-        @NamedQuery(name="Employee.findAll", query = "from Employee"),
-        @NamedQuery(name = "Employee.findByFirstNameAndLastName", query = "from Employee e where e.firstName = :firstName and e.lastName = :lastName"),
-})
+@NamedQueries({@NamedQuery(name = "Employee.findAll", query = "from Employee"), @NamedQuery(name = "Employee.findByFirstNameAndLastName", query = "from Employee e where e.firstName = :firstName and e.lastName = :lastName"),})
 public class Employee {
 
     @Id
@@ -57,8 +54,9 @@ public class Employee {
     @Transient
     private Set<Day> events;
 
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Holiday> holidayDays = new HashSet<>();
 
     public Employee() {
-
     }
 }

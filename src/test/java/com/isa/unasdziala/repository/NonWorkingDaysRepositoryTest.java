@@ -23,16 +23,17 @@ class NonWorkingDaysRepositoryTest {
     @Test
     void shouldLoadNonWorkingDaysRepository() {
         // when
-        sut = new NonWorkingDaysRepository();
+
         // then
-        assertThat(sut.getNonWorkingDays()).isNotNull();
+        assertThat(sut.findAll()).isNotEmpty();
     }
 
     @Test
     void shouldDayCountryNameBeLikePl() {
         // given
+
         List<Day> dayList = sut.findAll();
-        Day day = dayList.get(1);
+        Day day = dayList.get(0);
         // when
         String result = day.getCountry();
         // then
