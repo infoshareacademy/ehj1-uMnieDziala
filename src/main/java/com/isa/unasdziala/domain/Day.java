@@ -24,7 +24,7 @@ public class Day {
 
 
     @JsonProperty("date")
-    private void unpackDateFromNestedObject(Map<String, Object> date) throws ParseException {
+    private void unpackDateFromNestedObject(Map<String, Object> date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.date = LocalDate.parse(date.get("iso").toString(), formatter);
     }

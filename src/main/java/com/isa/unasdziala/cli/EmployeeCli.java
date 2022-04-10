@@ -105,7 +105,7 @@ public class EmployeeCli {
         logSTD.info("Enter new holidays amount");
         float newHolidays = Float.parseFloat(scanner.nextLine());
 
-        EmployeeDto newEmployeeDto = new EmployeeDto(
+        return new EmployeeDto(
                 null,
                 newFirstName,
                 newLastName,
@@ -124,7 +124,6 @@ public class EmployeeCli {
                 newHolidays,
                 null
         );
-        return newEmployeeDto;
     }
 
     private Department getDepartmentName() {

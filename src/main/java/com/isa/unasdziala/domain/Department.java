@@ -10,7 +10,7 @@ public enum Department {
     DEPARTAMENT_SPRZEDAZY("Departament Sprzedaży"),
     DEPARTAMENT_FINANSOW("Departament Finansów");
 
-    private String description;
+    private final String description;
     public static final List<Department> VALUES = List.of(Department.values());
     private static final Map<String, Department> DESCRIPTION_TO_DEPARTMENT_MAP = new HashMap<>();
 

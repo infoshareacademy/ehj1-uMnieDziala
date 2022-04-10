@@ -19,7 +19,7 @@ public class AppProperties {
     ClassLoader classLoader = getClass().getClassLoader();
     private final String PROPERTIES_FILE_NAME = "app.properties";
     private final File PROPERTIES_FILE = new File(classLoader.getResource(PROPERTIES_FILE_NAME).getFile());
-    private Properties properties;
+    private final Properties properties;
 
     public AppProperties() {
         properties = readFile(PROPERTIES_FILE.toPath());

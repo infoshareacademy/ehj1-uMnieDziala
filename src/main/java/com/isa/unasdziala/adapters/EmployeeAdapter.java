@@ -10,7 +10,7 @@ public class EmployeeAdapter {
         if (employee == null) {
             return null;
         }
-        EmployeeDto employeeDto = EmployeeDto.builder()
+        return EmployeeDto.builder()
                 .id(employee.getId())
                 .firstName(employee.getFirstName())
                 .lastName(employee.getLastName())
@@ -20,7 +20,6 @@ public class EmployeeAdapter {
                 .holidays(employee.getHolidays())
                 .events(employee.getEvents())
                 .build();
-        return employeeDto;
     }
 
     public Employee convertToEmployee(EmployeeDto employeeDto) {
@@ -43,7 +42,7 @@ public class EmployeeAdapter {
         if (employeeCSV == null) {
             return null;
         }
-        EmployeeDto employeeDto = EmployeeDto.builder()
+        return EmployeeDto.builder()
                 .firstName(employeeCSV.getFirstName())
                 .lastName(employeeCSV.getLastName())
                 .contact(employeeCSV.getContact())
@@ -52,6 +51,5 @@ public class EmployeeAdapter {
                 .holidays(employeeCSV.getHolidays())
                 .events(employeeCSV.getEvents())
                 .build();
-        return employeeDto;
     }
 }
