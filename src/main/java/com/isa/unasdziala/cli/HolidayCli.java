@@ -95,22 +95,20 @@ public class HolidayCli {
                 .filter(holiday -> holiday.getEmployees().stream().collect(Collectors.toList()).size() >= maxAbsence)
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
-        Set<LocalDate> busyDaysFromEmployeHolidaysDays = holidayService.findAll().stream()
-                .filter(holiday -> holiday.getEmployees().contains(employee))
-                .map(Holiday::getDate)
-                .collect(Collectors.toSet());
+//        Set<LocalDate> busyDaysFromEmployeHolidaysDays = holidayService.findAll().stream()
+//                .filter(holiday ->holiday.getEmployees())
 
         busyDays.addAll(busyDaysFromNonWorkingDaysRepo);
         busyDays.addAll(busyDaysFromHolidayRepo);
         busyDays.addAll(busyDayFromEvent);
-        busyDays.addAll(busyDaysFromEmployeHolidaysDays);
+//        busyDays.addAll(busyDaysFromEmployeHolidaysDays);
         busyDays = busyDays.stream()
                 .sorted()
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         logSTD.info(busyDaysFromNonWorkingDaysRepo.toString());
         logSTD.info(busyDaysFromHolidayRepo.toString());
-        logSTD.info(busyDaysFromEmployeHolidaysDays.toString());
+//        logSTD.info(busyDaysFromEmployeHolidaysDays.toString());
         logSTD.info(busyDayFromEvent.toString());
     }
 
@@ -151,9 +149,14 @@ public class HolidayCli {
             EmployeeDto employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
             Employee employee = adapter.convertToEmployee(employeeDto);
             LocalDate finalInputDate = inputDate;
-
-            Holiday newHoliday = holidayService.addHoliday(inputDate, employee);
-            logSTD.info("Adding new holiday {} to employee {}", newHoliday.getDate().toString(), employeeDto.getFirstName() + " " + employeeDto.getLastName());
+            if (employee.getHolidays() >= 1) {
+                Holiday newHoliday = holidayService.addHoliday(inputDate, employee);
+                logSTD.info("Adding new holiday {} to employee {}", newHoliday.getDate().toString(), employeeDto.getFirstName() + " " + employeeDto.getLastName());
+            } else {
+                logSTD.warn("WARNING!!!");
+                logSTD.info("New holiday will not be added - Free holidays days count is to low!");
+                return;
+            }
         } else logSTD.info("Try adding new day");
     }
 
