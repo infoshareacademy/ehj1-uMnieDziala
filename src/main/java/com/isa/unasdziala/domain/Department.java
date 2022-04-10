@@ -24,6 +24,10 @@ public enum Department {
         this.description = description;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public static Department fromString(String category) {
         return DESCRIPTION_TO_DEPARTMENT_MAP.get(category);
     }
