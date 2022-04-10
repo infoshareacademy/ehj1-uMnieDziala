@@ -43,7 +43,9 @@ public class HolidayCli {
 
 
     public void run() {
+        logSTD.info("***************");
         logSTD.info("Choose employee");
+        logSTD.info("***************");
 
         logSTD.info("Enter first name");
         firstName = scanner.nextLine();
