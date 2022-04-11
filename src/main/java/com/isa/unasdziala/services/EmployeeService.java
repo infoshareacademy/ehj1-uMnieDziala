@@ -4,7 +4,6 @@ import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.repository.EmployeesRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public class EmployeeService {
     private final EmployeesRepository employeesRepository;
@@ -45,8 +44,12 @@ public class EmployeeService {
         return employeesRepository.update(oldFirstName, oldLastName, newEmployeeDto)
                 .orElseThrow(
                         () -> new IllegalArgumentException(
-                                "Employee with first name and last name does not exist: " + oldFirstName + " " + oldLastName
+                                "Employee with first name and last name does not exist or already exists with new name and lastname: " + oldFirstName + " " + oldLastName
                         )
                 );
+    }
+
+    public void importFile() {
+        employeesRepository.importEmployees();
     }
 }

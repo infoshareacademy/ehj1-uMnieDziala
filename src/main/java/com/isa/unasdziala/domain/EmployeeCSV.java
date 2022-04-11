@@ -27,7 +27,7 @@ public class EmployeeCSV {
     private Department department;
     @CsvBindByPosition(position = 11)
     private float holidays;
-    private Set<Day> events=new HashSet<>();
+    private Set<Day> events;
 
 
     public EmployeeCSV(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
@@ -37,6 +37,6 @@ public class EmployeeCSV {
         this.address = address;
         this.department = department;
         this.holidays = holidays;
-        this.events = new HashSet<Day>();
+        this.events = new HashSet<>();
     }
 }

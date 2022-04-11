@@ -7,8 +7,8 @@ import com.opencsv.exceptions.CsvDataTypeMismatchException;
 
 public class DepartmentConverter extends AbstractBeanField {
 
-        @Override
-        protected Object convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
-            return Department.fromString(s);
-        }
+    @Override
+    protected Object convert(String s) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
+        return Department.fromString(s);
     }
+}

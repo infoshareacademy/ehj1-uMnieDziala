@@ -8,43 +8,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
 public class NonWorkingDaysRepository {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
-    private final List<Day> nonWorkingDays = importNonWorkingDays();
+    private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysRepository.class);
+    private List<Day> nonWorkingDays = new ArrayList<>();
 
-    public Day add(Day day) {
-        day.setId(UUID.randomUUID());
-        nonWorkingDays.add(day);
-        return day;
+    public NonWorkingDaysRepository() {
+        initialize();
     }
 
-    public Optional<Day> findById(UUID id) {
-        return nonWorkingDays.stream().filter(day -> day.getId().equals(id)).findFirst();
+    private void initialize() {
+        log.info("Initialize non working days repository");
+        if (this.nonWorkingDays.isEmpty()) {
+            this.nonWorkingDays = importNonWorkingDays();
+        }
     }
 
-    public List<Day> findDaysByLocalDate(LocalDate date) {
-        return nonWorkingDays.stream().filter(day -> day.getDate().equals(date)).collect(Collectors.toList());
+
+    public Optional<Day> add(Day day) {
+        Optional<Day> optionalDay = findByDate(day.getDate());
+        if (optionalDay.isEmpty()) {
+            day.setId(UUID.randomUUID());
+            nonWorkingDays.add(day);
+            return Optional.of(day);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Day> findByDate(LocalDate date) {
+        return nonWorkingDays.stream().filter(day -> day.getDate().equals(date)).findFirst();
     }
 
     public List<Day> findAll() {
         return List.copyOf(nonWorkingDays);
     }
 
-    public Optional<Day> deleteById(UUID id) {
-        Optional<Day> day = findById(id);
+    public Optional<Day> deleteByDate(LocalDate date) {
+        Optional<Day> day = findByDate(date);
         day.ifPresent(nonWorkingDays::remove);
         return day;
     }
 
-    public Optional<Day> updateById(UUID id, Day newDay) {
-        Optional<Day> optionalDay = findById(id);
+    public Optional<Day> updateByDate(Day newDay) {
+        Optional<Day> optionalDay = findByDate(newDay.getDate());
         if (optionalDay.isPresent()) {
             Day day = optionalDay.get();
             day.setDate(newDay.getDate());
@@ -55,14 +65,14 @@ public class NonWorkingDaysRepository {
     }
 
     private List<Day> importNonWorkingDays() {
-        LOGGER.info("Start import non working days to repository");
+        log.info("Start import non working days to repository");
         NonWorkingDaysReader nonWorkingDaysReader = new NonWorkingDaysReader();
-        String countryName = new AppProperties().getCountryName();
-        LOGGER.info("Filtr non working days country by: {}", countryName);
+        Locale countryName = new AppProperties().getCountryName();
+        log.info("Filtr non working days country by: {}", countryName.getCountry());
         List<Day> nonWorkingDaysRepository = nonWorkingDaysReader.getNonWorkingDays().stream()
-                .filter(day -> day.getCountry().equals(countryName))
+                .filter(day -> day.getCountry().equals(countryName.getCountry().toLowerCase()))
                 .collect(Collectors.toList());
-        LOGGER.info("Have been imported {} day/s to country: {}",nonWorkingDaysRepository.size(), countryName);
+        log.info("Have been imported {} day/s to country: {}", nonWorkingDaysRepository.size(), countryName.getCountry());
         return nonWorkingDaysRepository;
     }
 }

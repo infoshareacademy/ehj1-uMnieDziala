@@ -2,23 +2,21 @@ package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.adapters.EmployeeAdapter;
 import com.isa.unasdziala.domain.EmployeeCSV;
-import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.domain.entity.Employee;
+import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.utils.CalendarLoader;
 import com.isa.unasdziala.utils.HibernateUtil;
+import com.opencsv.bean.CsvToBeanBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-
-import com.opencsv.bean.CsvToBeanBuilder;
-
-import javax.persistence.EntityManager;
 
 public class EmployeesRepository {
     private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
@@ -56,11 +54,22 @@ public class EmployeesRepository {
             return Optional.empty();
         }
         Employee employee = adapter.convertToEmployee(employeeDto);
+        System.out.println("Dodaje " + employee.getFirstName());
+        em.getTransaction().begin();
         em.persist(employee);
+        em.getTransaction().commit();
+        System.out.println(employee);
         return Optional.of(adapter.convertToEmployeeDto(employee));
     }
 
     public Optional<EmployeeDto> update(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
+        // Check if employee with new Name and new Lastname already exists.
+        Optional<EmployeeDto> checkExistingNewEmployee = findByFirstNameAndLastName(newEmployeeDto.getFirstName(), newEmployeeDto.getLastName());
+        if(checkExistingNewEmployee.isPresent()) {
+            return Optional.empty();
+        }
+
+
         Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(oldFirstName, oldLastName);
         if (employeeDtoOptional.isPresent()) {
             EmployeeDto employeeDto = employeeDtoOptional.get();
@@ -71,8 +80,11 @@ public class EmployeesRepository {
             employee.setAddress(newEmployeeDto.getAddress());
             employee.setContact(newEmployeeDto.getContact());
             employee.setDepartment(newEmployeeDto.getDepartment());
+            employee.setHolidays(newEmployeeDto.getHolidays());
 
-            em.merge(employee);
+            em.getTransaction().begin();
+            em.merge(em.contains(employee) ? employee : em.merge(employee));
+            em.getTransaction().commit();
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }
         return Optional.empty();
@@ -82,7 +94,9 @@ public class EmployeesRepository {
         Optional<EmployeeDto> employeeDtoOptional = findByFirstNameAndLastName(firstName, lastName);
         if (employeeDtoOptional.isPresent()) {
             Employee employee = adapter.convertToEmployee(employeeDtoOptional.get());
-            em.remove(employee);
+            em.getTransaction().begin();
+            em.remove(em.contains(employee) ? employee : em.merge(employee));
+            em.getTransaction().commit();
             return Optional.of(adapter.convertToEmployeeDto(employee));
         }
         return Optional.empty();
