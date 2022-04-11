@@ -2,8 +2,6 @@ package com.isa.unasdziala.services.properties;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Locale;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class AppPropertiesTest {
@@ -21,15 +19,15 @@ class AppPropertiesTest {
     }
 
     @Test
-    void shouldGetCountryNameFromProperties() {
+    void shouldGetMaxAbsenceeFromProperties() {
         // given
         sut = new AppProperties();
-        String expectedCountry = "PL";
+        int maxAbsence = 1;
         // when
-        Locale result = sut.getCountryName();
+        int result = sut.getMaxAbsence();
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getCountry()).isEqualTo(expectedCountry);
+        assertThat(result).isEqualTo(maxAbsence);
     }
 }
 
