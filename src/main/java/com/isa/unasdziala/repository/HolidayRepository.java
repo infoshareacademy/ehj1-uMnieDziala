@@ -2,7 +2,6 @@ package com.isa.unasdziala.repository;
 
 import com.isa.unasdziala.domain.entity.Employee;
 import com.isa.unasdziala.domain.entity.Holiday;
-import com.isa.unasdziala.services.repositories.NonWorkingDaysReader;
 import com.isa.unasdziala.utils.HibernateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import java.util.Optional;
 public class HolidayRepository {
 
     private final EntityManager em = HibernateUtil.getEntityManager();
-    Logger log = LoggerFactory.getLogger(NonWorkingDaysReader.class);
+    private final Logger log = LoggerFactory.getLogger(HolidayRepository.class);
 
     public List<Holiday> findAll() {
         log.info("Get all holiday day/s from repository");

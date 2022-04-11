@@ -29,6 +29,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 public class HolidayCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
+    private final Logger log = LoggerFactory.getLogger(HolidayCli.class);
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -46,22 +47,25 @@ public class HolidayCli {
 
 
     public void run() {
+        log.info("Run HolidayCli");
         logSTD.info("***************");
         logSTD.info("Choose employee");
         logSTD.info("***************");
 
         logSTD.info("Enter first name");
         firstName = scanner.nextLine();
-
+        log.info("Get first name " + firstName);
         logSTD.info("Enter last name");
         lastName = scanner.nextLine();
-
+        log.info("Get last name " + lastName);
         this.busyDays = new HashSet<>();
         this.freeDaysFromCalendar = new HashSet<>();
         try {
+            log.info("Try to find employee {} in repository", firstName + " " + lastName);
             employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
         } catch (IllegalArgumentException e) {
             logSTD.error("Employee not exists in repository", e.getMessage());
+            log.warn("Employee not exists in repository", e);
             return;
         }
         employee = adapter.convertToEmployee(employeeDto);
@@ -97,8 +101,10 @@ public class HolidayCli {
     }
 
     private int getUserOption() {
+        log.info("Ask User for choose option");
         System.out.print("Choose option: ");
         String userOptionInput = scanner.nextLine();
+        log.info("User choose option: " + userOptionInput);
 
         try {
             return Integer.parseInt(userOptionInput);
@@ -108,6 +114,7 @@ public class HolidayCli {
     }
 
     private void getAllBusyDays() {
+        log.info("Get all busy days from all repository");
         Set<LocalDate> busyDayFromEvent = employee.getEvents().stream().map(e -> e.getDate()).collect(Collectors.toSet());
         Set<LocalDate> busyDaysFromNonWorkingDaysRepo = nonWorkingDayService.findAll().stream().map(Day::getDate).collect(Collectors.toSet());
         Set<LocalDate> busyDaysFromHolidayRepo = holidayService.findAll().stream().filter(holiday -> holiday.getEmployees().stream().collect(Collectors.toList()).size() >= maxAbsence).map(Holiday::getDate).collect(Collectors.toSet());
@@ -118,20 +125,27 @@ public class HolidayCli {
         busyDays.addAll(busyDayFromEvent);
         busyDays.addAll(busyDaysFromEmployeeHolidaysDays);
         busyDays = busyDays.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        log.info("Get {} busy days", busyDays.size());
     }
 
     private void checkDay() {
+        log.info("Start check day");
         logSTD.info("Please enter date to check");
         LocalDate dateToCheck = getInputDate();
+        log.info("Day to check: ", dateToCheck.toString());
         getAllBusyDays();
         if (busyDays.contains(dateToCheck)) {
             logSTD.info("Date is busy. Choose another");
+            log.info("Date is busy. Choose another");
         } else if (dateToCheck.getDayOfWeek() == DayOfWeek.SATURDAY || dateToCheck.getDayOfWeek() == DayOfWeek.SUNDAY) {
             logSTD.info("Date is weekend. Choose another");
+            log.info("Date is weekend. Choose another");
         } else logSTD.info("Date is free");
+        log.info("Date is free");
     }
 
     private void showHint() {
+        log.info("Start show hint");
         logSTD.info("How many days show You ?");
         int userOption = getUserOption();
         freeDaysFromCalendar = LocalDate.now().datesUntil(LocalDate.now().with(lastDayOfYear()))
@@ -147,14 +161,18 @@ public class HolidayCli {
     }
 
     private void addNewHolidayToEmployee() {
+        log.info("Start add new holiday to repository");
         int counter = 0;
         boolean isCorrect = false;
         LocalDate inputDate;
         getAllBusyDays();
+
         do {
             inputDate = getInputDate();
+            log.info("Start try add day {} to repository", inputDate.toString());
             if (busyDays.contains(inputDate) || inputDate.getDayOfWeek() == DayOfWeek.SATURDAY || inputDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
                 logSTD.info("Day is busy or weekend. Choose another");
+                log.info("Day is busy or weekend. Choose another");
                 counter++;
             } else {
                 isCorrect = true;
@@ -169,9 +187,11 @@ public class HolidayCli {
             if (employee.getHolidays() >= 1) {
                 Holiday newHoliday = holidayService.addHoliday(inputDate, employee);
                 logSTD.info("Adding new holiday {} to employee {}", newHoliday.getDate().toString(), employeeDto.getFirstName() + " " + employeeDto.getLastName());
+                log.info("Adding new holiday {} to employee {}", newHoliday.getDate().toString(), employeeDto.getFirstName() + " " + employeeDto.getLastName());
             } else {
                 logSTD.warn("WARNING!!!");
                 logSTD.info("New holiday will not be added - Free holidays days count is to low!");
+                log.info("New holiday will not be added - Free holidays days count is to low!");
                 return;
             }
         } else logSTD.info("Try adding new day");
@@ -186,19 +206,22 @@ public class HolidayCli {
     }
 
     private LocalDate getInputDate() {
+        log.info("Check to input data from User");
         logSTD.info("Enter date in format: yyyy-MM-dd");
         String dateInput = scanner.nextLine();
 
         try {
             return LocalDate.parse(dateInput, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } catch (DateTimeParseException e) {
-            logSTD.info("Wrong date format!");
+            logSTD.warn("Wrong date format!");
+            log.warn("Wrong date format!");
             return getInputDate();
         }
     }
 
     private void printFreeDays() {
         getAllBusyDays();
+        log.info("Print all free days");
         logSTD.info("Next free days: ");
         for (LocalDate date : freeDaysFromCalendar) {
             logSTD.info("\t" + date.toString());
