@@ -28,11 +28,11 @@ Project is created with:
 - Junit
 
 ## Setup ⚙️
-To run this project: 
-1/ You need to have installed: Docker Desktop, IDE of your choice, PowerShell (optionally)
-2/ Clone GitHub repository _ehj1-uNasDziala_ 
-2/ In PowerShell or terminal go to directory with docker-compose.yml file and run command _docker-compose up_
-3/ Run app in IDE. 
+To run this project:
+1) You need to have installed: Docker Desktop, IDE of your choice, PowerShell (optionally)
+2) Clone GitHub repository _ehj1-uNasDziala_
+3) In PowerShell or terminal go to directory with docker-compose.yml file and run command _docker-compose up_
+4) Run app in IDE
 
 ## Status 👁️
 Application development in progress. 
@@ -40,8 +40,8 @@ Planned completion of the first stage on April 11, 2022.
 
 ## Authors 🧑👱‍♀️🧑🧑
 _uNasDziała_ team:
-[Paweł Majewski](https://github.com/pmajewski7)
-[Marta Łukjanowicz](https://github.com/MartaLukjanowicz)
-[Daniel Surowiec](https://github.com/daniel-surowiec)
-[Mateusz Tarasewicz](https://github.com/MateuszTarasewicz)
+- [Paweł Majewski](https://github.com/pmajewski7)
+- [Marta Łukjanowicz](https://github.com/MartaLukjanowicz)
+- [Daniel Surowiec](https://github.com/daniel-surowiec)
+- [Mateusz Tarasewicz](https://github.com/MateuszTarasewicz)
 
