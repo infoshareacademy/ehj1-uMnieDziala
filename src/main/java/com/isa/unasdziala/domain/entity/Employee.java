@@ -44,7 +44,6 @@ public class Employee {
     @Column(nullable = false)
     private Address address;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Department department;
 

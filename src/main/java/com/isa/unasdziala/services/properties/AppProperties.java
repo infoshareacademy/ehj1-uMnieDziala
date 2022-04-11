@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -18,11 +19,10 @@ public class AppProperties {
     private final static Logger log = LoggerFactory.getLogger(AppProperties.class);
     ClassLoader classLoader = getClass().getClassLoader();
     private final String PROPERTIES_FILE_NAME = "app.properties";
-    private final File PROPERTIES_FILE = new File(classLoader.getResource(PROPERTIES_FILE_NAME).getFile());
-    private Properties properties;
+    private final Properties properties;
 
     public AppProperties() {
-        properties = readFile(PROPERTIES_FILE.toPath());
+        properties = readFile();
     }
 
 
@@ -44,10 +44,10 @@ public class AppProperties {
         return maxAbsence;
     }
 
-    private Properties readFile(Path fileName) {
+    private Properties readFile() {
         Properties appProperties = new Properties();
         try {
-            appProperties.load(new StringReader(Files.readString(fileName)));
+            appProperties.load(new InputStreamReader(classLoader.getResourceAsStream(PROPERTIES_FILE_NAME)));;
         } catch (InvalidPathException e) {
             log.error("Path not found, " + e.getMessage(), e);
         } catch (IOException e) {

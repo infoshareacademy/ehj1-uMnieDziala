@@ -49,10 +49,12 @@ public class MainCli {
     }
 
     private void printMenu() {
+        logSTD.info("-----------------------------------------------");
         logSTD.info("Options: ");
         logSTD.info("1. Employee Management");
         logSTD.info("2. Non Working Days Management");
         logSTD.info("3. Holidays Management");
         logSTD.info("0. Exit");
+        logSTD.info("-----------------------------------------------");
     }
 }

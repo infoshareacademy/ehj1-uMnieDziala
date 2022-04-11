@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +21,9 @@ public class NonWorkingDaysReader {
     public static final String HOLIDAYS_FILE_NAME = "non_working_days.json";
 
     private final static Logger log = LoggerFactory.getLogger(NonWorkingDaysReader.class);
-    private List<Day> nonWorkingDays = new ArrayList<Day>();
+    private List<Day> nonWorkingDays = new ArrayList<>();
     ClassLoader classLoader = getClass().getClassLoader();
     private final String NON_WORKING_DAYS_FILE_NAME = "non_working_days.json";
-    private final File NON_WORKING_DAYS_FILE = new File(classLoader.getResource(NON_WORKING_DAYS_FILE_NAME).getFile());
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public NonWorkingDaysReader() {
@@ -33,11 +33,11 @@ public class NonWorkingDaysReader {
     private void setNonWorkingDays() {
         try {
             log.info("Start read file: {}", NON_WORKING_DAYS_FILE_NAME);
-            FileReader fileReader = new FileReader(NON_WORKING_DAYS_FILE);
+            InputStreamReader inputStreamReader = new InputStreamReader(classLoader.getResourceAsStream(NON_WORKING_DAYS_FILE_NAME));
             log.info("Start load non working days from file");
             List<Day> result = objectMapper
                     .readerFor(new TypeReference<List<Day>>() {})
-                    .readValue(fileReader);
+                    .readValue(inputStreamReader);
             nonWorkingDays.addAll(result);
             log.info("Have been loaded: {} day/s", result.size());
 

@@ -19,4 +19,8 @@ public class Contact {
     @CsvBindByPosition(position = 3)
     String emailAddress;
 
+    @Override
+    public String toString() {
+        return "PhoneNo: " + phoneNo  + "\t mail: " + emailAddress;
+    }
 }
