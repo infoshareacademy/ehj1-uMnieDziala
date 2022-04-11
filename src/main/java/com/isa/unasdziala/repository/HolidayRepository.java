@@ -37,6 +37,7 @@ public class HolidayRepository {
                 System.out.println("Date exist " + existingHoliday.get().getDate().toString());
                 existingHoliday.get().getEmployees().add(employee);
                 employee.getHolidayDays().add(existingHoliday.get());
+                employee.setHolidays(employee.getHolidays() - 1);
                 em.getTransaction().begin();
                 em.merge(existingHoliday.get());
                 em.getTransaction().commit();
@@ -45,6 +46,7 @@ public class HolidayRepository {
             Holiday holiday = new Holiday(date);
                 holiday.getEmployees().add(employee);
                 employee.getHolidayDays().add(holiday);
+                employee.setHolidays(employee.getHolidays() - 1);
                 System.out.println("Adding date " + date.toString());
             em.getTransaction().begin();
             em.merge(holiday);
