@@ -58,7 +58,12 @@ public class HolidayCli {
 
         this.busyDays = new HashSet<>();
         this.freeDaysFromCalendar = new HashSet<>();
-        employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
+        try {
+            employeeDto = employeeService.findByFirstNameAndLastName(firstName, lastName);
+        } catch (IllegalArgumentException e) {
+            logSTD.error("Employee not exists in repository", e.getMessage());
+            return;
+        }
         employee = adapter.convertToEmployee(employeeDto);
 
         logSTD.info("**************************************");
@@ -81,12 +86,14 @@ public class HolidayCli {
     }
 
     private void printMenu() {
+        logSTD.info("--------------------------------------");
         logSTD.info("Options: ");
         logSTD.info("1. Show all busy days");
         logSTD.info("2. Check if day to holiday is correct");
         logSTD.info("3. Give me a hint about holiday days");
         logSTD.info("4. Add new holiday");
         logSTD.info("0. Back to previous menu");
+        logSTD.info("--------------------------------------");
     }
 
     private int getUserOption() {
