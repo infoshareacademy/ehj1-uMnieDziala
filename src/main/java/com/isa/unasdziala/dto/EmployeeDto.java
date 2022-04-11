@@ -26,4 +26,12 @@ public class EmployeeDto {
     private Department department;
     private float holidays;
     private Set<Day> events;
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName
+                + "\n\t" + address
+                + "\n\t" + contact
+                + "\n\t" + department.getDescription();
+    }
 }

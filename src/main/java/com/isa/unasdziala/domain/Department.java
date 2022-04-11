@@ -7,12 +7,12 @@ import java.util.Map;
 public enum Department {
 
     DEPARTAMENT_AKTUARIALNY("Departament Aktuarialny"),
-    DEPARTAMENT_SPRZEDAZY("Departament Sprzedaży"),
-    DEPARTAMENT_FINANSOW("Departament Finansów");
+    DEPARTAMENT_SPRZEDAZY("Departament Sprzedazy"),
+    DEPARTAMENT_FINANSOW("Departament Finansow");
 
-    private String description;
+    public String description;
     public static final List<Department> VALUES = List.of(Department.values());
-    private static final Map<String, Department> DESCRIPTION_TO_DEPARTMENT_MAP = new HashMap<>();
+    public static final Map<String, Department> DESCRIPTION_TO_DEPARTMENT_MAP = new HashMap<>();
 
     static {
         for (Department category : VALUES) {

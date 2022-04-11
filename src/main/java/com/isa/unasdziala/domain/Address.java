@@ -24,4 +24,9 @@ public class Address {
     String houseNumber;
     @CsvBindByPosition(position = 9)
     String  flatNumber;
+
+    @Override
+    public String toString() {
+        return "Address: " + city + " " + zipCode + " " + street + " " + houseNumber + "/" + flatNumber;
     }
+}

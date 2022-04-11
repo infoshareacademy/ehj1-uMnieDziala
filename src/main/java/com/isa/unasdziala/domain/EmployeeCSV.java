@@ -35,7 +35,7 @@ public class EmployeeCSV {
         this.lastName = lastName;
         this.contact = contact;
         this.address = address;
-        this.department = department;
+//        this.department = department;
         this.holidays = holidays;
         this.events = new HashSet<>();
     }

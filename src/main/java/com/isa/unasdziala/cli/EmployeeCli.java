@@ -149,7 +149,12 @@ public class EmployeeCli {
         logSTD.info("Enter last name");
         String lastName = scanner.nextLine();
 
+        try {
+
         employeeService.deleteEmployee(firstName, lastName);
+        } catch (IllegalArgumentException e) {
+            logSTD.info(e.getMessage());
+        }
     }
 
     private void showAllEmployees() {
@@ -168,8 +173,13 @@ public class EmployeeCli {
         logSTD.info("Enter last name");
         String lastName = scanner.nextLine();
 
-        EmployeeDto employee = employeeService.findByFirstNameAndLastName(firstName, lastName);
-        logSTD.info(employee.toString());
+        try {
+
+            EmployeeDto employee = employeeService.findByFirstNameAndLastName(firstName, lastName);
+            logSTD.info(employee.toString());
+        } catch (IllegalArgumentException e) {
+            logSTD.info(e.getMessage());
+        }
 
     }
 
@@ -179,14 +189,16 @@ public class EmployeeCli {
     }
 
     private void printMenu() {
+        logSTD.info("-----------------------------------------------");
         logSTD.info("Options: ");
         logSTD.info("1. Show all Employees");
         logSTD.info("2. Show Employee by first and last name");
-        logSTD.info("3. Add new Employee1");
+        logSTD.info("3. Add new Employee");
         logSTD.info("4. Update Employee by first and last name");
         logSTD.info("5. Delete employee by first and last name");
         logSTD.info("6. Import from employees_repository.csv file");
         logSTD.info("0. Back to previous menu");
+        logSTD.info("-----------------------------------------------");
     }
 
     private int getUserOption() {

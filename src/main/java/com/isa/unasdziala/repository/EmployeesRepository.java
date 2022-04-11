@@ -13,13 +13,13 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.EntityManager;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
 public class EmployeesRepository {
-    private static final Path PATH_TO_CSV = Paths.get("src", "main", "resources", "employees_repository.csv");
     private static final char CSV_SEPARATOR = ';';
     private static final Logger logger = LoggerFactory.getLogger(EmployeesRepository.class);
 
@@ -54,18 +54,16 @@ public class EmployeesRepository {
             return Optional.empty();
         }
         Employee employee = adapter.convertToEmployee(employeeDto);
-        System.out.println("Dodaje " + employee.getFirstName());
         em.getTransaction().begin();
         em.persist(employee);
         em.getTransaction().commit();
-        System.out.println(employee);
         return Optional.of(adapter.convertToEmployeeDto(employee));
     }
 
     public Optional<EmployeeDto> update(String oldFirstName, String oldLastName, EmployeeDto newEmployeeDto) {
         // Check if employee with new Name and new Lastname already exists.
         Optional<EmployeeDto> checkExistingNewEmployee = findByFirstNameAndLastName(newEmployeeDto.getFirstName(), newEmployeeDto.getLastName());
-        if(checkExistingNewEmployee.isPresent()) {
+        if (checkExistingNewEmployee.isPresent()) {
             return Optional.empty();
         }
 
@@ -105,8 +103,8 @@ public class EmployeesRepository {
 
     public void importEmployees() {
         logger.debug("Importing employees from file.");
-        try (FileReader fileReader = new FileReader(PATH_TO_CSV.toString())) {
-            List<EmployeeCSV> employeesCSV = new CsvToBeanBuilder<EmployeeCSV>(fileReader)
+        try (InputStreamReader inputStreamReader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("employees_repository.csv"))) {
+            List<EmployeeCSV> employeesCSV = new CsvToBeanBuilder<EmployeeCSV>(inputStreamReader)
                     .withType(EmployeeCSV.class)
                     .withSeparator(CSV_SEPARATOR)
                     .withSkipLines(1)
