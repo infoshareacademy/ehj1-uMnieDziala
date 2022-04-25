@@ -9,6 +9,7 @@ import com.isa.unasdziala.utils.HibernateUtil;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class EmployeesRepository {
     private static final char CSV_SEPARATOR = ';';
     private static final Logger logger = LoggerFactory.getLogger(EmployeesRepository.class);

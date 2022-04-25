@@ -3,7 +3,9 @@ package com.isa.unasdziala.adapters;
 import com.isa.unasdziala.domain.EmployeeCSV;
 import com.isa.unasdziala.domain.entity.Employee;
 import com.isa.unasdziala.dto.EmployeeDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmployeeAdapter {
 
     public EmployeeDto convertToEmployeeDto(Employee employee) {

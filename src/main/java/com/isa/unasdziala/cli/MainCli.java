@@ -13,7 +13,7 @@ public class MainCli {
     private final EmployeeCli employeeCli = new EmployeeCli();
     private final HolidayCli holidayCli = new HolidayCli();
 
-    private final EmployeeService service = new EmployeeService(new EmployeesRepository());
+    private final EmployeeService service = new EmployeeService(new EmployeesRepository(), employeeAdapter);
     private final Scanner scanner = new Scanner(System.in);
 
     public void run() {

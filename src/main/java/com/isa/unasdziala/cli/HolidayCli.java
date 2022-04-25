@@ -35,7 +35,7 @@ public class HolidayCli {
 
     private final HolidayService holidayService = new HolidayService(new HolidayRepository());
     private final NonWorkingDayService nonWorkingDayService = new NonWorkingDayService(new NonWorkingDaysRepository());
-    private final EmployeeService employeeService = new EmployeeService(new EmployeesRepository());
+    private final EmployeeService employeeService = new EmployeeService(new EmployeesRepository(), employeeAdapter);
     private final Integer maxAbsence = new AppProperties().getMaxAbsence();
     private final EmployeeAdapter adapter = new EmployeeAdapter();
     private EmployeeDto employeeDto;
@@ -88,6 +88,8 @@ public class HolidayCli {
 
         }
     }
+
+    //Employee/id/holiday/{id}
 
     private void printMenu() {
         logSTD.info("--------------------------------------");

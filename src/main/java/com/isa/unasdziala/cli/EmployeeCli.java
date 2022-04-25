@@ -1,6 +1,7 @@
 package com.isa.unasdziala.cli;
 
 
+import com.isa.unasdziala.adapters.EmployeeAdapter;
 import com.isa.unasdziala.domain.Address;
 import com.isa.unasdziala.domain.Contact;
 import com.isa.unasdziala.domain.Department;
@@ -18,7 +19,7 @@ import java.util.Scanner;
 public class EmployeeCli {
     private static final Logger logSTD = LoggerFactory.getLogger("STDOUT");
 
-    private final EmployeeService employeeService = new EmployeeService(new EmployeesRepository());
+    private final EmployeeService employeeService = new EmployeeService(new EmployeesRepository(), new EmployeeAdapter());
     private final Scanner scanner = new Scanner(System.in);
 
 
