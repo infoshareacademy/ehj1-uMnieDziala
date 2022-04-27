@@ -12,8 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class Holiday {
     @Id
     @GeneratedValue
