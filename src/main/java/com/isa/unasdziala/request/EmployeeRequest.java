@@ -1,11 +1,11 @@
-package com.isa.unasdziala.dto;
+package com.isa.unasdziala.request;
 
 import com.isa.unasdziala.model.Address;
 import com.isa.unasdziala.model.Contact;
 import com.isa.unasdziala.model.Department;
 import javax.validation.constraints.Size;
 
-public class employeeRequest {
+public class EmployeeRequest {
     @Size(min = 2, max = 30)
     private String firstName;
     @Size(min = 2, max = 30)
@@ -15,7 +15,7 @@ public class employeeRequest {
     private Department department;
     private float holidays;
 
-    public employeeRequest(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
+    public EmployeeRequest(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
