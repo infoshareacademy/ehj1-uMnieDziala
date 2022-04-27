@@ -1,11 +1,13 @@
 package com.isa.unasdziala.service;
 
+import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
 import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.repository.EmployeeRepository;
+import com.isa.unasdziala.request.EmployeeRequest;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -14,24 +16,25 @@ import static java.lang.String.format;
 @Service
 public class EmployeeService {
 
-    private final List<Employee> employees = new ArrayList<>();
     private final EmployeeRepository employeeRepository;
+    private final ModelMapper mapper;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper mapper) {
         this.employeeRepository = employeeRepository;
+        this.mapper = mapper;
     }
 
-    public List<Employee> findAll(){
+    public List<EmployeeDto> findAll(){
         return employeeRepository.findAll()
-                .stream()
+                .stream().map(employee -> mapper.map(employee, EmployeeDto.class))
                 .toList();
+
     }
 
-    public Employee findById(Long id){
-        return employees.stream()
-                .filter(employee -> employee.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException(format("Movie with id %d not found.", id)))
+    public EmployeeDto findById(Long id){
+        return employeeRepository.findById(id)
+                .map(employee -> mapper.map(employee,EmployeeDto.class))
+                .orElseThrow(() -> new ResourceNotFoundException(format("Movie with id %d not found.", id)));
     }
 
 
@@ -40,7 +43,8 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(Long id, EmployeeRequest employeeRequest) {
-    var employee = getById(id);
-    return updateEmployee(employee, employeeRequest);
+//        var employee = getById(id);
+        return null;
     }
+
 }
