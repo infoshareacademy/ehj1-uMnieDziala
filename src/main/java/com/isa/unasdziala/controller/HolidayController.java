@@ -26,6 +26,11 @@ public class HolidayController {
         return ResponseEntity.ok(holidayService.findAll(userId));
     }
 
+    @GetMapping("/{holidayId}")
+    public ResponseEntity<HolidayDto> getHolidayById(@PathVariable("userId") Long userId, @PathVariable("holidayId") Long holidayId) {
+        return ResponseEntity.ok(holidayService.findHolidayById(userId, holidayId));
+    }
+
     @PostMapping
     public ResponseEntity<HolidayDto> addHoliday(@PathVariable("userId") Long userId, @RequestBody Collection<LocalDate> dates) {
         return ResponseEntity.ok(holidayService.addHoliday(userId, dates));
