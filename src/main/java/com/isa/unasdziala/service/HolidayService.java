@@ -1,6 +1,7 @@
 package com.isa.unasdziala.service;
 
 import com.isa.unasdziala.dto.HolidayDto;
+import com.isa.unasdziala.request.DeletedHolidaysRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,11 +14,15 @@ public class HolidayService {
         throw new RuntimeException("Not implemented");
     }
 
+    public HolidayDto findHolidayById(Long userId, Long holidayId) {
+        throw new RuntimeException("Not implemented");
+    }
+
     public HolidayDto addHoliday(Long userId, Collection<LocalDate> dates) {
         throw new RuntimeException("Not implemented");
     }
 
-    public HolidayDto findHolidayById(Long userId, Long holidayId) {
+    public void deleteById(Long userId, DeletedHolidaysRequest holidayId) {
         throw new RuntimeException("Not implemented");
     }
 }
