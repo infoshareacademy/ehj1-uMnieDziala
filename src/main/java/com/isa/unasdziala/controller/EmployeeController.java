@@ -3,6 +3,7 @@ package com.isa.unasdziala.controller;
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.service.EmployeeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +32,11 @@ public class EmployeeController {
     @PostMapping
     public Employee addEmployee(@RequestBody Employee employee){
         return employeeService.addEmployee(employee);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEmployee(@PathVariable Long id){
+        employeeService.deleteById(id);
     }
 }
