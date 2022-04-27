@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface HolidayRepository extends JpaRepository<Holiday, Long> {
-    List<Holiday> findAllByEmployees_Id(Long employeeId);
-    Optional<Holiday> findByIdAndEmployees_Id(Long id, Long userId);
+    List<Holiday> findAllByEmployeesId(Long employeeId);
+    Optional<Holiday> findByIdAndEmployeesId(Long id, Long userId);
 }

@@ -34,7 +34,7 @@ public class EmployeeService {
     public EmployeeDto findById(Long id){
         return employeeRepository.findById(id)
                 .map(employee -> mapper.map(employee,EmployeeDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(format("Movie with id %d not found.", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(format("Employee with id %d not found.", id)));
     }
 
 

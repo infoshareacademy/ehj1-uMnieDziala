@@ -25,14 +25,14 @@ public class HolidayService {
     }
 
     public List<HolidayDto> findAll(Long userId) {
-        return holidayRepository.findAllByEmployees_Id(userId)
+        return holidayRepository.findAllByEmployeesId(userId)
                 .stream()
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class))
                 .toList();
     }
 
     public HolidayDto findHolidayById(Long userId, Long holidayId) {
-        return holidayRepository.findByIdAndEmployees_Id(holidayId, userId)
+        return holidayRepository.findByIdAndEmployeesId(holidayId, userId)
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(format("Holiday with id %d not found.", holidayId)));
     }
