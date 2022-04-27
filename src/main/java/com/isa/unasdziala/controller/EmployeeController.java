@@ -20,23 +20,23 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDto>> getAll(){
+    public ResponseEntity<List<EmployeeDto>> getAll() {
         return ResponseEntity.ok(employeeService.findAll());
     }
 
     @GetMapping("/{id}")
-    public EmployeeDto getById(@PathVariable Long id){
-        return employeeService.findById(id);
+    public ResponseEntity<EmployeeDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.findById(id));
     }
 
     @PostMapping
-    public Employee addEmployee(@RequestBody Employee employee){
+    public Employee addEmployee(@RequestBody Employee employee) {
         return employeeService.addEmployee(employee);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteEmployee(@PathVariable Long id){
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
