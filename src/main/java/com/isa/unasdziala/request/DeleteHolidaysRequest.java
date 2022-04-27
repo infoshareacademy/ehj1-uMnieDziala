@@ -7,6 +7,6 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DeletedHolidaysRequest {
+public class DeleteHolidaysRequest {
     private List<Long> holidaysId;
 }

@@ -1,7 +1,8 @@
 package com.isa.unasdziala.controller;
 
 import com.isa.unasdziala.dto.HolidayDto;
-import com.isa.unasdziala.request.DeletedHolidaysRequest;
+import com.isa.unasdziala.request.AddHolidaysRequest;
+import com.isa.unasdziala.request.DeleteHolidaysRequest;
 import com.isa.unasdziala.service.HolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +34,14 @@ public class HolidayController {
     }
 
     @PostMapping
-    public ResponseEntity<HolidayDto> addHoliday(@PathVariable("userId") Long userId, @RequestBody Collection<LocalDate> dates) {
-        return ResponseEntity.ok(holidayService.addHoliday(userId, dates));
+    public ResponseEntity<List<HolidayDto>> addHoliday(@PathVariable("userId") Long userId, @RequestBody AddHolidaysRequest addHolidaysRequest) {
+        return ResponseEntity.ok(holidayService.addHoliday(userId, addHolidaysRequest));
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteById(@PathVariable("userId") Long userId,
-                                        @RequestBody DeletedHolidaysRequest deletedHolidaysRequest) {
-        holidayService.deleteById(userId, deletedHolidaysRequest);
+                                        @RequestBody DeleteHolidaysRequest deleteHolidaysRequest) {
+        holidayService.deleteById(userId, deleteHolidaysRequest);
         return ResponseEntity.noContent().build();
     }
 }
