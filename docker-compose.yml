@@ -10,9 +10,9 @@ services:
       - MYSQL_DATABASE=holidays
     ports:
       - 3307:3306
-    volumes:
-      - ./fixtures:/fixtures
-      - ./mysql:/var/lib/mysql
+#    volumes:
+#      - ./fixtures:/fixtures
+#      - ./mysql:/var/lib/mysql
   adminer:
     image: adminer
     restart: always
