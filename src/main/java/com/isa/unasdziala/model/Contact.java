@@ -14,7 +14,7 @@ import javax.persistence.Embeddable;
 public class Contact {
 
     private String phoneNo;
-    String emailAddress;
+    private String emailAddress;
 
     @Override
     public String toString() {

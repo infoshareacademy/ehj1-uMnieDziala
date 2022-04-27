@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Holiday {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private LocalDate date;
