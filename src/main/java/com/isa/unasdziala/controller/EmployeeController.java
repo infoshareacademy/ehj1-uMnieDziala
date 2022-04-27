@@ -2,7 +2,6 @@ package com.isa.unasdziala.controller;
 
 import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.service.EmployeeService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class EmployeeController {
         return employeeService.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public Employee getById(@PathVariable Long id){
         return employeeService.findById(id);
     }
@@ -30,16 +29,5 @@ public class EmployeeController {
     @PostMapping
     public Employee addEmployee(@RequestBody Employee employee){
         return employeeService.addEmployee(employee);
-    }
-
-    @PutMapping
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeRequest employeeRequest ){
-        return employeeService.updateEmployee(id, employeeRequest);
-    }
-
-    @DeleteMapping("/id")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteEmployee(@PathVariable Long id){
-        employeeService.deleteById(id);
     }
 }
