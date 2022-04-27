@@ -31,7 +31,7 @@ public class HolidayController {
         return ResponseEntity.ok(holidayService.findHolidayById(userId, holidayId));
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<List<HolidayDto>> addHoliday(@PathVariable("userId") Long userId, @RequestBody AddHolidaysRequest addHolidaysRequest) {
         return ResponseEntity.ok(holidayService.addHoliday(userId, addHolidaysRequest));
     }
