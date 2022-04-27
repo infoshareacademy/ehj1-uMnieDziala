@@ -17,14 +17,11 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> findAll(){
+    public List<Employee> findAll() {
         return employeeRepository.findAll()
                 .stream()
                 .toList();
     }
 
-    public Employee addEmployee(Employee employee){
-        return employeeRepository.save(employee);
-    }
 
 }
