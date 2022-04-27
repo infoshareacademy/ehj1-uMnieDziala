@@ -11,10 +11,10 @@ INSERT INTO employees(                      first_name,
                       department,
                       holidays)
 VALUES ('Adam', 'Superclass', '111222333', 'adam@company.com', 'Bylowo-Leśnictwo', '80-002', 'Kartuzy', 'Tak bez ulicy', '1', '',
-        'Departament Finansow', 22.5),
+        'ACTUARIAL_DEPARTMENT', 22.5),
        ('Jan', 'Maven', '222333444', 'jan@company.com', 'Gdynia', '80-001', 'Gdynia,Starowiejska', 'Nowa', '33', '',
-        'Departament Aktuarialny', 44),
+        'SALES_DEPARTMENT', 44),
        ('Monika', 'Git', '444555666', 'monika@company.com', 'Gdańsk', '80-003', 'Gdańsk', 'Długa', '44/45', '3',
-        'Departament Sprzedazy', 0),
+        'FINANCE_DEPARTMENT', 0),
        ('Karolina', 'Pullrequest', '999888777', 'karolina@company.com', 'Kościerzyna', '80-004', 'Kościerzyna',
-        'Nowa', '5A', '', 'Departament Aktuarialny', 0.5);
+        'Nowa', '5A', '', 'FINANCE_DEPARTMENT', 0.5);
