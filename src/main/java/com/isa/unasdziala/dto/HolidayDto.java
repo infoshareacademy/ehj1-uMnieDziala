@@ -1,24 +1,19 @@
 package com.isa.unasdziala.dto;
 
 import com.isa.unasdziala.model.Employee;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class HolidayDto {
+@AllArgsConstructor
+public class HolidayDto implements Serializable {
     private Long id;
     private LocalDate date;
     private Set<Employee> employees;
-
-    public HolidayDto(Long id, LocalDate date, Set<Employee> employees) {
-        this.id = id;
-        this.date = date;
-        this.employees = employees;
-    }
 }
