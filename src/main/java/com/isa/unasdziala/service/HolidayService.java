@@ -16,4 +16,8 @@ public class HolidayService {
     public HolidayDto addHoliday(Long userId, Collection<LocalDate> dates) {
         throw new RuntimeException("Not implemented");
     }
+
+    public HolidayDto findHolidayById(Long userId, Long holidayId) {
+        throw new RuntimeException("Not implemented");
+    }
 }
