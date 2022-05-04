@@ -2,11 +2,12 @@ package com.isa.unasdziala.controller;
 
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.model.Employee;
+import com.isa.unasdziala.request.EmployeeRequest;
 import com.isa.unasdziala.service.EmployeeService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -38,5 +39,10 @@ public class EmployeeController {
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}")
+    public Employee updateEmployee(@PathVariable Long id,
+                                   @RequestBody @Valid EmployeeRequest employeeRequest){
+        return employeeService.updateEmployee(id, employeeRequest);
     }
 }
