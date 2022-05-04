@@ -2,6 +2,7 @@ package com.isa.unasdziala.service;
 
 import com.isa.unasdziala.dto.HolidayDto;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
+import com.isa.unasdziala.model.Holiday;
 import com.isa.unasdziala.repository.HolidayRepository;
 import com.isa.unasdziala.request.AddHolidaysRequest;
 import com.isa.unasdziala.request.DeleteHolidaysRequest;
@@ -42,6 +43,11 @@ public class HolidayService {
     }
 
     public void deleteById(Long userId, DeleteHolidaysRequest deleteHolidaysRequest) {
-        throw new RuntimeException("Not implemented");
+        List<Long> holidaysId = deleteHolidaysRequest.getHolidaysId();
+        List<Holiday> holidays = holidayRepository.findAllById(holidaysId);
+
+        holidays.forEach(holiday -> holiday.getEmployees().removeIf(user -> user.getId().equals(userId)));
+
+        holidayRepository.saveAll(holidays);
     }
 }
