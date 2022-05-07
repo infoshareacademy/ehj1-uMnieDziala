@@ -2,6 +2,8 @@ package com.isa.unasdziala.service;
 
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
+import com.isa.unasdziala.model.Address;
+import com.isa.unasdziala.model.Contact;
 import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.repository.EmployeeRepository;
 import com.isa.unasdziala.request.EmployeeRequest;
@@ -41,25 +43,29 @@ public class EmployeeService {
     }
 
 
-    public Employee addEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public EmployeeDto addEmployee(EmployeeRequest employeeRequest) {
+        Employee employee = mapper.map(employeeRequest, Employee.class);
+        return mapper.map(employeeRepository.save(employee), EmployeeDto.class);
     }
 
-    public Employee updateEmployee(Long id, EmployeeRequest employeeRequest) {
+    public EmployeeDto updateEmployee(Long id, EmployeeRequest employeeRequest) {
         Employee employee = findEmployeeById(id);
-        updateEmployeeData(employee, employeeRequest);
+        Employee newEmployee = mapper.map(employeeRequest, Employee.class);
+
+        updateEmployeeData(employee, newEmployee);
         employeeRepository.save(employee);
-        return employee;
+        
+        return mapper.map(employee, EmployeeDto.class);
     }
 
 
-    private void updateEmployeeData(Employee foundEmployee, EmployeeRequest employeeRequest) {
-        foundEmployee.setFirstName(employeeRequest.getFirstName());
-        foundEmployee.setLastName(employeeRequest.getLastName());
-        foundEmployee.setAddress(employeeRequest.getAddress());
-        foundEmployee.setContact(employeeRequest.getContact());
-        foundEmployee.setDepartment(employeeRequest.getDepartment());
-        foundEmployee.setHolidays(employeeRequest.getHolidays());
+    private void updateEmployeeData(Employee foundEmployee, Employee newEmployee) {
+        foundEmployee.setFirstName(newEmployee.getFirstName());
+        foundEmployee.setLastName(newEmployee.getLastName());
+        foundEmployee.setAddress(newEmployee.getAddress());
+        foundEmployee.setContact(newEmployee.getContact());
+        foundEmployee.setDepartment(newEmployee.getDepartment());
+        foundEmployee.setHolidays(newEmployee.getHolidays());
 
     }
 

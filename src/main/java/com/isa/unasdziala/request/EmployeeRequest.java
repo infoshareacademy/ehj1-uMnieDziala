@@ -1,8 +1,10 @@
 package com.isa.unasdziala.request;
 
-import com.isa.unasdziala.model.Address;
-import com.isa.unasdziala.model.Contact;
 import com.isa.unasdziala.model.Department;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class EmployeeRequest {
@@ -10,12 +12,17 @@ public class EmployeeRequest {
     private String firstName;
     @Size(min = 2, max = 30)
     private String lastName;
-    private Contact contact;
-    private Address address;
+    @NotNull
+    private ContactRequest contact;
+    @NotNull
+    private AddressRequest address;
+    @NotNull
     private Department department;
+    @Min(value = 0)
+    @Max(value = 100)
     private float holidays;
 
-    public EmployeeRequest(String firstName, String lastName, Contact contact, Address address, Department department, float holidays) {
+    public EmployeeRequest(String firstName, String lastName, ContactRequest contact, AddressRequest address, Department department, float holidays) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
@@ -32,11 +39,11 @@ public class EmployeeRequest {
         this.lastName = lastName;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(ContactRequest contact) {
         this.contact = contact;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressRequest address) {
         this.address = address;
     }
 
@@ -56,11 +63,11 @@ public class EmployeeRequest {
         return lastName;
     }
 
-    public Contact getContact() {
+    public ContactRequest getContact() {
         return contact;
     }
 
-    public Address getAddress() {
+    public AddressRequest getAddress() {
         return address;
     }
 
