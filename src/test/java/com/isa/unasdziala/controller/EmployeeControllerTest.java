@@ -2,7 +2,6 @@ package com.isa.unasdziala.controller;
 
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
-import com.isa.unasdziala.model.Department;
 import com.isa.unasdziala.request.EmployeeRequest;
 import com.isa.unasdziala.service.EmployeeService;
 import org.hamcrest.Matchers;
@@ -15,14 +14,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -89,7 +85,7 @@ class EmployeeControllerTest {
         String requestBody = """
                                 {
                     "firstName": "Janko",
-                    "lastName": "Kowalskis",
+                    "lastName": "Kowalski",
                     "contact": null,
                     "address": null,
                     "department": null,
