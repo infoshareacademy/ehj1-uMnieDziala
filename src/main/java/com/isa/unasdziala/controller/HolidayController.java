@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employee/{userId}/holiday")
+@RequestMapping("/api/employee/{employeeId}/holiday")
 public class HolidayController {
 
     private final HolidayService holidayService;
@@ -22,22 +22,22 @@ public class HolidayController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HolidayDto>> getAll(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<HolidayDto>> getAll(@PathVariable("employeeId") Long userId) {
         return ResponseEntity.ok(holidayService.findAll(userId));
     }
 
     @GetMapping("/{holidayId}")
-    public ResponseEntity<HolidayDto> getHolidayById(@PathVariable("userId") Long userId, @PathVariable("holidayId") Long holidayId) {
+    public ResponseEntity<HolidayDto> getHolidayById(@PathVariable("employeeId") Long userId, @PathVariable("holidayId") Long holidayId) {
         return ResponseEntity.ok(holidayService.findHolidayById(userId, holidayId));
     }
 
     @PostMapping("")
-    public ResponseEntity<List<HolidayDto>> addHoliday(@PathVariable("userId") Long userId, @RequestBody AddHolidaysRequest addHolidaysRequest) {
+    public ResponseEntity<List<HolidayDto>> addHoliday(@PathVariable("employeeId") Long userId, @RequestBody AddHolidaysRequest addHolidaysRequest) {
         return ResponseEntity.ok(holidayService.addHoliday(userId, addHolidaysRequest));
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteById(@PathVariable("userId") Long userId,
+    public ResponseEntity<?> deleteById(@PathVariable("employeeId") Long userId,
                                         @RequestBody DeleteHolidaysRequest deleteHolidaysRequest) {
         holidayService.deleteById(userId, deleteHolidaysRequest);
         return ResponseEntity.noContent().build();
