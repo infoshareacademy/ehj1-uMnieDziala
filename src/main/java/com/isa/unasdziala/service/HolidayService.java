@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static org.aspectj.runtime.internal.Conversions.longValue;
 
 @Service
 public class HolidayService {
@@ -66,8 +67,11 @@ public class HolidayService {
         addHolidaysRequest.getDates().stream()
                 .filter(date -> !bussyDays.contains(date))
                 .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY || date.getDayOfWeek() != DayOfWeek.SUNDAY)
-                .limit((long) employee.getHolidays())
+                .limit(longValue(employee.getHolidays()))
                 .collect(Collectors.toSet());
+
+        employee.setHolidays(employee.getHolidays() - addHolidaysRequest.getDates().size());
+        employee.setHolidayDays(employee.getHolidayDays().add());
 
         return null;
     }

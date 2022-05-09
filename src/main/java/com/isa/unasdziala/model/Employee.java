@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "employees")
@@ -38,8 +40,8 @@ public class Employee {
 //    @Transient
 //    private Set<Day> events;
 
-//    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Holiday> holidayDays = new HashSet<>();
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Holiday> holidayDays = new HashSet<>();
 
     public Employee() {
     }
