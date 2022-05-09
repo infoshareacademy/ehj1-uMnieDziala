@@ -67,17 +67,17 @@ public class HolidayService {
         bussyDays.addAll(bussyDaysFromEmployeeHolidaysDays);
         bussyDays.addAll(bussyDaysFromHolidayRepo);
 
-        addHolidaysRequest.getDates().stream()
+        Set<LocalDate> requestDates = addHolidaysRequest.getDates().stream()
                 .filter(date -> !bussyDays.contains(date))
                 .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY)
                 .limit(longValue(employee.get().getHolidays()))
                 .collect(Collectors.toSet());
 
-        Set<Holiday> holidaysToAdd = addHolidaysRequest.getDates().stream()
+        Set<Holiday> holidaysToAdd = requestDates.stream()
                 .map(date -> new Holiday(date))
                 .collect(Collectors.toSet());
 
-        employee.get().setHolidays(employee.get().getHolidays() - addHolidaysRequest.getDates().size());
+        employee.get().setHolidays(employee.get().getHolidays() - holidaysToAdd.size());
         employee.get().getHolidayDays().addAll(holidaysToAdd);
         employeeRepository.save(employee.get());
 
