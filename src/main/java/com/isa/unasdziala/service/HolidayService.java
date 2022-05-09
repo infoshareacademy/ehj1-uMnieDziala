@@ -69,7 +69,7 @@ public class HolidayService {
 
         addHolidaysRequest.getDates().stream()
                 .filter(date -> !bussyDays.contains(date))
-                .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY || date.getDayOfWeek() != DayOfWeek.SUNDAY)
+                .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY)
                 .limit(longValue(employee.get().getHolidays()))
                 .collect(Collectors.toSet());
 
@@ -94,7 +94,7 @@ public class HolidayService {
                 .map(holiday -> modelMapper.map(holiday, Holiday.class))
                 .collect(Collectors.toSet());
 
-        employee.get().setHolidays(employee.get().getHolidays() + deleteHolidaysRequest.getHolidaysId().size());
+        employee.get().setHolidays(employee.get().getHolidays() + holidaysToDelete.size());
         employee.get().getHolidayDays().removeAll(holidaysToDelete);
         employeeRepository.save(employee.get());
 
