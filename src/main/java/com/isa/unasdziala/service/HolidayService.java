@@ -82,8 +82,7 @@ public class HolidayService {
         employeeRepository.save(employee.get());
 
         return holidaysToAdd.stream()
-                .map(holiday -> modelMapper.map(holiday, HolidayDto.class))
-                .toList();
+                .map(holiday -> modelMapper.map(holiday, HolidayDto.class))                .toList();
     }
 
     public void deleteById(Long userId, DeleteHolidaysRequest deleteHolidaysRequest) {

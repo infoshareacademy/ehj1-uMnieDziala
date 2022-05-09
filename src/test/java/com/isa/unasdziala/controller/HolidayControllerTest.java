@@ -1,16 +1,17 @@
 package com.isa.unasdziala.controller;
 
 
-import com.isa.unasdziala.dto.HolidayDto;
-import com.isa.unasdziala.model.Employee;
+import com.isa.unasdziala.request.DeleteHolidaysRequest;
 import com.isa.unasdziala.service.HolidayService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class HolidayControllerTest {
 
+    public static final String HOLIDAY_URL = "/api/employee/{employeeId}/holiday";
     @Autowired
     private MockMvc mockMvc;
 
@@ -39,8 +41,39 @@ class HolidayControllerTest {
         when(holidayService.findAll(1L)).thenReturn(List.of());
         // when
         // then
-        mockMvc.perform(get("/api/employee/{employeeId}/holiday", 1L))
+        mockMvc.perform(get(HOLIDAY_URL, 1L))
                 .andExpect(status().isOk());
+    }
+
+
+    @Test
+    void shouldPostCanReturnNotFoundWhenUserNotExist() throws Exception {
+        // given
+        when(holidayService.addHoliday(eq(1L), any(AddHolidaysRequest.class))).thenThrow(new ResourceNotFoundException("Not Found"));
+        // when
+        String body = """
+                {
+                    "dates" : []
+                }
+                """;
+        mockMvc.perform(post(HOLIDAY_URL, 1L).contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isNotFound());
+
+        // then
+
+    }
+
+    @Test
+    void shouldPostCanReturnBadRequestWhenWrongContent() throws Exception {
+        // given
+        when(holidayService.addHoliday(eq(1L), any(AddHolidaysRequest.class))).thenThrow(new ResourceNotFoundException("Not Found"));
+        // when
+        String body = "";
+        mockMvc.perform(post(HOLIDAY_URL, 1L).contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isBadRequest());
+
+        // then
+
     }
 
     @Test
@@ -72,9 +105,9 @@ class HolidayControllerTest {
                 }
                 """;
         mockMvc.perform(
-                delete("/api/employee/{employeeId}/holiday", 1L)
-                        .content(body)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        delete(HOLIDAY_URL, 1L)
+                                .content(body)
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 }

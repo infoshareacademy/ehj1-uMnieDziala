@@ -32,8 +32,8 @@ public class HolidayController {
     }
 
     @PostMapping("")
-    public ResponseEntity<List<HolidayDto>> addHoliday(@PathVariable("employeeId") Long userId, @RequestBody AddHolidaysRequest addHolidaysRequest) {
-        return ResponseEntity.ok(holidayService.addHoliday(userId, addHolidaysRequest));
+    public ResponseEntity<List<HolidayDto>> addHoliday(@PathVariable("employeeId") Long employeeId, @RequestBody AddHolidaysRequest addHolidaysRequest) {
+        return ResponseEntity.ok(holidayService.addHoliday(employeeId, addHolidaysRequest));
     }
 
     @DeleteMapping
