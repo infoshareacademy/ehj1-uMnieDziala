@@ -2,8 +2,6 @@ package com.isa.unasdziala.service;
 
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
-import com.isa.unasdziala.model.Address;
-import com.isa.unasdziala.model.Contact;
 import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.repository.EmployeeRepository;
 import com.isa.unasdziala.request.EmployeeRequest;
@@ -54,7 +52,7 @@ public class EmployeeService {
 
         updateEmployeeData(employee, newEmployee);
         employeeRepository.save(employee);
-        
+
         return mapper.map(employee, EmployeeDto.class);
     }
 

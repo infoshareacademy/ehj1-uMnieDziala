@@ -1,7 +1,6 @@
 package com.isa.unasdziala.controller;
 
 import com.isa.unasdziala.dto.EmployeeDto;
-import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.request.EmployeeRequest;
 import com.isa.unasdziala.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
