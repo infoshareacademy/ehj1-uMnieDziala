@@ -64,7 +64,7 @@ class EmployeeControllerTest {
     void shouldReturn404ExceptionWhenEmployeeNotFound() throws Exception {
         EmployeeDto employeeDto = new EmployeeDto();
 
-        Mockito.when(employeeService.findById(1L)).thenThrow(new ResourceNotFoundException(format("EmployeeNotFound", 1L)));
+        Mockito.when(employeeService.findById(1L)).thenThrow(new ResourceNotFoundException("Not found"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/employee/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))

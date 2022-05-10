@@ -37,29 +37,33 @@ public class HolidayService {
         this.holidayConfiguration = holidayConfiguration;
     }
 
-    public List<HolidayDto> findAll(Long userId) {
-        return holidayRepository.findAllByEmployeesId(userId)
+    public List<HolidayDto> findAll(Long employeeId) {
+        return holidayRepository.findAllByEmployeesId(employeeId)
                 .stream()
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class))
                 .toList();
     }
 
-    public HolidayDto findHolidayById(Long userId, Long holidayId) {
-        return holidayRepository.findByIdAndEmployeesId(holidayId, userId)
+    public HolidayDto findHolidayById(Long employeeId, Long holidayId) {
+        return holidayRepository.findByIdAndEmployeesId(holidayId, employeeId)
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(format("Holiday with id %d not found.", holidayId)));
+                .orElseThrow(() -> new ResourceNotFoundException(format("Holiday with id %d not found or does not belong to this employee", holidayId)));
     }
 
     public List<HolidayDto> addHoliday(Long userId, AddHolidaysRequest addHolidaysRequest) {
 
         Optional<Employee> employee = employeeRepository.findById(userId);
+        if (employee.isEmpty()) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found");
+        }
+
+        Employee employeeEntity = employee.get();
 
         Set<LocalDate> bussyDaysFromEmployeeHolidaysDays = holidayRepository.findAllByEmployeesId(userId).stream()
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
         Set<LocalDate> bussyDaysFromHolidayRepo = holidayRepository.findAll().stream()
-                .filter(holiday -> holiday.getEmployees().stream()
-                        .collect(Collectors.toList())
+                .filter(holiday -> holiday.getEmployees().stream().toList()
                         .size() >= holidayConfiguration.getMaxAbsence())
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
@@ -70,20 +74,21 @@ public class HolidayService {
         Set<LocalDate> requestDates = addHolidaysRequest.getDates().stream()
                 .filter(date -> !bussyDays.contains(date))
                 .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY)
-                .limit(longValue(employee.get().getHolidays()))
+                .limit(longValue(employeeEntity.getHolidays()))
                 .collect(Collectors.toSet());
 
         Set<Holiday> holidaysToAdd = requestDates.stream()
-                .map(date -> new Holiday(date))
+                .map(Holiday::new)
                 .collect(Collectors.toSet());
 
-        employee.get().setHolidays(employee.get().getHolidays() - holidaysToAdd.size());
-        employee.get().getHolidayDays().addAll(holidaysToAdd);
-        employeeRepository.save(employee.get());
+        employeeEntity.setHolidays(employeeEntity.getHolidays() - holidaysToAdd.size());
+        employeeEntity.getHolidayDays().addAll(holidaysToAdd);
+        employeeRepository.save(employeeEntity);
 
         return holidaysToAdd.stream()
-                .map(holiday -> modelMapper.map(holiday, HolidayDto.class))                .toList();
+                .map(holiday -> modelMapper.map(holiday, HolidayDto.class)).toList();
     }
+
 
     public void deleteById(Long userId, DeleteHolidaysRequest deleteHolidaysRequest) {
         Optional<Employee> employee = employeeRepository.findById(userId);

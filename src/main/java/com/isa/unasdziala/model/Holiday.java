@@ -18,14 +18,14 @@ public class Holiday {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
+    @Column(unique = true)
     private LocalDate date;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "holiday_employe",
+            name = "holiday_employee",
             joinColumns = @JoinColumn(name = "holiday_id"),
-            inverseJoinColumns = @JoinColumn(name = "employe_id")
+            inverseJoinColumns = @JoinColumn(name = "employee_id")
     )
     private Set<Employee> employees = new HashSet<>();
 
