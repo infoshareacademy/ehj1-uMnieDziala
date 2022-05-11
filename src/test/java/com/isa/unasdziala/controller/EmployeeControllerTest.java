@@ -2,6 +2,9 @@ package com.isa.unasdziala.controller;
 
 import com.isa.unasdziala.dto.EmployeeDto;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
+import com.isa.unasdziala.model.Address;
+import com.isa.unasdziala.model.Contact;
+import com.isa.unasdziala.model.Department;
 import com.isa.unasdziala.request.EmployeeRequest;
 import com.isa.unasdziala.service.EmployeeService;
 import org.hamcrest.Matchers;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
+import static java.lang.String.valueOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,13 +42,13 @@ class EmployeeControllerTest {
     @Test
     void shouldReturnAllEmployees() throws Exception {
         List<EmployeeDto> testEmployees = new ArrayList<>();
-        testEmployees.add (new EmployeeDto());
+        testEmployees.add(new EmployeeDto());
 
         Mockito.when(employeeService.findAll()).thenReturn(testEmployees);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/employee/")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*",Matchers.hasSize(1)))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.*", Matchers.hasSize(1)))
                 .andExpect(status().isOk());
 
     }
@@ -78,19 +82,34 @@ class EmployeeControllerTest {
         employeeDto.setId(1L);
         employeeDto.setFirstName("Jan");
         employeeDto.setLastName("Kowalski");
+        employeeDto.setDepartment(Department.ACTUARIAL_DEPARTMENT);
+        employeeDto.setContact(new Contact("123456789", "test@test.pl"));
+        employeeDto.setAddress(new Address("TestCity", "00-000", "TestPostCity",
+                "TestStreet", "0", "0"));
         employeeDto.setHolidays(9.0f);
 
         Mockito.when(employeeService.addEmployee(any(EmployeeRequest.class))).thenReturn(employeeDto);
 
         String requestBody = """
-                                {
-                    "firstName": "Janko",
-                    "lastName": "Kowalski",
-                    "contact": null,
-                    "address": null,
-                    "department": null,
-                    "holidays": 9.0
-                }
+                   {
+                       "id": 1,
+                       "firstName": "Jan",
+                       "lastName": "Kowalski",
+                       "contact": {
+                           "phoneNo": "123456789",
+                           "emailAddress": "test@test.pl"
+                       },
+                       "address": {
+                           "city": "TestCity",
+                           "zipCode": "00-000",
+                           "postCity": "TestPostCity",
+                           "street": "TestStreet",
+                           "houseNumber": "0",
+                           "flatNumber": "0"
+                       },
+                       "department": "ACTUARIAL_DEPARTMENT",
+                       "holidays": 9.0
+                   }
                 """;
         mockMvc.perform(MockMvcRequestBuilders.post("/api/employee/").content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -98,6 +117,14 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.firstName", Matchers.equalTo("Jan")))
                 .andExpect(jsonPath("$.lastName", Matchers.equalTo("Kowalski")))
+                .andExpect(jsonPath("$.contact.phoneNo", Matchers.equalTo("123456789")))
+                .andExpect(jsonPath("$.contact.emailAddress", Matchers.equalTo("test@test.pl")))
+                .andExpect(jsonPath("$.address.city", Matchers.equalTo("TestCity")))
+                .andExpect(jsonPath("$.address.zipCode", Matchers.equalTo("00-000")))
+                .andExpect(jsonPath("$.address.postCity", Matchers.equalTo("TestPostCity")))
+                .andExpect(jsonPath("$.address.street", Matchers.equalTo("TestStreet")))
+                .andExpect(jsonPath("$.address.houseNumber", Matchers.equalTo("0")))
+                .andExpect(jsonPath("$.address.flatNumber", Matchers.equalTo("0")))
                 .andExpect(jsonPath("$.holidays", Matchers.equalTo(9.0)));
     }
 
@@ -115,20 +142,34 @@ class EmployeeControllerTest {
         employeeDto.setId(1L);
         employeeDto.setFirstName("Jan");
         employeeDto.setLastName("Kowalski");
+        employeeDto.setDepartment(Department.ACTUARIAL_DEPARTMENT);
+        employeeDto.setContact(new Contact("123456789", "test@test.pl"));
+        employeeDto.setAddress(new Address("TestCity", "00-000", "TestPostCity",
+                "TestStreet", "0", "0"));
         employeeDto.setHolidays(9.0f);
 
         Mockito.when(employeeService.updateEmployee(eq(1L), any(EmployeeRequest.class))).thenReturn(employeeDto);
 
         String requestBody = """
-                                {
-                    "id": 1,
-                    "firstName": "Janko",
-                    "lastName": "Kowalskis",
-                    "contact": null,
-                    "address": null,
-                    "department": null,
-                    "holidays": 9.0
-                }
+                   {
+                       "id": 1,
+                       "firstName": "Jan",
+                       "lastName": "Kowalski",
+                       "contact": {
+                           "phoneNo": "123456789",
+                           "emailAddress": "test@test.pl"
+                       },
+                       "address": {
+                           "city": "TestCity",
+                           "zipCode": "00-000",
+                           "postCity": "TestPostCity",
+                           "street": "TestStreet",
+                           "houseNumber": "0",
+                           "flatNumber": "0"
+                       },
+                       "department": "ACTUARIAL_DEPARTMENT",
+                       "holidays": 9.0
+                   }
                 """;
         mockMvc.perform(MockMvcRequestBuilders.put("/api/employee/{id}", 1L).content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -136,6 +177,14 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id", Matchers.equalTo(1)))
                 .andExpect(jsonPath("$.firstName", Matchers.equalTo("Jan")))
                 .andExpect(jsonPath("$.lastName", Matchers.equalTo("Kowalski")))
+                .andExpect(jsonPath("$.contact.phoneNo", Matchers.equalTo("123456789")))
+                .andExpect(jsonPath("$.contact.emailAddress", Matchers.equalTo("test@test.pl")))
+                .andExpect(jsonPath("$.address.city", Matchers.equalTo("TestCity")))
+                .andExpect(jsonPath("$.address.zipCode", Matchers.equalTo("00-000")))
+                .andExpect(jsonPath("$.address.postCity", Matchers.equalTo("TestPostCity")))
+                .andExpect(jsonPath("$.address.street", Matchers.equalTo("TestStreet")))
+                .andExpect(jsonPath("$.address.houseNumber", Matchers.equalTo("0")))
+                .andExpect(jsonPath("$.address.flatNumber", Matchers.equalTo("0")))
                 .andExpect(jsonPath("$.holidays", Matchers.equalTo(9.0)));
     }
 }
