@@ -15,7 +15,7 @@ import java.util.Set;
 public class HolidayDto implements Serializable {
     private Long id;
     private LocalDate date;
-    private Set<Employee> employees;
+    private Set<EmployeeDto> employees;
 
     public HolidayDto(LocalDate date) {
         this.date = date;

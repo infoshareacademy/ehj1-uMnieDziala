@@ -2,6 +2,7 @@ package com.isa.unasdziala.service;
 
 import com.isa.unasdziala.configuration.HolidayConfiguration;
 import com.isa.unasdziala.dto.HolidayDto;
+import com.isa.unasdziala.exception.OutOfFreeDaysException;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
 import com.isa.unasdziala.model.Employee;
 import com.isa.unasdziala.model.Holiday;
@@ -45,19 +46,19 @@ public class HolidayService {
     }
 
     public HolidayDto findHolidayById(Long employeeId, Long holidayId) {
+        return modelMapper.map(findHolidayEntityById(employeeId, holidayId), HolidayDto.class);
+    }
+
+    private Holiday findHolidayEntityById(Long employeeId, Long holidayId) {
         return holidayRepository.findByIdAndEmployeesId(holidayId, employeeId)
-                .map(holiday -> modelMapper.map(holiday, HolidayDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(format("Holiday with id %d not found or does not belong to this employee", holidayId)));
     }
 
     public List<HolidayDto> addHoliday(Long userId, AddHolidaysRequest addHolidaysRequest) {
 
-        Optional<Employee> employee = employeeRepository.findById(userId);
-        if (employee.isEmpty()) {
-            throw new ResourceNotFoundException("User with id " + userId + " not found");
-        }
+        Employee employee = employeeRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " not found"));
 
-        Employee employeeEntity = employee.get();
 
         Set<LocalDate> bussyDaysFromEmployeeHolidaysDays = holidayRepository.findAllByEmployeesId(userId).stream()
                 .map(Holiday::getDate)
@@ -74,33 +75,39 @@ public class HolidayService {
         Set<LocalDate> requestDates = addHolidaysRequest.getDates().stream()
                 .filter(date -> !bussyDays.contains(date))
                 .filter(date -> date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY)
-                .limit(longValue(employeeEntity.getHolidays()))
                 .collect(Collectors.toSet());
 
         Set<Holiday> holidaysToAdd = requestDates.stream()
                 .map(Holiday::new)
+                .peek(holiday -> holiday.getEmployees().add(employee))
                 .collect(Collectors.toSet());
 
-        employeeEntity.setHolidays(employeeEntity.getHolidays() - holidaysToAdd.size());
-        employeeEntity.getHolidayDays().addAll(holidaysToAdd);
-        employeeRepository.save(employeeEntity);
+
+        if (employee.getHolidays() < holidaysToAdd.size()) {
+            throw new OutOfFreeDaysException();
+        }
+        employee.setHolidays(employee.getHolidays() - holidaysToAdd.size());
+        employee.getHolidayDays().addAll(holidaysToAdd);
+        employeeRepository.save(employee);
 
         return holidaysToAdd.stream()
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class)).toList();
     }
 
 
-    public void deleteById(Long userId, DeleteHolidaysRequest deleteHolidaysRequest) {
-        Optional<Employee> employee = employeeRepository.findById(userId);
+    public void deleteById(Long employeeId, DeleteHolidaysRequest deleteHolidaysRequest) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + employeeId + " not found"));
 
         Set<Holiday> holidaysToDelete = deleteHolidaysRequest.getHolidaysId().stream()
-                .map(id -> findHolidayById(userId, id))
-                .map(holiday -> modelMapper.map(holiday, Holiday.class))
+                .map(id -> findHolidayEntityById(employeeId, id))
                 .collect(Collectors.toSet());
 
-        employee.get().setHolidays(employee.get().getHolidays() + holidaysToDelete.size());
-        employee.get().getHolidayDays().removeAll(holidaysToDelete);
-        employeeRepository.save(employee.get());
-
+        employee.setHolidays(employee.getHolidays() + holidaysToDelete.size());
+        Set<Holiday> holidayDays = employee.getHolidayDays();
+        holidayDays.removeAll(holidaysToDelete);
+        employee.setHolidayDays(holidayDays);
+        employeeRepository.save(employee);
+        holidayRepository.deleteAll(holidaysToDelete);
     }
 }

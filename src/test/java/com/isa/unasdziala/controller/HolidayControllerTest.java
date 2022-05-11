@@ -83,7 +83,7 @@ class HolidayControllerTest {
         holidayDto.setDate(LocalDate.of(2022, 05, 20));
         Employee testEmployee = new Employee();
         testEmployee.setId(1L);
-        holidayDto.setEmployees(Set.of(testEmployee));
+//        holidayDto.setEmployees(Set.of(testEmployee));
         when(holidayService.findHolidayById(1L, 1L)).thenReturn(holidayDto);
         // when
         // then
