@@ -18,39 +18,29 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
+    @Column()
     private String firstName;
 
-    @Column(nullable = true)
+    @Column()
     private String lastName;
 
     @Embedded
-    @Column(nullable = true)
+    @Column()
     private Contact contact;
 
     @Embedded
-    @Column(nullable = true)
+    @Column()
     private Address address;
 
     @Enumerated(EnumType.STRING)
     private Department department;
 
-    @Column(nullable = true)
+    @Column()
     private float holidays;
-
-//    @Transient
-//    private Set<Day> events;
-
+    
     @ManyToMany(mappedBy = "employees", cascade = CascadeType.MERGE)
     private Set<Holiday> holidayDays = new HashSet<>();
 
     public Employee() {
-    }
-
-
-    public void removeAllHolidays() {
-        this.getHolidayDays()
-                .forEach(day -> day.getEmployees().remove(this));
-        this.setHolidayDays(new HashSet<>());
     }
 }

@@ -71,7 +71,9 @@ public class EmployeeService {
 
     public void deleteById(Long id) {
         Employee employee = findEmployeeById(id);
-        employee.removeAllHolidays();
+        employee.getHolidayDays()
+                .forEach(day -> day.getEmployees().remove(employee));
+        employee.setHolidayDays(new HashSet<>());
         employeeRepository.delete(employee);
     }
 }
