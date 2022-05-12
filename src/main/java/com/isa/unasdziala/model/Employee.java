@@ -40,12 +40,7 @@ public class Employee {
 //    @Transient
 //    private Set<Day> events;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "holiday_employee",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "holiday_id")
-    )
+    @ManyToMany(mappedBy = "employees", cascade = CascadeType.MERGE)
     private Set<Holiday> holidayDays = new HashSet<>();
 
     public Employee() {

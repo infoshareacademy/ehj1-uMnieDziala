@@ -21,7 +21,12 @@ public class Holiday {
     private LocalDate date;
 
 
-    @ManyToMany(mappedBy = "holidayDays", cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "employee_holiday",
+            joinColumns = @JoinColumn(name = "holiday_id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id")
+    )
     private Set<Employee> employees = new HashSet<>();
 
     public Holiday(LocalDate date) {

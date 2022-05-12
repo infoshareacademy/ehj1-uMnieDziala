@@ -77,18 +77,34 @@ public class HolidayService {
 
         Set<Holiday> holidaysToAdd = requestDates.stream()
                 .map(Holiday::new)
-                .peek(holiday -> holiday.getEmployees().add(employee))
+//                .peek(holiday -> holiday.getEmployees().add(employee))
                 .collect(Collectors.toSet());
 
-
+        Set<Holiday> addedHolidays = new HashSet<>();
         if (employee.getHolidays() < holidaysToAdd.size()) {
             throw new OutOfFreeDaysException();
         }
-        employee.setHolidays(employee.getHolidays() - holidaysToAdd.size());
-        employee.getHolidayDays().addAll(holidaysToAdd);
+        for (Holiday holiday : holidaysToAdd) {
+            List<Holiday> existingHoliday = holidayRepository.findAllByDateIn(List.of(holiday.getDate()));
+            if (existingHoliday.size() == 0) {
+                employee.getHolidayDays().add(holiday);
+                holiday.getEmployees().add(employee);
+                holidayRepository.save(holiday);
+                addedHolidays.add(holiday);
+            } else {
+                Holiday oldHoliday = existingHoliday.get(0);
+                employee.getHolidayDays().add(oldHoliday);
+                oldHoliday.getEmployees().add(employee);
+                holidayRepository.save(oldHoliday);
+                addedHolidays.add(oldHoliday);
+            }
+
+        }
+        employee.setHolidays(employee.getHolidays() - addedHolidays.size());
+//        employee.getHolidayDays().addAll(holidaysToAdd);
         employeeRepository.save(employee);
 
-        return holidaysToAdd.stream()
+        return addedHolidays.stream()
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class)).toList();
     }
 
@@ -105,6 +121,10 @@ public class HolidayService {
         holidayDays.removeAll(holidaysToDelete);
         employee.setHolidayDays(holidayDays);
         employeeRepository.save(employee);
-        holidayRepository.deleteAll(holidaysToDelete);
+
+        var holidays = holidaysToDelete.stream()
+                .peek(holiday -> holiday.getEmployees().remove(employee))
+                .toList();
+        holidayRepository.saveAll(holidays);
     }
 }
