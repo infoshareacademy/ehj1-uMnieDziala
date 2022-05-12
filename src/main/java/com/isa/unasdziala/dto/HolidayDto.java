@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HolidayDto implements Serializable {
+public class HolidayDto {
     private Long id;
     private LocalDate date;
     private Set<EmployeeDto> employees;

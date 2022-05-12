@@ -18,7 +18,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties
-public class NonWorkingDayApiResponse implements Serializable {
+public class NonWorkingDayApiResponse {
     private List<NonWorkingDay> nonWorkingDays;
 
     @JsonProperty("response")

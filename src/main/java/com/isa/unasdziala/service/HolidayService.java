@@ -17,12 +17,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static org.aspectj.runtime.internal.Conversions.longValue;
 
 @Service
 public class HolidayService {
@@ -93,7 +91,6 @@ public class HolidayService {
         return holidaysToAdd.stream()
                 .map(holiday -> modelMapper.map(holiday, HolidayDto.class)).toList();
     }
-
 
     public void deleteById(Long employeeId, DeleteHolidaysRequest deleteHolidaysRequest) {
         Employee employee = employeeRepository.findById(employeeId)

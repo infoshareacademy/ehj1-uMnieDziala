@@ -15,7 +15,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NonWorkingDay {
+public class NonWorkingDay implements Serializable {
     @JsonProperty
     private String name;
     @JsonProperty
