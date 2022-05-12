@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "employees")
@@ -44,5 +45,12 @@ public class Employee {
     private Set<Holiday> holidayDays = new HashSet<>();
 
     public Employee() {
+    }
+
+
+    public void removeAllHolidays() {
+        this.getHolidayDays()
+                .forEach(day -> day.getEmployees().remove(this));
+        this.setHolidayDays(new HashSet<>());
     }
 }

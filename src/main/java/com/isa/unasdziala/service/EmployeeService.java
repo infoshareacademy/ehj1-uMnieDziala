@@ -8,7 +8,9 @@ import com.isa.unasdziala.request.EmployeeRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
 
@@ -68,6 +70,8 @@ public class EmployeeService {
     }
 
     public void deleteById(Long id) {
-        employeeRepository.deleteById(id);
+        Employee employee = findEmployeeById(id);
+        employee.removeAllHolidays();
+        employeeRepository.delete(employee);
     }
 }
