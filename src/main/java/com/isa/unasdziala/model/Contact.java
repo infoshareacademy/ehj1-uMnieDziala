@@ -4,6 +4,7 @@ package com.isa.unasdziala.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
 
@@ -11,6 +12,7 @@ import javax.persistence.Embeddable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class Contact {
 
     private String phoneNo;

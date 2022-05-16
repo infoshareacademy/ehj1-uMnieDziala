@@ -1,9 +1,9 @@
 package com.isa.unasdziala.dto;
 
+import com.isa.unasdziala.model.Address;
+import com.isa.unasdziala.model.Contact;
 import com.isa.unasdziala.model.Department;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -14,6 +14,8 @@ public class EmployeeDto {
     private Long id;
     private String firstName;
     private String lastName;
+    private Address address;
+    private Contact contact;
     private Department department;
     private float holidays;
 }

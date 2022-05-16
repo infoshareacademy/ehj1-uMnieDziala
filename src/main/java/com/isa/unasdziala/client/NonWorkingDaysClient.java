@@ -1,5 +1,6 @@
 package com.isa.unasdziala.client;
 
+import com.isa.unasdziala.configuration.NonWorkingDaysConfiguration;
 import com.isa.unasdziala.dto.HolidayDto;
 import com.isa.unasdziala.dto.NonWorkingDayApiResponse;
 import com.isa.unasdziala.model.NonWorkingDay;
@@ -8,8 +9,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,20 +20,25 @@ import java.util.stream.Collectors;
 @Component
 public class NonWorkingDaysClient {
     private final RestTemplate restTemplate;
+    private final NonWorkingDaysConfiguration configuration;
 
     @Autowired
-    public NonWorkingDaysClient(RestTemplate restTemplate) {
+    public NonWorkingDaysClient(RestTemplate restTemplate, NonWorkingDaysConfiguration configuration) {
         this.restTemplate = restTemplate;
+        this.configuration = configuration;
     }
 
     @Cacheable(value = "NonWorkingDays")
     public List<NonWorkingDay> getAll() {
-        var year = LocalDate.now().getYear();
-        String URL = "https://calendarific.com/api/v2/holidays?country=pl&year=" +
-                year +
-                "&api_key=5b7d1f3039c481c46d91c60dfbe7310b6e24a5c7&type=national";
-        System.out.println("Działa: " + LocalDateTime.now());
-        return Objects.requireNonNull(restTemplate.getForObject(URL, NonWorkingDayApiResponse.class)).getNonWorkingDays();
+        String url = configuration.getBaseUrl() +
+                "country=" + configuration.getCountry() +
+                "&year=" + LocalDate.now().getYear() +
+                "&api_key=" + configuration.getApiKey() +
+                "&type=" + configuration.getType();
+
+
+        System.out.println("Cached: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy")));
+        return Objects.requireNonNull(restTemplate.getForObject(url, NonWorkingDayApiResponse.class)).getNonWorkingDays();
     }
 
     public List<HolidayDto> getAllAsDayDtoList() {
