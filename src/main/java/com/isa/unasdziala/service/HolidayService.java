@@ -2,6 +2,7 @@ package com.isa.unasdziala.service;
 
 import com.isa.unasdziala.configuration.HolidayConfiguration;
 import com.isa.unasdziala.dto.HolidayDto;
+import com.isa.unasdziala.dto.NonWorkingDayDto;
 import com.isa.unasdziala.exception.OutOfFreeDaysException;
 import com.isa.unasdziala.exception.ResourceNotFoundException;
 import com.isa.unasdziala.model.Employee;
@@ -68,7 +69,7 @@ public class HolidayService {
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
         Set<LocalDate> bussyDaysFromNonWorkingDays = nonWorkingDaysService.getAll().stream()
-                .map(day -> day.getDate())
+                .map(NonWorkingDayDto::getDate)
                 .collect(Collectors.toSet());
 
         Set<LocalDate> bussyDays = new HashSet<>();
