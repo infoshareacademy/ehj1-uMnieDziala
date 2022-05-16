@@ -26,14 +26,16 @@ import static java.lang.String.format;
 public class HolidayService {
     private final HolidayRepository holidayRepository;
     private final EmployeeRepository employeeRepository;
+    private final NonWorkingDaysService nonWorkingDaysService;
     private final ModelMapper modelMapper;
     private final HolidayConfiguration holidayConfiguration;
 
-    public HolidayService(HolidayRepository holidayRepository, EmployeeService employeeService, ModelMapper modelMapper, EmployeeRepository employeeRepository, HolidayConfiguration holidayConfiguration) {
+    public HolidayService(HolidayRepository holidayRepository, EmployeeService employeeService, ModelMapper modelMapper, EmployeeRepository employeeRepository, HolidayConfiguration holidayConfiguration, NonWorkingDaysService nonWorkingDaysService) {
         this.holidayRepository = holidayRepository;
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
         this.holidayConfiguration = holidayConfiguration;
+        this.nonWorkingDaysService = nonWorkingDaysService;
     }
 
     public List<HolidayDto> findAll(Long employeeId) {
@@ -57,7 +59,6 @@ public class HolidayService {
         Employee employee = employeeRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " not found"));
 
-
         Set<LocalDate> bussyDaysFromEmployeeHolidaysDays = holidayRepository.findAllByEmployeesId(userId).stream()
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
@@ -66,9 +67,14 @@ public class HolidayService {
                         .size() >= holidayConfiguration.getMaxAbsence())
                 .map(Holiday::getDate)
                 .collect(Collectors.toSet());
+        Set<LocalDate> bussyDaysFromNonWorkingDays = nonWorkingDaysService.getAll().stream()
+                .map(day -> day.getDate())
+                .collect(Collectors.toSet());
+
         Set<LocalDate> bussyDays = new HashSet<>();
         bussyDays.addAll(bussyDaysFromEmployeeHolidaysDays);
         bussyDays.addAll(bussyDaysFromHolidayRepo);
+        bussyDays.addAll(bussyDaysFromNonWorkingDays);
 
         Set<LocalDate> requestDates = addHolidaysRequest.getDates().stream()
                 .filter(date -> !bussyDays.contains(date))
@@ -77,7 +83,6 @@ public class HolidayService {
 
         Set<Holiday> holidaysToAdd = requestDates.stream()
                 .map(Holiday::new)
-//                .peek(holiday -> holiday.getEmployees().add(employee))
                 .collect(Collectors.toSet());
 
         Set<Holiday> addedHolidays = new HashSet<>();
@@ -101,7 +106,6 @@ public class HolidayService {
 
         }
         employee.setHolidays(employee.getHolidays() - addedHolidays.size());
-//        employee.getHolidayDays().addAll(holidaysToAdd);
         employeeRepository.save(employee);
 
         return addedHolidays.stream()
