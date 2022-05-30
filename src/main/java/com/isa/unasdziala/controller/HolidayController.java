@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee/{employeeId}/holiday")
+@CrossOrigin(origins = "*")
 public class HolidayController {
 
     private final HolidayService holidayService;
