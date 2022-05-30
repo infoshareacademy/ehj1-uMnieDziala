@@ -39,10 +39,12 @@ const renderList = function (holidays) {
         btn.classList.add("btn", "btn-danger")
         btn.id = `delete${holiday.id}`
         btn.innerHTML = "X"
-        li.innerHTML = `<div class="ms-2 me-auto">
-                                      ${holiday.date}
-                                </div>
-        `
+
+        let div = document.createElement("div");
+        div.classList.add("ms-2", "me-auto")
+        div.innerHTML = `${holiday.date}`
+
+        li.appendChild(div)
         li.appendChild(btn)
 
         btn.addEventListener('click', () => {
@@ -65,8 +67,6 @@ const renderList = function (holidays) {
         li.addEventListener('mouseleave', () => {
             li.classList.remove("active")
         })
-
-
         list.appendChild(li);
     })
 }
